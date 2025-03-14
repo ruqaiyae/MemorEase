@@ -1,10 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './Components/Layout/Layout';
-import { LandingPage } from './Pages/LandingPages';
+import { LandingPage } from './Pages/LandingPage';
 import { ComingSoon } from './Pages/ComingSoon';
 import { AuthPage } from './Pages/AuthPage';
 import './index.css';
 import { UserProvider } from './Components/UserManagement/UserContext';
+import { About } from './Pages/About';
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<LandingPage />} />
+            <Route path="about-us" element={<About />} />
             <Route path="/sign-up" element={<AuthPage mode="sign-up" />} />
             <Route path="/sign-in" element={<AuthPage mode="sign-in" />} />
             <Route path="*" element={<ComingSoon />} />

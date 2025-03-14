@@ -12,6 +12,7 @@ module.exports = {
         lato: ['Lato', 'sans-serif'],
         fondamento: ['Fondamento', 'cursive'],
         parisienne: ['Parisienne', 'cursive'],
+        artifika: ['Artifika', 'serif'],
       },
     },
   },

@@ -22,7 +22,7 @@ export function NavBar() {
         <div className="w-[50%] md:w-[35%] my-2 md:my-5">
           <div className="flex items-center justify-around">
             <NavBtn btnName="Home" path={'/'} />
-            <NavBtn btnName="About" path={'*'} />
+            <NavBtn btnName="About" path={'about-us'} />
             <NavBtn btnName="Vault" path={'*'} />
             <FontAwesomeIcon
               icon={faUser}
