@@ -2,13 +2,20 @@ import { FormEvent, ReactNode, useState } from 'react';
 import { Container } from '../Components/Container';
 import { FormInput } from '../Components/UserManagement/FormInput';
 import { useNavigate } from 'react-router-dom';
-import { User } from '../Components/UserManagement/UserContext';
+// import { User } from '../Components/UserManagement/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleCheck,
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { PasswordInput } from '../Components/UserManagement/PasswordInput';
+
+type User = {
+  userId: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+};
 
 export function SignUp() {
   const [password, setPassword] = useState('');

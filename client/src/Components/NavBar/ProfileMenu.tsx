@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { useUser } from '../UserManagement/useUser';
 
 type Props = {
   isOpen: boolean;
@@ -7,6 +8,7 @@ type Props = {
   onClose: () => void;
 };
 export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
+  const { user, handleSignOut } = useUser();
   if (!isOpen) return null;
 
   const r = positionTo?.getBoundingClientRect();
@@ -28,14 +30,29 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
           transform: 'translateX(-50%)',
         }}>
         <ul className="list-none m-0 py-[3px] text-center font-[Lato] text-[#EBD199] text-[9px] md:text-[15px]">
-          <Link to={'sign-in'}>
-            <li onClick={onClose} className="pb-[5px] md:pb-[10px]">
-              Sign In
-            </li>
-          </Link>
-          <Link to={'sign-up'}>
-            <li onClick={onClose}>Sign Up</li>
-          </Link>
+          {!user && (
+            <>
+              <li onClick={onClose} className="pb-[5px] md:pb-[10px]">
+                <Link to={'sign-in'}>Sign In</Link>
+              </li>
+
+              <li onClick={onClose}>
+                <Link to={'sign-up'}>Sign Up</Link>
+              </li>
+            </>
+          )}
+          {user && (
+            <>
+              <li
+                onClick={() => {
+                  handleSignOut();
+                  onClose();
+                }}
+                className="pb-[5px] md:pb-[10px]">
+                <Link to={'/'}>Sign Out</Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </>,
