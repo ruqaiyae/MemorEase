@@ -2,26 +2,22 @@ import { FormEvent, ReactNode, useState } from 'react';
 import { Container } from '../Components/Layout/Container';
 import { FormInput } from '../Components/UserManagement/FormInput';
 import { useNavigate } from 'react-router-dom';
-// import { User } from '../Components/UserManagement/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleCheck,
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { PasswordInput } from '../Components/UserManagement/PasswordInput';
-
-type User = {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-};
+import { requestSignUp } from '../Lib/data';
+import { User } from '../Components/UserManagement/UserContext';
+import { useUser } from '../Components/UserManagement/useUser';
 
 export function SignUp() {
   const [password, setPassword] = useState('');
   const [icon, setIcon] = useState<ReactNode>(null);
   const [valid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { handleSignIn } = useUser();
   const navigate = useNavigate();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -37,7 +33,7 @@ export function SignUp() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      if (valid === false) throw new Error('Passwords must match');
+      if (!valid) throw new Error('Passwords must match');
       setIsLoading(true);
       const formData = new FormData(event.currentTarget);
       const userData = Object.fromEntries(formData);
@@ -46,15 +42,12 @@ export function SignUp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
       };
-      const res = await fetch('/api/auth/sign-up', req);
-      if (!res.ok) {
-        throw new Error(`fetch Error ${res.status}`);
-      }
-      const user = (await res.json()) as User;
+      const [user, token] = (await requestSignUp(req)) as [User, string];
       console.log('Registered', user);
       alert(
         `Successfully registered ${user.firstName} ${user.lastName} as ${user.username}.`
       );
+      handleSignIn(user, token);
       navigate('/');
     } catch (err) {
       alert(`Error registering user: ${err}`);

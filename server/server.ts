@@ -58,14 +58,15 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
                 returning "firstName", "lastName", "username", "usersId", "createdAt";
                 `;
 
-    const response = await db.query(sql, [
-      firstName,
-      lastName,
-      username,
-      hashedPassword,
-    ]);
+    const params = [firstName, lastName, username, hashedPassword];
+    const response = await db.query(sql, params);
+    // for sign-in on sign-up
     const user = response.rows[0];
-    res.status(201).json(user);
+    const { usersId } = user;
+    const payload = { username, usersId };
+    const token = jwt.sign(payload, hashKey);
+
+    res.status(201).json({ user: payload, token });
   } catch (err) {
     next(err);
   }
@@ -87,8 +88,8 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     if (!(await argon2.verify(user.hashedPassword, password))) {
       throw new ClientError(401, 'invalid login');
     } else {
-      const { userId } = user;
-      const payload = { username, userId };
+      const { usersId } = user;
+      const payload = { username, usersId };
       const token = jwt.sign(payload, hashKey);
       res.json({ user: payload, token });
     }

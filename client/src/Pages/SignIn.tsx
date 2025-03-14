@@ -4,11 +4,7 @@ import { User, useUser } from '../Components/UserManagement/useUser';
 import { Container } from '../Components/Layout/Container';
 import { FormInput } from '../Components/UserManagement/FormInput';
 import { PasswordInput } from '../Components/UserManagement/PasswordInput';
-
-type AuthData = {
-  user: User;
-  token: string;
-};
+import { requestSignIn } from '../Lib/data';
 
 export function SignIn() {
   const { handleSignIn } = useUser();
@@ -26,11 +22,7 @@ export function SignIn() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
       };
-      const res = await fetch('/api/auth/sign-in', req);
-      if (!res.ok) {
-        throw new Error(`fetch Error ${res.status}`);
-      }
-      const { user, token } = (await res.json()) as AuthData;
+      const [user, token] = (await requestSignIn(req)) as [User, string];
       handleSignIn(user, token);
       navigate('/');
     } catch (err) {

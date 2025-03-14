@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
-  const iconRef = useRef<SVGSVGElement | null>(null);
+  const iconRef = useRef<SVGSVGElement>(null);
   const navigate = useNavigate();
   return (
     <>

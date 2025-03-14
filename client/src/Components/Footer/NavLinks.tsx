@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 
-type Prop = {
+type Props = {
   link: string;
   name: string;
 };
 
-export function FooterLinks({ link, name }: Prop) {
+export function FooterLinks({ link, name }: Props) {
   const linkClass =
     'font-[Lato] text-[#EBD199] text-[8px] block md:text-xl py-[1px]';
 
