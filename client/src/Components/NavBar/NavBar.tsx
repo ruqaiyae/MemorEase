@@ -11,15 +11,15 @@ export function NavBar() {
   const navigate = useNavigate();
   return (
     <>
-      <div className="flex w-[90%] md:w-[95%] mx-auto">
-        <div className="w-[65%] my-2">
+      <div className="flex md:items-center w-[90%] md:w-[95%] mx-auto">
+        <div className="w-[65%] md:w-[70%] my-2">
           <img
             src="/logo.png"
             onClick={() => navigate('/')}
             className="w-8 md:w-15 cursor-pointer"
           />
         </div>
-        <div className="w-[50%] md:w-[35%] my-2 md:my-5">
+        <div className="w-[50%] md:w-[30%] my-2 md:my-3">
           <div className="flex items-center justify-around">
             <NavBtn btnName="Home" path={'/'} />
             <NavBtn btnName="About" path={'about-us'} />

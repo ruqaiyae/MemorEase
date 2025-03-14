@@ -1,5 +1,5 @@
 import { FormEvent, ReactNode, useState } from 'react';
-import { Container } from '../Components/Container';
+import { Container } from '../Components/Layout/Container';
 import { FormInput } from '../Components/UserManagement/FormInput';
 import { useNavigate } from 'react-router-dom';
 // import { User } from '../Components/UserManagement/UserContext';
@@ -67,7 +67,7 @@ export function SignUp() {
       <h1 className="font-[Parisienne] font-bold text-[#654A2F] text-[15px] md:text-[40px] text-center my-3 md:my-6">
         Preserve Your Legacy, One Memory at a Time
       </h1>
-      <Container width="50%">
+      <Container mobileWidth="60%" width="50%">
         <form onSubmit={handleSubmit}>
           <div className="text-end">
             <div className="mt-6 md:mt-12 mr-10 md:mr-30">

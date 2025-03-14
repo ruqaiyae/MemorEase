@@ -21,9 +21,9 @@ export function About() {
           />
         </div>
       </div>
-      <div className="font-[Artifika] text-[#654A2F] text-[10px] w-[85%] mx-auto my-7">
-        <p className="py-1">Dear Memory Keepers, </p>
-        <p className="py-1">
+      <div className="font-[Artifika] text-[#654A2F] text-[10px] md:text-[20px] w-[85%] md:w-[75%] mx-auto my-7 md:my-18">
+        <p className="py-1 md:py-3">Dear Memory Keepers, </p>
+        <p className="py-1 md:py-3">
           Welcome to MemorEase—where every moment becomes a cherished heirloom.
           Our journey began with a simple, heartfelt idea: to preserve the magic
           of family stories, the laughter shared over old photo albums, and the
@@ -31,7 +31,7 @@ export function About() {
           we believe memories should not fade into obscurity but shine as
           beacons of our shared legacy.
         </p>
-        <p className="py-1">
+        <p className="py-1 md:py-3">
           At MemorEase, we&apos;ve built a secure digital vault where photos,
           videos, and heartfelt messages are lovingly stored, waiting to bridge
           generations. Imagine logging in and instantly feeling the warmth of a
@@ -40,11 +40,11 @@ export function About() {
           personal time capsule, designed to keep the spirit, tradition, and
           love alive.
         </p>
-        <p className="py-1">
+        <p className="py-1 md:py-3">
           Thank you for inviting us to share in your story.{' '}
         </p>
-        <p className="py-1">With warmth, </p>
-        <p className="py-1">The MemorEase Team</p>
+        <p className="py-1 md:py-3">With warmth, </p>
+        <p className="py-1 md:py-3">The MemorEase Team</p>
       </div>
     </>
   );

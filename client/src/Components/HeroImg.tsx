@@ -1,6 +1,6 @@
 export function HeroImg() {
   return (
-    <div className="w-[95%] mx-auto">
+    <div className="w-[85%] mx-auto">
       <img
         src="/mobile-hero.png"
         alt="MemorEase hero image"
