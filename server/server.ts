@@ -55,15 +55,15 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
     const sql = `
                 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
                 values ($1, $2, $3, $4)
-                returning "firstName", "lastName", "username", "usersId", "createdAt";
+                returning "firstName", "lastName", "username", "userId", "createdAt";
                 `;
 
     const params = [firstName, lastName, username, hashedPassword];
     const response = await db.query(sql, params);
     // for sign-in on sign-up
     const user = response.rows[0];
-    const { usersId } = user;
-    const payload = { username, usersId };
+    const { userId } = user;
+    const payload = { username, userId };
     const token = jwt.sign(payload, hashKey);
 
     res.status(201).json({ user: payload, token });
@@ -88,8 +88,8 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     if (!(await argon2.verify(user.hashedPassword, password))) {
       throw new ClientError(401, 'invalid login');
     } else {
-      const { usersId } = user;
-      const payload = { username, usersId };
+      const { userId } = user;
+      const payload = { username, userId };
       const token = jwt.sign(payload, hashKey);
       res.json({ user: payload, token });
     }
@@ -112,6 +112,57 @@ app.post('/api/auth/create-family', authMiddleware, async (req, res, next) => {
     const params = [familyName, hashedPassword];
     const response = await db.query(sql, params);
     const family = response.rows[0];
+    res.status(201).json(family);
+  } catch (err) {
+    next(err);
+  }
+});
+
+async function validatePassword(
+  familyId: number,
+  password: string
+): Promise<void | boolean> {
+  const sql = `select * from "Families"
+            where "familyId" = $1`;
+  const response = await db.query(sql, [familyId]);
+  const family = response.rows[0];
+  if (!family) throw new ClientError(401, 'invalid login');
+  if (!(await argon2.verify(family.hashedPassword, password))) {
+    throw new ClientError(401, 'invalid login');
+  }
+  return true;
+}
+
+async function getFamilyName(familyId: number): Promise<string> {
+  const sql = `select * from "Families"
+              where "familyId" = $1;
+              `;
+  const response = await db.query(sql, [familyId]);
+  const familyName = response.rows[0];
+  if (!familyName) throw new ClientError(404, 'Family does not exist');
+  console.log(familyName);
+  return familyName;
+}
+
+app.post('/api/auth/join-family', authMiddleware, async (req, res, next) => {
+  try {
+    const { familyId, password } = req.body;
+    if (!familyId || !password) {
+      throw new ClientError(401, 'Invalid credentials');
+    }
+    if (!(await validatePassword(familyId, password))) {
+      throw new ClientError(401, 'Password incorrect');
+    }
+    const sql = `
+                insert into "FamilyMembers" ("userId", "familyId")
+                values ($1, $2)
+                returning *;
+                `;
+    const params = [req.user?.userId, familyId];
+    const response = await db.query(sql, params);
+    const family = response.rows[0];
+    family.familyName = await getFamilyName(familyId);
+    console.log(family);
     res.status(201).json(family);
   } catch (err) {
     next(err);
