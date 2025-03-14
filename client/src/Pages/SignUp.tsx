@@ -19,24 +19,25 @@ type User = {
 
 export function SignUp() {
   const [password, setPassword] = useState('');
-  const [isValid, setIsValid] = useState<ReactNode>(null);
+  const [icon, setIcon] = useState<ReactNode>(null);
+  const [valid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
     const iconClass = 'text-[#654a2f] absolute translateX-(50%)';
-    password === e.target.value
-      ? setIsValid(
-          <FontAwesomeIcon icon={faCircleCheck} className={iconClass} />
-        )
-      : setIsValid(
-          <FontAwesomeIcon icon={faCircleXmark} className={iconClass} />
-        );
+    if (password === e.target.value) {
+      setIcon(<FontAwesomeIcon icon={faCircleCheck} className={iconClass} />);
+      setIsValid(true);
+    } else {
+      setIcon(<FontAwesomeIcon icon={faCircleXmark} className={iconClass} />);
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
+      if (valid === false) throw new Error('Passwords must match');
       setIsLoading(true);
       const formData = new FormData(event.currentTarget);
       const userData = Object.fromEntries(formData);
@@ -81,7 +82,7 @@ export function SignUp() {
               <PasswordInput
                 labelName={'Confirm Password:'}
                 onInput={(e) => handleChange(e)}
-                icon={isValid}
+                icon={icon}
               />
             </div>
           </div>
