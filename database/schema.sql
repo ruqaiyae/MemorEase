@@ -18,6 +18,7 @@ CREATE TABLE "Users" (
 CREATE TABLE "Families" (
   "familyId" serial PRIMARY KEY,
   "familyName" text NOT NULL,
+  "hashedPassword" text,
   "createdAt" timestamptz DEFAULT (CURRENT_TIMESTAMP)
 );
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- Remove when used */
 import 'dotenv/config';
-import express from 'express';
+import express, { application } from 'express';
 import pg from 'pg';
 import { ClientError, errorMiddleware, authMiddleware } from './lib/index.js';
 import argon2 from 'argon2';
@@ -47,10 +47,10 @@ app.use(express.json());
 app.post('/api/auth/sign-up', async (req, res, next) => {
   try {
     const { firstName, lastName, username, password } = req.body;
-    validateBody(firstName, 'firstName');
-    validateBody(lastName, 'lastName');
-    validateBody(username, 'username');
-    validateBody(password, 'password');
+    validateBody(firstName, 'First name');
+    validateBody(lastName, 'Last name');
+    validateBody(username, 'Username');
+    validateBody(password, 'Password');
     const hashedPassword = await argon2.hash(password);
     const sql = `
                 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
@@ -93,6 +93,26 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
       const token = jwt.sign(payload, hashKey);
       res.json({ user: payload, token });
     }
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/auth/create-family', authMiddleware, async (req, res, next) => {
+  try {
+    const { familyName, password } = req.body;
+    validateBody(familyName, 'Family name');
+    validateBody(password, 'Password');
+    const hashedPassword = await argon2.hash(password);
+    const sql = `
+                insert into "Families" ("familyName", "hashedPassword")
+                values ($1, $2)
+                returning "familyName", "familyId", "createdAt";
+                `;
+    const params = [familyName, hashedPassword];
+    const response = await db.query(sql, params);
+    const family = response.rows[0];
+    res.status(201).json(family);
   } catch (err) {
     next(err);
   }
