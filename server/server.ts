@@ -2,26 +2,7 @@
 import 'dotenv/config';
 import express from 'express';
 import pg from 'pg';
-import { ClientError, errorMiddleware, authMiddleware } from './lib/index.js';
-import argon2 from 'argon2';
-import jwt from 'jsonwebtoken';
-
-type User = {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-  hashedPassword: string;
-};
-
-type Auth = {
-  username: string;
-  password: string;
-};
-
-function validateBody(property: string | number, propName: string): void {
-  if (!property) throw new ClientError(400, `${propName} required`);
-}
+import { ClientError, errorMiddleware } from './lib/index.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -29,9 +10,6 @@ const db = new pg.Pool({
     rejectUnauthorized: false,
   },
 });
-
-const hashKey = process.env.TOKEN_SECRET;
-if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
 
 const app = express();
 
@@ -43,61 +21,6 @@ app.use(express.static(reactStaticDir));
 // Static directory for file uploads server/public/
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
-
-app.post('/api/auth/sign-up', async (req, res, next) => {
-  try {
-    const { firstName, lastName, username, password } = req.body;
-    validateBody(firstName, 'firstName');
-    validateBody(lastName, 'lastName');
-    validateBody(username, 'username');
-    validateBody(password, 'password');
-    const hashedPassword = await argon2.hash(password);
-    const sql = `
-                insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
-                values ($1, $2, $3, $4)
-                returning "firstName", "lastName", "username", "usersId", "createdAt";
-                `;
-
-    const response = await db.query(sql, [
-      firstName,
-      lastName,
-      username,
-      hashedPassword,
-    ]);
-    const user = response.rows[0];
-    res.status(201).json(user);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.post('/api/auth/sign-in', async (req, res, next) => {
-  try {
-    const { username, password } = req.body as Partial<Auth>;
-    if (!username || !password) {
-      throw new ClientError(401, 'invalid login');
-    }
-    const sql = `
-                select * from "Users"
-                where "username" = $1;
-                `;
-    const response = await db.query(sql, [username]);
-    const user = response.rows[0];
-    if (!user) throw new ClientError(401, 'invalid login');
-    if (!(await argon2.verify(user.hashedPassword, password))) {
-      throw new ClientError(401, 'invalid login');
-    } else {
-      const { userId } = user;
-      const payload = { username, userId };
-      const token = jwt.sign(payload, hashKey);
-      res.json({ user: payload, token });
-    }
-  } catch (err) {
-    next(err);
-  }
-});
-
-// add authMiddleware when creating endpoints
 
 /*
  * Handles paths that aren't handled by any other route handler.
