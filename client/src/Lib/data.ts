@@ -47,3 +47,26 @@ export function readUser(): User | undefined {
   if (!auth) return undefined;
   return (JSON.parse(auth) as Auth).user;
 }
+
+export function readToken(): string | undefined {
+  const auth = localStorage.getItem(authKey);
+  if (!auth) return undefined;
+  return (JSON.parse(auth) as Auth).token;
+}
+
+export async function requestFamilyDetails() {
+  const user = readUser();
+  const { userId } = user as User;
+  const req = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify({ userId }),
+  };
+
+  const res = await fetch('/api/family-details', req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return await res.json();
+}

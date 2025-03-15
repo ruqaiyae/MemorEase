@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useUser } from '../UserManagement/useUser';
+import { FamilyMenu } from '../FamilyManagement/FamilyMenu';
 
 type Props = {
   isOpen: boolean;
@@ -29,7 +30,7 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
           left,
           transform: 'translateX(-50%)',
         }}>
-        <ul className="list-none m-0 py-[3px] text-center font-[Lato] text-[#EBD199] text-[9px] md:text-[15px]">
+        <ul className="list-none m-0 py-[3px] font-[Lato] text-[#EBD199] text-[9px] md:text-[15px]">
           {!user && (
             <>
               <li onClick={onClose} className="pb-[5px] md:pb-[10px]">
@@ -43,6 +44,8 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
           )}
           {user && (
             <>
+              <FamilyMenu />
+              <hr className="my-1"></hr>
               <li
                 onClick={() => {
                   handleSignOut();

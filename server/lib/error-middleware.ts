@@ -13,12 +13,12 @@ export function errorMiddleware(
     res.status(err.status).json({ error: err.message });
   } else if (err instanceof jwt.JsonWebTokenError) {
     res.status(401).json({ error: 'invalid access token' });
-  } else if (
-    err instanceof Error &&
-    'code' in err &&
-    (err as { code: string }).code === '23505'
-  ) {
-    res.status(400).json({ error: 'User is already in the family' });
+    // } else if (
+    //   err instanceof Error &&
+    //   'code' in err &&
+    //   (err as { code: string }).code === '23505'
+    // ) {
+    //   res.status(400).json({ error: 'User is already in the family' });
   } else {
     console.error(err);
     res.status(500).json({

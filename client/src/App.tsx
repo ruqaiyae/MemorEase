@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './Components/Layout/Layout';
 import { LandingPage } from './Pages/LandingPage';
+import { Dashboard } from './Pages/Dashboard';
 import { ComingSoon } from './Pages/ComingSoon';
 import { AuthPage } from './Pages/AuthPage';
 import './index.css';
@@ -15,8 +16,9 @@ export default function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<LandingPage />} />
             <Route path="about-us" element={<About />} />
-            <Route path="/sign-up" element={<AuthPage mode="sign-up" />} />
             <Route path="/sign-in" element={<AuthPage mode="sign-in" />} />
+            <Route path="/sign-up" element={<AuthPage mode="sign-up" />} />
+            <Route path="family/:familyId/dashboard" element={<Dashboard />} />
             <Route path="*" element={<ComingSoon />} />
           </Route>
         </Routes>
