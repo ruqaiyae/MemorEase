@@ -133,17 +133,6 @@ async function validatePassword(
   return true;
 }
 
-async function getFamilyDetails(userId: number): Promise<any[]> {
-  const sql = `select * from "FamilyMembers"
-              join "Families" using ("familyId")
-              where "userId" = $1;
-              `;
-  const response = await db.query(sql, [userId]);
-  const familyDetails = response.rows;
-  if (!familyDetails) throw new ClientError(404, 'Family does not exist');
-  return familyDetails;
-}
-
 app.post('/api/auth/join-family', authMiddleware, async (req, res, next) => {
   try {
     const { familyId, password } = req.body;
@@ -171,12 +160,18 @@ app.post('/api/family-details', authMiddleware, async (req, res, next) => {
   try {
     const { userId } = req.body;
     validateBody(userId, 'userId');
-    const response = await getFamilyDetails(userId);
-    if (!response.length) throw new Error('Failed to get family name');
-    const familyDetails = response.map((response) => {
-      return { familyId: response.familyId, familyName: response.familyName };
+    const sql = `select * from "FamilyMembers"
+              join "Families" using ("familyId")
+              where "userId" = $1;
+              `;
+    const response = await db.query(sql, [userId]);
+    const familyDetails = response.rows;
+    if (!familyDetails.length)
+      throw new ClientError(404, 'Failed to get family name');
+    const details = familyDetails.map((family) => {
+      return { familyId: family.familyId, familyName: family.familyName };
     });
-    res.send(familyDetails);
+    res.send(details);
   } catch (err) {
     next(err);
   }

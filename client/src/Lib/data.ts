@@ -17,8 +17,6 @@ export async function requestSignUp(req: Req) {
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
-  console.log('res', res);
-
   const { user, token } = (await res.json()) as Auth;
   console.log('user', user);
   return [user, token];
@@ -70,3 +68,14 @@ export async function requestFamilyDetails() {
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
   return await res.json();
 }
+
+export async function createFamily(req: Req) {
+  const res = await fetch('/api/auth/create-family', req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  const response = await res.json();
+  return response;
+}
+
+// export async

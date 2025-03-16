@@ -1,16 +1,23 @@
 import { useEffect, useState } from 'react';
 import { requestFamilyDetails } from '../../Lib/data';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useFamName } from './useFamName';
+
+type Prop = {
+  onClose: () => void;
+};
 
 type Family = {
   familyId: number;
   familyName: string;
 };
 
-export function FamilyMenu() {
+export function FamilyMenu({ onClose }: Prop) {
   const [family, setFamily] = useState<Family[]>([]);
   const [error, setError] = useState<unknown>();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const { updateName } = useFamName();
 
   useEffect(() => {
     async function load() {
@@ -29,17 +36,28 @@ export function FamilyMenu() {
   if (isLoading) return <li>Loading...</li>;
   if (error)
     return (
-      <li>
-        Error!
-        {error instanceof Error ? error.message : 'Unknown Error'}
-      </li>
+      <>
+        <li
+          onClick={() => {
+            navigate('family-form'), onClose();
+          }}
+          className="cursor-pointer">
+          Create / Join a family
+        </li>
+      </>
     );
 
   return (
     <>
       {family?.map((fam) => (
-        <li key={fam.familyId}>
-          <Link to={`family/${fam.familyId}/dashboard`}>{fam.familyName}</Link>
+        <li
+          key={fam.familyId}
+          onClick={() => {
+            navigate(`family/${fam.familyId}/dashboard`),
+              updateName(fam.familyName),
+              onClose();
+          }}>
+          {fam.familyName}
         </li>
       ))}
     </>
