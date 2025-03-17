@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import { HeroImg } from '../Components/HeroImg';
 import { Container } from '../Components/Layout/Container';
 import { MemoryDescription, MemoryTile } from '../Components/MemoryShowcase';
 
 export function LandingPage() {
+  const navigate = useNavigate();
+
   return (
     <>
       <HeroImg />
@@ -66,14 +69,16 @@ A digital recipe book infused with the flavors of family history.`}
           </div>
         </div>
       </Container>
-      <div className="mb-30">
+      <div className="md:mb-30">
         <div className="bg-[#654A2F] mx-auto rounded-2xl w-[80%]">
-          <h2 className="font-[fondamento] font-bold text-[#EBD199] text-[15px] md:text-[35px] text-center my-6 md:my-6 py-2 md:py-4">
+          <h2 className="font-[fondamento] font-bold text-[#EBD199] text-[13px] md:text-[35px] text-center mb-3 md:my-6 py-2 md:py-4">
             Start Building Your Family's Memory Vault Today!
           </h2>
         </div>
         <div className="flex justify-center">
-          <button className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[25px]">
+          <button
+            onClick={() => navigate('sign-up')}
+            className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[25px] cursor-pointer">
             Get Started
           </button>
         </div>

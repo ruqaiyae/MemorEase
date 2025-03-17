@@ -1,6 +1,18 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Msg } from '../../Components/Toast';
+import { useEffect } from 'react';
 
 export function FamilyForm() {
+  const [params] = useSearchParams();
+
+  useEffect(() => {
+    function successMsg() {
+      toast(<Msg message="Registered successfully" />);
+    }
+    params.get('action') === 'signup-success' && successMsg();
+  }, [params]);
+
   const navigate = useNavigate();
 
   return (
@@ -13,12 +25,12 @@ export function FamilyForm() {
         </h1>
         <button
           onClick={() => navigate('create-family')}
-          className="btn bg-[#654A2F] m-4 md:m-10 px-3 md:px-7 py-2 md:py-5 md:mt-10 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px]">
+          className="btn bg-[#654A2F] m-4 md:m-10 px-3 md:px-7 py-2 md:py-5 md:mt-10 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px] cursor-pointer">
           Create a family
         </button>
         <button
           onClick={() => navigate('join-family')}
-          className="btn bg-[#654A2F] m-4 md:m-10 px-3 md:px-7 py-2 md:py-5 md:mt-10 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px]">
+          className="btn bg-[#654A2F] m-4 md:m-10 px-3 md:px-7 py-2 md:py-5 md:mt-10 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px] cursor-pointer">
           Join a family
         </button>
       </div>

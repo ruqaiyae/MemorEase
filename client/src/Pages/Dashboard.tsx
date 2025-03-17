@@ -1,6 +1,6 @@
 import { Container } from '../Components/Layout/Container';
 import { useFamName } from '../Components/FamilyManagement/useFamName';
-import { MemoryDescription, MemoryTile } from '../Components/MemoryShowcase';
+import { MemoryTile } from '../Components/MemoryShowcase';
 
 export function Dashboard() {
   const { familyName } = useFamName();
@@ -8,7 +8,8 @@ export function Dashboard() {
   return (
     <>
       <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[50px] my-4 md:my-8 mx-7 md:mx-70">
-        Welcome to the legacy of the {familyName} family—where memories live on.
+        Welcome to the legacy of the {familyName} family — where memories live
+        on.
       </h1>
       <Container mobileWidth="85%" width="70%">
         <div className="flex flex-wrap justify-center px-2 my-6">
@@ -33,7 +34,6 @@ export function Dashboard() {
             <h4 className="font-[fondamento] md:text-[40px] text-[#654A2F] text-center">
               Generations of Flavor
             </h4>
-            <MemoryDescription title="" />
           </div>
           <div className="mt-4 md:my-10 w-[45%]">
             <MemoryTile
@@ -45,7 +45,6 @@ export function Dashboard() {
             <h4 className="font-[fondamento] md:text-[40px] text-[#654A2F] text-center">
               Family Folklore
             </h4>
-            <MemoryDescription title="" />
           </div>
           <div className="mt-4 md:my-10 w-[45%]">
             <MemoryTile

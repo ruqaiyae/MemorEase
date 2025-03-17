@@ -41,6 +41,3 @@ export default function App() {
     </>
   );
 }
-
-// EBD199 light
-// 654A2F dark
