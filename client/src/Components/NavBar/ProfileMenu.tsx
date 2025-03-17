@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../UserManagement/useUser';
 import { FamilyMenu } from '../FamilyManagement/FamilyMenu';
-import { useFamName } from '../FamilyManagement/useFamName';
+import { useFamily } from '../FamilyManagement/useFamily';
 
 type Props = {
   isOpen: boolean;
@@ -11,7 +11,7 @@ type Props = {
 };
 export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
   const { user, handleSignOut } = useUser();
-  const { familyName } = useFamName();
+  const { currentFamily, isLoading, error } = useFamily();
   const navigate = useNavigate();
 
   if (!isOpen) return null;
@@ -19,6 +19,8 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
   const r = positionTo?.getBoundingClientRect();
   const top = r ? `${r.bottom + 4}px` : '8%';
   const left = r ? `${r.left - 50}px` : '95%';
+
+  if (isLoading) return;
 
   return createPortal(
     <>
@@ -48,8 +50,25 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
           {user && (
             <>
               <FamilyMenu onClose={() => onClose()} />
-              <hr className="my-1"></hr>
-              {familyName && (
+              {isLoading && (
+                <>
+                  <li>Loading...</li>
+                  <hr className="my-1"></hr>
+                </>
+              )}
+              {error && (
+                <>
+                  <li
+                    onClick={() => {
+                      navigate('family-form'), onClose();
+                    }}
+                    className="cursor-pointer">
+                    Family Portal
+                  </li>
+                  <hr className="my-1"></hr>
+                </>
+              )}
+              {currentFamily.familyName && (
                 <>
                   {' '}
                   <li

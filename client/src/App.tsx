@@ -1,5 +1,5 @@
 import { UserProvider } from './Components/UserManagement/UserContext';
-import { FamNameProvider } from './Components/FamilyManagement/FamNameContext';
+import { FamilyProvider } from './Components/FamilyManagement/FamilyContext';
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './Components/Layout/Layout';
 import { LandingPage } from './Pages/LandingPage';
@@ -16,7 +16,7 @@ export default function App() {
   return (
     <>
       <UserProvider>
-        <FamNameProvider>
+        <FamilyProvider>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<LandingPage />} />
@@ -36,7 +36,7 @@ export default function App() {
               <Route path="*" element={<ComingSoon />} />
             </Route>
           </Routes>
-        </FamNameProvider>
+        </FamilyProvider>
       </UserProvider>
     </>
   );

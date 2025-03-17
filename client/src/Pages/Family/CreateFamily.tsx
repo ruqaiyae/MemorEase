@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { createFamily, CreateFamilyData, joinFamily } from '../../Lib/data';
 import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
-import { useFamName } from '../../Components/FamilyManagement/useFamName';
+import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
 
 export function CreateFamily() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { updateName } = useFamName();
+  const { updateFamily } = useFamily();
 
   function errorMsg() {
     toast(
@@ -28,7 +28,7 @@ export function CreateFamily() {
       const { familyName, password } = familyData;
       await joinFamily({ familyId, password });
       navigate(`/family/${familyId}/dashboard`);
-      updateName(familyName);
+      updateFamily({ familyId, familyName });
     } catch (err) {
       errorMsg();
     } finally {

@@ -7,14 +7,14 @@ import {
 } from '../../Lib/data';
 import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
-import { useFamName } from '../../Components/FamilyManagement/useFamName';
+import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
 
 export function JoinFamily() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { updateName } = useFamName();
+  const { updateFamily } = useFamily();
 
   function errorMsg() {
     toast(<Msg message="Invalid family id or password. Please try again." />);
@@ -29,7 +29,7 @@ export function JoinFamily() {
       const { familyId } = await joinFamily(familyData);
       const name = await requestFamilyDetails();
       const familyName = name[0].familyName;
-      updateName(familyName);
+      updateFamily({ familyId, familyName });
       navigate(`/family/${familyId}/dashboard`);
     } catch (err) {
       errorMsg();
