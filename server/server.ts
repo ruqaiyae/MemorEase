@@ -6,14 +6,6 @@ import { ClientError, errorMiddleware, authMiddleware } from './lib/index.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 
-type User = {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-  hashedPassword: string;
-};
-
 type Auth = {
   username: string;
   password: string;
