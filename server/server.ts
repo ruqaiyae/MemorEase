@@ -63,8 +63,9 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
     // for sign-in on sign-up
     const user = response.rows[0];
     const { userId } = user;
-    const payload = { username, userId };
+    const payload = { firstName, lastName, username, userId };
     const token = jwt.sign(payload, hashKey);
+    console.log('payload', payload);
 
     res.status(201).json({ user: payload, token });
   } catch (err) {

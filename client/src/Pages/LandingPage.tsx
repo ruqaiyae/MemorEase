@@ -66,6 +66,18 @@ A digital recipe book infused with the flavors of family history.`}
           </div>
         </div>
       </Container>
+      <div className="mb-30">
+        <div className="bg-[#654A2F] mx-auto rounded-2xl w-[80%]">
+          <h2 className="font-[fondamento] font-bold text-[#EBD199] text-[15px] md:text-[35px] text-center my-6 md:my-6 py-2 md:py-4">
+            Start Building Your Family's Memory Vault Today!
+          </h2>
+        </div>
+        <div className="flex justify-center">
+          <button className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[25px]">
+            Get Started
+          </button>
+        </div>
+      </div>
     </>
   );
 }

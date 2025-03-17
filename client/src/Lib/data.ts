@@ -6,23 +6,48 @@ type Auth = {
   token: string;
 };
 
-type Req = {
-  method: string;
-  headers: Record<string, string>;
-  body: string;
+export type SignUpUser = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  password: string;
 };
 
-export async function requestSignUp(req: Req) {
+export type SignInUser = {
+  username: string;
+  password: string;
+};
+
+export type CreateFamilyData = {
+  familyName: string;
+  password: string;
+};
+
+export type JoinFamilyData = {
+  familyId: string;
+  password: string;
+};
+
+export async function requestSignUp(userData: SignUpUser) {
+  const req = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData),
+  };
   const res = await fetch('/api/auth/sign-up', req);
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
   const { user, token } = (await res.json()) as Auth;
-  console.log('user', user);
   return [user, token];
 }
 
-export async function requestSignIn(req: Req) {
+export async function requestSignIn(userData: SignInUser) {
+  const req = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData),
+  };
   const res = await fetch('/api/auth/sign-in', req);
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
@@ -69,13 +94,34 @@ export async function requestFamilyDetails() {
   return await res.json();
 }
 
-export async function createFamily(req: Req) {
+export async function createFamily(familyData: CreateFamilyData) {
+  const req = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify(familyData),
+  };
   const res = await fetch('/api/auth/create-family', req);
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
-  const response = await res.json();
-  return response;
+  return await res.json();
 }
 
-// export async
+export async function joinFamily(familyData: JoinFamilyData) {
+  const req = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify(familyData),
+  };
+  const res = await fetch('/api/auth/join-family', req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}

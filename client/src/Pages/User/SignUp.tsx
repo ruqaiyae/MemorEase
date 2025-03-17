@@ -1,16 +1,16 @@
 import { FormEvent, ReactNode, useState } from 'react';
-import { Container } from '../Components/Layout/Container';
-import { FormInput } from '../Components/UserManagement/FormInput';
+import { Container } from '../../Components/Layout/Container';
+import { FormInput } from '../../Components/UserManagement/FormInput';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleCheck,
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { PasswordInput } from '../Components/UserManagement/PasswordInput';
-import { requestSignUp } from '../Lib/data';
-import { User } from '../Components/UserManagement/UserContext';
-import { useUser } from '../Components/UserManagement/useUser';
+import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
+import { type SignUpUser, requestSignUp } from '../../Lib/data';
+import { User } from '../../Components/UserManagement/UserContext';
+import { useUser } from '../../Components/UserManagement/useUser';
 
 export function SignUp() {
   const [password, setPassword] = useState('');
@@ -36,19 +36,14 @@ export function SignUp() {
       if (!valid) throw new Error('Passwords must match');
       setIsLoading(true);
       const formData = new FormData(event.currentTarget);
-      const userData = Object.fromEntries(formData);
-      const req = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      };
-      const [user, token] = (await requestSignUp(req)) as [User, string];
+      const userData = Object.fromEntries(formData) as SignUpUser;
+      const [user, token] = (await requestSignUp(userData)) as [User, string];
       console.log('Registered', user);
       alert(
         `Successfully registered ${user.firstName} ${user.lastName} as ${user.username}.`
       );
       handleSignIn(user, token);
-      navigate('/');
+      navigate('/family-form');
     } catch (err) {
       alert(`Error registering user: ${err}`);
     } finally {

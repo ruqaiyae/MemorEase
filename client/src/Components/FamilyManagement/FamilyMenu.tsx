@@ -42,7 +42,7 @@ export function FamilyMenu({ onClose }: Prop) {
             navigate('family-form'), onClose();
           }}
           className="cursor-pointer">
-          Create / Join a family
+          Family Portal
         </li>
       </>
     );

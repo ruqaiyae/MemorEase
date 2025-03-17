@@ -1,10 +1,10 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, useUser } from '../Components/UserManagement/useUser';
-import { Container } from '../Components/Layout/Container';
-import { FormInput } from '../Components/UserManagement/FormInput';
-import { PasswordInput } from '../Components/UserManagement/PasswordInput';
-import { requestSignIn } from '../Lib/data';
+import { User, useUser } from '../../Components/UserManagement/useUser';
+import { Container } from '../../Components/Layout/Container';
+import { FormInput } from '../../Components/UserManagement/FormInput';
+import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
+import { type SignInUser, requestSignIn } from '../../Lib/data';
 
 export function SignIn() {
   const { handleSignIn } = useUser();
@@ -16,13 +16,8 @@ export function SignIn() {
     try {
       setIsLoading(true);
       const formData = new FormData(event.currentTarget);
-      const userData = Object.fromEntries(formData);
-      const req = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      };
-      const [user, token] = (await requestSignIn(req)) as [User, string];
+      const userData = Object.fromEntries(formData) as SignInUser;
+      const [user, token] = (await requestSignIn(userData)) as [User, string];
       handleSignIn(user, token);
       navigate('/');
     } catch (err) {

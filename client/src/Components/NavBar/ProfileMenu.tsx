@@ -1,7 +1,8 @@
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../UserManagement/useUser';
 import { FamilyMenu } from '../FamilyManagement/FamilyMenu';
+import { useFamName } from '../FamilyManagement/useFamName';
 
 type Props = {
   isOpen: boolean;
@@ -10,6 +11,9 @@ type Props = {
 };
 export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
   const { user, handleSignOut } = useUser();
+  const { familyName } = useFamName();
+  const navigate = useNavigate();
+
   if (!isOpen) return null;
 
   const r = positionTo?.getBoundingClientRect();
@@ -45,12 +49,27 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
             <>
               <FamilyMenu onClose={() => onClose()} />
               <hr className="my-1"></hr>
+              {familyName && (
+                <>
+                  {' '}
+                  <li
+                    onClick={() => {
+                      navigate('family-form'), onClose();
+                    }}
+                    className="cursor-pointer">
+                    {' '}
+                    Family Portal{' '}
+                  </li>
+                  <hr className="my-1"></hr>
+                </>
+              )}
+
               <li
                 onClick={() => {
                   handleSignOut();
                   onClose();
                 }}
-                className="pb-[5px] md:pb-[10px]">
+                className="py-[3px] md:pb-[10px]">
                 <Link to={'/'}>Sign Out</Link>
               </li>
             </>
