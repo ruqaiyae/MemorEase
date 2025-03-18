@@ -7,7 +7,7 @@ drop schema "public" cascade;
 create schema "public";
 
 CREATE TABLE "Users" (
-  "usersId" serial PRIMARY KEY,
+  "userId" serial PRIMARY KEY,
   "firstName" text,
   "lastName" text,
   "username" text UNIQUE,
@@ -18,14 +18,15 @@ CREATE TABLE "Users" (
 CREATE TABLE "Families" (
   "familyId" serial PRIMARY KEY,
   "familyName" text NOT NULL,
+  "hashedPassword" text,
   "createdAt" timestamptz DEFAULT (CURRENT_TIMESTAMP)
 );
 
 CREATE TABLE "FamilyMembers" (
-  "familyMembersId" serial PRIMARY KEY,
   "userId" integer,
   "familyId" integer,
-  "joinedAt" timestamptz DEFAULT (CURRENT_TIMESTAMP)
+  "joinedAt" timestamptz DEFAULT (CURRENT_TIMESTAMP),
+  primary key ("userId", "familyId")
 );
 
 CREATE TABLE "StoryMemories" (
@@ -74,25 +75,25 @@ CREATE TABLE "Comments" (
   "createdAt" timestamptz DEFAULT (CURRENT_timestamp)
 );
 
-ALTER TABLE "FamilyMembers" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("usersId");
+ALTER TABLE "FamilyMembers" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
 ALTER TABLE "FamilyMembers" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
 
-ALTER TABLE "StoryMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("usersId");
+ALTER TABLE "StoryMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
 ALTER TABLE "StoryMemories" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
 
-ALTER TABLE "ImageMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("usersId");
+ALTER TABLE "ImageMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
 ALTER TABLE "ImageMemories" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
 
-ALTER TABLE "VideoMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("usersId");
+ALTER TABLE "VideoMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
 ALTER TABLE "VideoMemories" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
 
-ALTER TABLE "Likes" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("usersId");
+ALTER TABLE "Likes" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
-ALTER TABLE "Comments" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("usersId");
+ALTER TABLE "Comments" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
 ALTER TABLE "Likes" ADD CONSTRAINT "Likes_StoryMemories" FOREIGN KEY ("storyId") REFERENCES "StoryMemories" ("storyId");
 

@@ -10,7 +10,7 @@ export function Footer() {
           <div className="w-[80%] content-center my-5 md:my-12">
             <h1
               onClick={() => navigate('/')}
-              className="font-[Fondamento] text-[#EBD199] md:text-5xl cursor-pointer">
+              className="font-[Fondamento] text-[#EBD199] md:text-5xl cursor-pointer w-[20%]">
               MemorEase
             </h1>
             <p className="font-[Lato] text-[#EBD199] text-[9px] md:text-xl md:pt-3">

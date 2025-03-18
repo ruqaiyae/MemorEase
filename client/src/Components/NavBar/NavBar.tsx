@@ -23,7 +23,7 @@ export function NavBar() {
           <div className="flex items-center justify-around">
             <NavBtn btnName="Home" path={'/'} />
             <NavBtn btnName="About" path={'about-us'} />
-            <NavBtn btnName="Vault" path={'*'} />
+            <NavBtn btnName="Vault" path={'family/dashboard'} />
             <FontAwesomeIcon
               icon={faUser}
               onClick={() => setIsOpen(!isOpen)}

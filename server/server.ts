@@ -1,18 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- Remove when used */
 import 'dotenv/config';
-import express from 'express';
+import express, { application } from 'express';
 import pg from 'pg';
 import { ClientError, errorMiddleware, authMiddleware } from './lib/index.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-
-type User = {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-  hashedPassword: string;
-};
 
 type Auth = {
   username: string;
@@ -47,24 +39,25 @@ app.use(express.json());
 app.post('/api/auth/sign-up', async (req, res, next) => {
   try {
     const { firstName, lastName, username, password } = req.body;
-    validateBody(firstName, 'firstName');
-    validateBody(lastName, 'lastName');
-    validateBody(username, 'username');
-    validateBody(password, 'password');
+    validateBody(firstName, 'First name');
+    validateBody(lastName, 'Last name');
+    validateBody(username, 'Username');
+    validateBody(password, 'Password');
     const hashedPassword = await argon2.hash(password);
     const sql = `
                 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
                 values ($1, $2, $3, $4)
-                returning "firstName", "lastName", "username", "usersId", "createdAt";
+                returning "firstName", "lastName", "username", "userId", "createdAt";
                 `;
 
     const params = [firstName, lastName, username, hashedPassword];
     const response = await db.query(sql, params);
     // for sign-in on sign-up
     const user = response.rows[0];
-    const { usersId } = user;
-    const payload = { username, usersId };
+    const { userId } = user;
+    const payload = { firstName, lastName, username, userId };
     const token = jwt.sign(payload, hashKey);
+    console.log('payload', payload);
 
     res.status(201).json({ user: payload, token });
   } catch (err) {
@@ -88,11 +81,90 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     if (!(await argon2.verify(user.hashedPassword, password))) {
       throw new ClientError(401, 'invalid login');
     } else {
-      const { usersId } = user;
-      const payload = { username, usersId };
+      const { userId } = user;
+      const payload = { username, userId };
       const token = jwt.sign(payload, hashKey);
       res.json({ user: payload, token });
     }
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/auth/create-family', authMiddleware, async (req, res, next) => {
+  try {
+    const { familyName, password } = req.body;
+    validateBody(familyName, 'Family name');
+    validateBody(password, 'Password');
+    const hashedPassword = await argon2.hash(password);
+    const sql = `
+                insert into "Families" ("familyName", "hashedPassword")
+                values ($1, $2)
+                returning "familyName", "familyId", "createdAt";
+                `;
+    const params = [familyName, hashedPassword];
+    const response = await db.query(sql, params);
+    const family = response.rows[0];
+    res.status(201).json(family);
+  } catch (err) {
+    next(err);
+  }
+});
+
+async function validatePassword(
+  familyId: number,
+  password: string
+): Promise<void | boolean> {
+  const sql = `select * from "Families"
+            where "familyId" = $1`;
+  const response = await db.query(sql, [familyId]);
+  const family = response.rows[0];
+  if (!family) throw new ClientError(401, 'invalid login');
+  if (!(await argon2.verify(family.hashedPassword, password))) {
+    throw new ClientError(401, 'invalid login');
+  }
+  return true;
+}
+
+app.post('/api/auth/join-family', authMiddleware, async (req, res, next) => {
+  try {
+    const { familyId, password } = req.body;
+    if (!familyId || !password) {
+      throw new ClientError(401, 'Invalid credentials');
+    }
+    if (!(await validatePassword(familyId, password))) {
+      throw new ClientError(401, 'Password incorrect');
+    }
+    const sql = `
+                insert into "FamilyMembers" ("userId", "familyId")
+                values ($1, $2)
+                returning *;
+                `;
+    const params = [req.user?.userId, familyId];
+    const response = await db.query(sql, params);
+    const family = response.rows[0];
+    res.status(201).json(family);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/family-details', authMiddleware, async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+    validateBody(userId, 'userId');
+    const sql = `select * from "FamilyMembers"
+              join "Families" using ("familyId")
+              where "userId" = $1;
+              `;
+    const response = await db.query(sql, [userId]);
+    const familyDetails = response.rows;
+    if (!familyDetails.length)
+      throw new ClientError(404, 'Failed to get family name');
+    const details = familyDetails.map((family) => {
+      return { familyId: family.familyId, familyName: family.familyName };
+    });
+    res.send(details);
   } catch (err) {
     next(err);
   }
