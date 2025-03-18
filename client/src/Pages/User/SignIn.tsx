@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, useUser } from '../../Components/UserManagement/useUser';
+import { type User, useUser } from '../../Components/UserManagement/useUser';
 import { Container } from '../../Components/Layout/Container';
 import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';

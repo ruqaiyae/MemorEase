@@ -1,18 +1,17 @@
 import { FormEvent, ReactNode, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container } from '../../Components/Layout/Container';
 import { FormInput } from '../../Components/UserManagement/FormInput';
-import { useNavigate } from 'react-router-dom';
+import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
+import { type SignUpUser, requestSignUp } from '../../Lib/data';
+import { type User, useUser } from '../../Components/UserManagement/useUser';
+import { toast } from 'react-toastify';
+import { Msg } from '../../Components/Toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleCheck,
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
-import { type SignUpUser, requestSignUp } from '../../Lib/data';
-import { User } from '../../Components/UserManagement/UserContext';
-import { useUser } from '../../Components/UserManagement/useUser';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 
 export function SignUp() {
   const [password, setPassword] = useState('');

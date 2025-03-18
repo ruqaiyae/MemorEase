@@ -1,13 +1,8 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  joinFamily,
-  JoinFamilyData,
-  requestFamilyDetails,
-} from '../../Lib/data';
+import { joinFamily, JoinFamilyData } from '../../Lib/data';
 import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
-import { useUser } from '../../Components/UserManagement/useUser';
 import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
@@ -15,7 +10,6 @@ import { Msg } from '../../Components/Toast';
 export function JoinFamily() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { user } = useUser();
   const { updateFamily, addFamily } = useFamily();
 
   function errorMsg() {
@@ -28,14 +22,15 @@ export function JoinFamily() {
       setIsLoading(true);
       const formData = new FormData(event.currentTarget);
       const familyData = Object.fromEntries(formData) as JoinFamilyData;
-      const { familyId } = await joinFamily(familyData);
-      const list = await requestFamilyDetails(user?.userId);
+      const familyId = Number(familyData.familyId);
+
+      const families = await joinFamily(familyData);
 
       let familyName = '';
       let i = 0;
-      while (i < list.length) {
-        if (list[i].familyId === familyId) {
-          familyName = list[i].familyName;
+      while (i < families.length) {
+        if (families[i].familyId === familyId) {
+          familyName = families[i].familyName;
         }
         i++;
       }
@@ -43,7 +38,7 @@ export function JoinFamily() {
       const family = { familyId, familyName };
       addFamily(family);
       updateFamily(family);
-      navigate(`/family/${familyId}/dashboard`);
+      navigate(`/family/${family.familyId}/dashboard`);
     } catch (err) {
       errorMsg();
     } finally {

@@ -14,21 +14,6 @@ export type SignUpUser = {
   password: string;
 };
 
-export type SignInUser = {
-  username: string;
-  password: string;
-};
-
-export type CreateFamilyData = {
-  familyName: string;
-  password: string;
-};
-
-export type JoinFamilyData = {
-  familyId: string;
-  password: string;
-};
-
 export async function requestSignUp(userData: SignUpUser) {
   const req = {
     method: 'POST',
@@ -42,6 +27,11 @@ export async function requestSignUp(userData: SignUpUser) {
   const { user, token } = (await res.json()) as Auth;
   return [user, token];
 }
+
+export type SignInUser = {
+  username: string;
+  password: string;
+};
 
 export async function requestSignIn(userData: SignInUser) {
   const req = {
@@ -78,20 +68,10 @@ export function readToken(): string | undefined {
   return (JSON.parse(auth) as Auth).token;
 }
 
-export async function requestFamilyDetails(userId: number | undefined) {
-  const req = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${readToken()}`,
-    },
-    body: JSON.stringify({ userId }),
-  };
-
-  const res = await fetch('/api/family-details', req);
-  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
-  return (await res.json()) as Family[];
-}
+export type CreateFamilyData = {
+  familyName: string;
+  password: string;
+};
 
 export async function createFamily(familyData: CreateFamilyData) {
   const req = {
@@ -109,6 +89,11 @@ export async function createFamily(familyData: CreateFamilyData) {
   return await res.json();
 }
 
+export type JoinFamilyData = {
+  familyId: string;
+  password: string;
+};
+
 export async function joinFamily(familyData: JoinFamilyData) {
   const req = {
     method: 'POST',
@@ -122,5 +107,21 @@ export async function joinFamily(familyData: JoinFamilyData) {
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
-  return await res.json();
+  const { userId } = await res.json();
+  return await requestFamilyDetails(userId);
+}
+
+export async function requestFamilyDetails(userId: number | undefined) {
+  const req = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify({ userId }),
+  };
+
+  const res = await fetch('/api/family-details', req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Family[];
 }

@@ -31,10 +31,6 @@ type Props = {
 
 export function FamilyProvider({ children }: Props) {
   const { user } = useUser();
-
-  console.log(user);
-  console.log(user?.userId);
-
   const [families, setFamilies] = useState<Family[]>([]);
   const [currentFamily, setCurrentFamily] = useState<Family | undefined>(
     undefined
