@@ -8,7 +8,7 @@ export function Dashboard() {
   return (
     <>
       <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[50px] my-4 md:my-8 mx-7 md:mx-70">
-        Welcome to the legacy of the {currentFamily.familyName} family — where
+        Welcome to the legacy of the {currentFamily?.familyName} family — where
         memories live on.
       </h1>
       <Container mobileWidth="85%" width="70%">

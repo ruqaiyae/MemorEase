@@ -10,7 +10,7 @@ import { Msg } from '../../Components/Toast';
 export function CreateFamily() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { updateFamily } = useFamily();
+  const { updateFamily, addFamily } = useFamily();
 
   function errorMsg() {
     toast(
@@ -28,7 +28,9 @@ export function CreateFamily() {
       const { familyName, password } = familyData;
       await joinFamily({ familyId, password });
       navigate(`/family/${familyId}/dashboard`);
-      updateFamily({ familyId, familyName });
+      const family = { familyId, familyName };
+      updateFamily(family);
+      addFamily(family);
     } catch (err) {
       errorMsg();
     } finally {

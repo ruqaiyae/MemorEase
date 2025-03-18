@@ -1,3 +1,4 @@
+import { Family } from '../Components/FamilyManagement/FamilyContext';
 import { User } from '../Components/UserManagement/UserContext';
 const authKey = 'um.auth';
 
@@ -77,9 +78,7 @@ export function readToken(): string | undefined {
   return (JSON.parse(auth) as Auth).token;
 }
 
-export async function requestFamilyDetails() {
-  const user = readUser();
-  const { userId } = user as User;
+export async function requestFamilyDetails(userId: number | undefined) {
   const req = {
     method: 'POST',
     headers: {
@@ -91,7 +90,7 @@ export async function requestFamilyDetails() {
 
   const res = await fetch('/api/family-details', req);
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
-  return await res.json();
+  return (await res.json()) as Family[];
 }
 
 export async function createFamily(familyData: CreateFamilyData) {

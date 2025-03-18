@@ -22,6 +22,7 @@ export function FamilyMenu({ onClose }: Prop) {
           {fam.familyName}
         </li>
       ))}
+      {families.length !== 0 && <hr className="my-1"></hr>}
     </>
   );
 }

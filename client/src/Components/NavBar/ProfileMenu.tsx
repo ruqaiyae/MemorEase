@@ -11,7 +11,7 @@ type Props = {
 };
 export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
   const { user, handleSignOut } = useUser();
-  const { currentFamily, isLoading, error } = useFamily();
+  const { resetFamilies, isLoading } = useFamily();
   const navigate = useNavigate();
 
   if (!isOpen) return null;
@@ -49,43 +49,25 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
           )}
           {user && (
             <>
-              <FamilyMenu onClose={() => onClose()} />
               {isLoading && (
                 <>
                   <li>Loading...</li>
-                  <hr className="my-1"></hr>
                 </>
               )}
-              {error && (
-                <>
-                  <li
-                    onClick={() => {
-                      navigate('family-form'), onClose();
-                    }}
-                    className="cursor-pointer">
-                    Family Portal
-                  </li>
-                  <hr className="my-1"></hr>
-                </>
-              )}
-              {currentFamily.familyName && (
-                <>
-                  {' '}
-                  <li
-                    onClick={() => {
-                      navigate('family-form'), onClose();
-                    }}
-                    className="cursor-pointer">
-                    {' '}
-                    Family Portal{' '}
-                  </li>
-                  <hr className="my-1"></hr>
-                </>
-              )}
-
+              <FamilyMenu onClose={() => onClose()} />
+              <li
+                onClick={() => {
+                  navigate('family-form');
+                  onClose();
+                }}
+                className="cursor-pointer">
+                Family Portal
+              </li>
+              <hr className="my-1"></hr>
               <li
                 onClick={() => {
                   handleSignOut();
+                  resetFamilies();
                   onClose();
                 }}
                 className="py-[3px] md:pb-[10px]">
