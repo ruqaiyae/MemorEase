@@ -1,8 +1,8 @@
 import { Family } from '../Components/FamilyManagement/FamilyContext';
-import { User } from '../Components/UserManagement/UserContext';
+import { type User } from '../Components/UserManagement/UserContext';
 const authKey = 'um.auth';
 
-type Auth = {
+export type Auth = {
   user: User;
   token: string;
 };
@@ -14,7 +14,7 @@ export type SignUpUser = {
   password: string;
 };
 
-export async function requestSignUp(userData: SignUpUser) {
+export async function requestSignUp(userData: SignUpUser): Promise<Auth> {
   const req = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -24,8 +24,7 @@ export async function requestSignUp(userData: SignUpUser) {
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
-  const { user, token } = (await res.json()) as Auth;
-  return [user, token];
+  return (await res.json()) as Auth;
 }
 
 export type SignInUser = {
@@ -33,7 +32,7 @@ export type SignInUser = {
   password: string;
 };
 
-export async function requestSignIn(userData: SignInUser) {
+export async function requestSignIn(userData: SignInUser): Promise<Auth> {
   const req = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -43,8 +42,7 @@ export async function requestSignIn(userData: SignInUser) {
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
-  const { user, token } = (await res.json()) as Auth;
-  return [user, token];
+  return (await res.json()) as Auth;
 }
 
 export function saveAuth(user: User, token: string): void {
@@ -73,7 +71,15 @@ export type CreateFamilyData = {
   password: string;
 };
 
-export async function createFamily(familyData: CreateFamilyData) {
+type CreateFamilyResponse = {
+  familyId: number;
+  familyName: string;
+  createdAt: string;
+};
+
+export async function createFamily(
+  familyData: CreateFamilyData
+): Promise<CreateFamilyResponse> {
   const req = {
     method: 'POST',
     headers: {
@@ -90,11 +96,13 @@ export async function createFamily(familyData: CreateFamilyData) {
 }
 
 export type JoinFamilyData = {
-  familyId: string;
+  familyId: string | number;
   password: string;
 };
 
-export async function joinFamily(familyData: JoinFamilyData) {
+export async function joinFamily(
+  familyData: JoinFamilyData
+): Promise<Family[]> {
   const req = {
     method: 'POST',
     headers: {
@@ -111,7 +119,9 @@ export async function joinFamily(familyData: JoinFamilyData) {
   return await requestFamilyDetails(userId);
 }
 
-export async function requestFamilyDetails(userId: number | undefined) {
+export async function requestFamilyDetails(
+  userId: number | undefined
+): Promise<Family[]> {
   const req = {
     method: 'POST',
     headers: {

@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Container } from '../../Components/Layout/Container';
 import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
-import { type SignUpUser, requestSignUp } from '../../Lib/data';
-import { type User, useUser } from '../../Components/UserManagement/useUser';
+import { type Auth, type SignUpUser, requestSignUp } from '../../Lib/data';
+import { useUser } from '../../Components/UserManagement/useUser';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,7 +42,7 @@ export function SignUp() {
       setIsLoading(true);
       const formData = new FormData(event.currentTarget);
       const userData = Object.fromEntries(formData) as SignUpUser;
-      const [user, token] = (await requestSignUp(userData)) as [User, string];
+      const { user, token } = (await requestSignUp(userData)) as Auth;
       handleSignIn(user, token);
       navigate(`/family-form?action=signup-success`);
     } catch (err) {

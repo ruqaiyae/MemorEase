@@ -15,9 +15,9 @@ export function FamilyMenu({ onClose }: Prop) {
         <li
           key={fam.familyId}
           onClick={() => {
-            navigate(`family/${fam.familyId}/dashboard`),
-              updateFamily(fam),
-              onClose();
+            navigate(`family/${fam.familyId}/dashboard`);
+            updateFamily(fam);
+            onClose();
           }}>
           {fam.familyName}
         </li>

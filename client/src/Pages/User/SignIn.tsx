@@ -1,10 +1,10 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { type User, useUser } from '../../Components/UserManagement/useUser';
+import { useUser } from '../../Components/UserManagement/useUser';
 import { Container } from '../../Components/Layout/Container';
 import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
-import { type SignInUser, requestSignIn } from '../../Lib/data';
+import { type Auth, type SignInUser, requestSignIn } from '../../Lib/data';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
 
@@ -23,7 +23,7 @@ export function SignIn() {
       setIsLoading(true);
       const formData = new FormData(event.currentTarget);
       const userData = Object.fromEntries(formData) as SignInUser;
-      const [user, token] = (await requestSignIn(userData)) as [User, string];
+      const { user, token } = (await requestSignIn(userData)) as Auth;
       handleSignIn(user, token);
       // update: navigate to the family selection page, where the user picks a family space before entering its dashboard.
       navigate('/');
