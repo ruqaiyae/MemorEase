@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- Remove when used */
 import 'dotenv/config';
-import express, { application } from 'express';
+import express from 'express';
 import pg from 'pg';
-import { ClientError, errorMiddleware, authMiddleware } from './lib/index.js';
+import {
+  ClientError,
+  errorMiddleware,
+  authMiddleware,
+  uploadsImageMiddleware,
+} from './lib/index.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 
-type Auth = {
-  username: string;
-  password: string;
-};
-
-function validateBody(property: string | number, propName: string): void {
+function validateBody(
+  property: string | number | undefined,
+  propName: string
+): void {
   if (!property) throw new ClientError(400, `${propName} required`);
 }
 
@@ -64,6 +67,11 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
     next(err);
   }
 });
+
+type Auth = {
+  username: string;
+  password: string;
+};
 
 app.post('/api/auth/sign-in', async (req, res, next) => {
   try {
@@ -169,6 +177,66 @@ app.post('/api/family-details', authMiddleware, async (req, res, next) => {
     next(err);
   }
 });
+
+type Image = {
+  userId: number;
+  familyId: number;
+  imageId: number;
+  url: string;
+  caption: string;
+};
+
+app.get(
+  '/api/family/:familyId/dashboard/images',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select * from "ImageMemories"
+                  where "userId" = $1 and "familyId" = $2;
+                  `;
+      const params = [req.user?.userId, familyId];
+      const response = await db.query(sql, params);
+      const image = response.rows;
+      res.status(201).json(image);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.post(
+  '/api/family/:familyId/dashboard/image-uploads',
+  authMiddleware,
+  uploadsImageMiddleware.single('image'),
+  async (req, res, next) => {
+    try {
+      if (!req.file)
+        throw new ClientError(400, 'No file provided in the request.');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      let { caption } = req.body as Partial<Image>;
+      caption && validateBody(caption, 'caption');
+      if (!caption) caption = '';
+      const imageUrl = `/images/${req.file.filename}`;
+      const sql = `insert into "ImageMemories" ("userId", "familyId", "imageUrl", "caption")
+                  values($1, $2, $3, $4)
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, imageUrl, caption];
+      const response = await db.query(sql, params);
+      const image = response.rows[0];
+      res.status(201).json(image);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 /*
  * Handles paths that aren't handled by any other route handler.

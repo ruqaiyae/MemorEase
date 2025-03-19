@@ -3,6 +3,7 @@ import { FooterLinks } from './NavLinks';
 
 export function Footer() {
   const navigate = useNavigate();
+
   return (
     <>
       <div className="bg-[#654A2F] mt-5">

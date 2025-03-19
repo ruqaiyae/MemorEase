@@ -4,13 +4,19 @@ type TileProps = {
   src: string;
   alt: string;
   tileWidth: string;
+  onSelect?: () => void;
 };
 
-export function MemoryTile({ src, alt, tileWidth }: TileProps) {
+export function MemoryTile({ src, alt, tileWidth, onSelect }: TileProps) {
   return (
     <>
       <div className="flex justify-center" style={{ width: tileWidth }}>
-        <img src={src} alt={alt} className="w-[90%] md:w-[80%]" />
+        <img
+          src={src}
+          alt={alt}
+          className="w-[90%] md:w-[80%]"
+          onClick={onSelect}
+        />
       </div>
     </>
   );

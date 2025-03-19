@@ -10,7 +10,9 @@ import { CreateFamily } from './Pages/Family/CreateFamily';
 import { JoinFamily } from './Pages/Family/JoinFamily';
 import { Dashboard } from './Pages/Dashboard';
 import { ComingSoon } from './Pages/ComingSoon';
+import { ImageForm } from './Components/DataManagement/ImageForm';
 import './index.css';
+import { ImageMemories } from './Pages/Memories/ImageMemories';
 
 export default function App() {
   return (
@@ -32,6 +34,14 @@ export default function App() {
               <Route
                 path="family/:familyId/dashboard"
                 element={<Dashboard />}
+              />
+              <Route
+                path="family/:familyId/dashboard/images"
+                element={<ImageMemories />}
+              />
+              <Route
+                path="family/:familyId/dashboard/image-uploads"
+                element={<ImageForm />}
               />
               <Route path="*" element={<ComingSoon />} />
             </Route>
