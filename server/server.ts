@@ -238,6 +238,54 @@ app.post(
   }
 );
 
+app.get(
+  '/api/family/:familyId/dashboard/stories',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select * from "StoryMemories"
+                  where "userId" = $1 and "familyId" = $2;
+                  `;
+      const params = [req.user?.userId, familyId];
+      const response = await db.query(sql, params);
+      const image = response.rows;
+      res.status(201).json(image);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.post(
+  '/api/family/:familyId/dashboard/story-uploads',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { title, content } = req.body;
+      validateBody(title, 'title');
+      validateBody(content, 'content');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `insert into "StoryMemories" ("userId", "familyId", "title", "content")
+                  values($1, $2, $3, $4)
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, title, content];
+      const response = await db.query(sql, params);
+      const story = response.rows[0];
+      res.status(201).json(story);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 /*
  * Handles paths that aren't handled by any other route handler.
  * It responds with `index.html` to support page refreshes with React Router.

@@ -7,6 +7,9 @@ export function Dashboard() {
   const { currentFamily } = useFamily();
   const navigate = useNavigate();
 
+  const className =
+    'font-[fondamento] md:text-[40px] text-[#654A2F] text-center cursor-pointer';
+
   return (
     <>
       <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[50px] my-4 md:my-8 mx-7 md:mx-70">
@@ -21,9 +24,10 @@ export function Dashboard() {
               alt="Album"
               tileWidth="100%"
               onSelect={() => navigate('images')}
+              cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 className="font-[fondamento] md:text-[40px] text-[#654A2F] text-center">
+            <h4 onClick={() => navigate('images')} className={className}>
               Eternal Snapshots
             </h4>
           </div>
@@ -32,20 +36,21 @@ export function Dashboard() {
               src="/MemoryTiles/Recipe.png"
               alt="Recipe Book"
               tileWidth="100%"
+              cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 className="font-[fondamento] md:text-[40px] text-[#654A2F] text-center">
-              Generations of Flavor
-            </h4>
+            <h4 className={className}>Generations of Flavor</h4>
           </div>
           <div className="mt-4 md:my-10 w-[45%]">
             <MemoryTile
               src="/MemoryTiles/Story.png"
               alt="Story Book"
               tileWidth="100%"
+              onSelect={() => navigate('images')}
+              cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 className="font-[fondamento] md:text-[40px] text-[#654A2F] text-center">
+            <h4 onClick={() => navigate('images')} className={className}>
               Family Folklore
             </h4>
           </div>
@@ -54,11 +59,10 @@ export function Dashboard() {
               src="/MemoryTiles/Video.png"
               alt="Video Album"
               tileWidth="100%"
+              cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 className="font-[fondamento] md:text-[40px] text-[#654A2F] text-center">
-              Timeless Tapes
-            </h4>
+            <h4 className={className}>Timeless Tapes</h4>
           </div>
         </div>
       </Container>

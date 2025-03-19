@@ -162,7 +162,7 @@ export async function readImages(
 }
 
 export async function uploadImage(
-  formData: FormData,
+  imageData: FormData,
   familyId: number | undefined
 ): Promise<Image> {
   const res = await fetch(`/api/family/${familyId}/dashboard/image-uploads`, {
@@ -170,7 +170,50 @@ export async function uploadImage(
     headers: {
       Authorization: `Bearer ${readToken()}`,
     },
-    body: formData,
+    body: imageData,
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export type Story = {
+  storyId: number;
+  userId: number;
+  familyId: number;
+  title: string;
+  content: string;
+};
+
+export async function readStories(
+  familyId: number | undefined
+): Promise<Story[]> {
+  const req = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(`/api/family/${familyId}/dashboard/stories`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function uploadStory(
+  storyData: Partial<Story>,
+  familyId: number
+): Promise<Story> {
+  const res = await fetch(`/api/family/${familyId}/dashboard/image-uploads`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify(storyData),
   });
 
   if (!res.ok) {
