@@ -1,9 +1,11 @@
 import { Container } from '../Components/Layout/Container';
 import { useFamily } from '../Components/FamilyManagement/useFamily';
 import { MemoryTile } from '../Components/MemoryShowcase';
+import { useNavigate } from 'react-router-dom';
 
 export function Dashboard() {
   const { currentFamily } = useFamily();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -18,6 +20,7 @@ export function Dashboard() {
               src="/MemoryTiles/Album.png"
               alt="Album"
               tileWidth="100%"
+              onSelect={() => navigate('images')}
             />
             <div className="h-[10px] md:h-[20px]" />
             <h4 className="font-[fondamento] md:text-[40px] text-[#654A2F] text-center">

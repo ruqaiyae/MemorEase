@@ -135,3 +135,46 @@ export async function requestFamilyDetails(
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
   return (await res.json()) as Family[];
 }
+
+export type Image = {
+  imageId: number;
+  userId: number;
+  familyId: number;
+  imageUrl: string;
+  caption: string;
+};
+
+export async function readImages(
+  familyId: number | undefined
+): Promise<Image[]> {
+  const req = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(`/api/family/${familyId}/dashboard/images`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function uploadImage(
+  formData: FormData,
+  familyId: number | undefined
+): Promise<Image> {
+  const res = await fetch(`/api/family/${familyId}/dashboard/image-uploads`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
