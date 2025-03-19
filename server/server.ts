@@ -220,8 +220,9 @@ app.post(
       if (!Number.isInteger(familyId) || familyId < 1) {
         throw new ClientError(400, 'familyId must be a positive integer');
       }
-      const { caption } = req.body as Partial<Image>;
-      validateBody(caption, 'caption');
+      let { caption } = req.body as Partial<Image>;
+      caption && validateBody(caption, 'caption');
+      if (!caption) caption = '';
       const imageUrl = `/images/${req.file.filename}`;
       const sql = `insert into "ImageMemories" ("userId", "familyId", "imageUrl", "caption")
                   values($1, $2, $3, $4)
