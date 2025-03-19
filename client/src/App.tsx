@@ -1,18 +1,19 @@
-import { UserProvider } from './Components/UserManagement/UserContext';
-import { FamilyProvider } from './Components/FamilyManagement/FamilyContext';
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './Components/Layout/Layout';
 import { LandingPage } from './Pages/LandingPage';
 import { About } from './Pages/About';
-import { AuthPage } from './Pages/User/AuthPage';
-import { FamilyForm } from './Pages/Family/FamilyForm';
-import { CreateFamily } from './Pages/Family/CreateFamily';
-import { JoinFamily } from './Pages/Family/JoinFamily';
-import { Dashboard } from './Pages/Dashboard';
 import { ComingSoon } from './Pages/ComingSoon';
-import { ImageForm } from './Components/DataManagement/ImageForm';
+import { AuthPage, UserProvider } from './Index/UserIndex';
+import {
+  FamilyProvider,
+  FamilyForm,
+  CreateFamily,
+  JoinFamily,
+} from './Index/FamilyIndex';
+import { Dashboard } from './Pages/Dashboard';
+import { ImageForm, StoryForm } from './Index/FormIndex';
+import { ImageMemories, StoryMemories } from './Index/MemoriesIndex';
 import './index.css';
-import { ImageMemories } from './Pages/Memories/ImageMemories';
 
 export default function App() {
   return (
@@ -36,12 +37,20 @@ export default function App() {
                 element={<Dashboard />}
               />
               <Route
+                path="family/:familyId/dashboard/image-uploads"
+                element={<ImageForm />}
+              />
+              <Route
                 path="family/:familyId/dashboard/images"
                 element={<ImageMemories />}
               />
               <Route
-                path="family/:familyId/dashboard/image-uploads"
-                element={<ImageForm />}
+                path="family/:familyId/dashboard/story-uploads"
+                element={<StoryForm />}
+              />
+              <Route
+                path="family/:familyId/dashboard/stories"
+                element={<StoryMemories />}
               />
               <Route path="*" element={<ComingSoon />} />
             </Route>
