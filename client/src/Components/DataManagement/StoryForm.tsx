@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FormInput, labelClass } from '../UserManagement/FormInput';
+import { labelClass } from '../UserManagement/FormInput';
 import { FormContainer } from './FormContainer';
 import { Story, uploadStory } from '../../Lib/data';
 import { toast } from 'react-toastify';
@@ -35,15 +35,23 @@ export function StoryForm() {
       <FormContainer
         text="Stories are the threads that weave generations together."
         onSubmit={(e) => handleSubmit(e)}>
-        <FormInput labelName={'Username:'} name={'username'} />
         <label className={labelClass}>
-          Tell the Story Behind This Photo:
+          Title:
+          <input
+            required
+            name={'title'}
+            type={'text'}
+            className="border md:border-2 focus:border-2 md:focus:border-3 focus:outline-none border-[#654A2F] rounded md:rounded-md  md:p-2 md:h-10 w-[75%] md:w-[83%] mb-3 md:mb-6 md:my-[10px] ml-2"
+          />
+        </label>
+        <label className={labelClass}>
+          Write a Story to Remember
           <textarea
             cols={30}
             autoFocus
-            id="caption"
-            name="caption"
-            className="block border md:border-2 focus:border-2 md:focus:border-3 focus:outline-none border-[#654A2F] rounded md:rounded-md  md:p-2 md:h-8  md:w-[60%] mt-[5px] mb-4 md:my-[10px] mx-auto md:h-30"
+            id="content"
+            name="content"
+            className="block border md:border-2 focus:border-2 md:focus:border-3 focus:outline-none border-[#654A2F] rounded md:rounded-md h-65 md:h-70  md:p-2 md:h-8 w-[90%] mt-[5px] mb-4 md:my-[10px] mx-auto md:h-30"
           />
         </label>
         <button

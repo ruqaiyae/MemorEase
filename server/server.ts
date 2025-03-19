@@ -265,6 +265,7 @@ app.post(
   authMiddleware,
   async (req, res, next) => {
     try {
+      console.log('Request Body:', req.body);
       const { title, content } = req.body;
       validateBody(title, 'title');
       validateBody(content, 'content');

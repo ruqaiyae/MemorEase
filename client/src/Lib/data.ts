@@ -208,9 +208,10 @@ export async function uploadStory(
   storyData: Partial<Story>,
   familyId: number
 ): Promise<Story> {
-  const res = await fetch(`/api/family/${familyId}/dashboard/image-uploads`, {
+  const res = await fetch(`/api/family/${familyId}/dashboard/story-uploads`, {
     method: 'POST',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
     body: JSON.stringify(storyData),

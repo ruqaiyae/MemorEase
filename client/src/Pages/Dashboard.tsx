@@ -46,7 +46,7 @@ export function Dashboard() {
               src="/MemoryTiles/Story.png"
               alt="Story Book"
               tileWidth="100%"
-              onSelect={() => navigate('images')}
+              onSelect={() => navigate('stories')}
               cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
