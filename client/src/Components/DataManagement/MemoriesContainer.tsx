@@ -1,5 +1,5 @@
 import { Container } from '../Layout/Container';
-import { type Image, type Story } from '../../Lib/data';
+import { type Image, type Recipe, type Story } from '../../Lib/data';
 import { useNavigate } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { useFamily } from '../FamilyManagement/useFamily';
@@ -8,7 +8,7 @@ type Props = {
   header1: string;
   header2: string;
   loading: boolean;
-  content: Image[] | Story[] | undefined;
+  content: Image[] | Recipe[] | Story[] | undefined;
   memoryType: string;
   path: string;
   children: ReactNode;
@@ -26,9 +26,11 @@ export function MemoriesContainer({
   const { currentFamily } = useFamily();
   const navigate = useNavigate();
 
+  console.log('content: ', content);
+
   return (
     <>
-      <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[40px] my-4 md:my-15 mx-7 md:mx-70">
+      <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[40px] my-4 md:my-15 mx-7 md:mx-30 whitespace-pre-line">
         {header1} {currentFamily?.familyName} {header2}
       </h1>
       {loading && <p>Loading...</p>}

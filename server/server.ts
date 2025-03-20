@@ -239,6 +239,80 @@ app.post(
 );
 
 app.get(
+  '/api/family/:familyId/dashboard/recipes',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select * from "RecipeMemories"
+                  where "userId" = $1 and "familyId" = $2;
+                  `;
+      const params = [req.user?.userId, familyId];
+      const response = await db.query(sql, params);
+      const recipes = response.rows;
+      res.status(201).json(recipes);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.post(
+  '/api/family/:familyId/dashboard/recipe-uploads',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const {
+        dishName,
+        category,
+        cookingTime,
+        ingredients,
+        directions,
+        creator,
+        backstory,
+        notes,
+      } = req.body;
+      validateBody(dishName, 'dishName');
+      validateBody(category, 'category');
+      validateBody(cookingTime, 'cookingTime');
+      validateBody(ingredients, 'ingredients');
+      validateBody(directions, 'directions');
+      validateBody(creator, 'creator');
+      validateBody(backstory, 'backstory');
+      validateBody(notes, 'notes');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `insert into "RecipeMemories" ("userId", "familyId", "dishName", "category", "cookingTime", "ingredients", "directions", "creator", "backstory", "notes")
+                  values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                  returning *;
+                  `;
+      const params = [
+        req.user?.userId,
+        familyId,
+        dishName,
+        category,
+        cookingTime,
+        ingredients,
+        directions,
+        creator,
+        backstory,
+        notes,
+      ];
+      const response = await db.query(sql, params);
+      const story = response.rows[0];
+      res.status(201).json(story);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
   '/api/family/:familyId/dashboard/stories',
   authMiddleware,
   async (req, res, next) => {
@@ -252,8 +326,8 @@ app.get(
                   `;
       const params = [req.user?.userId, familyId];
       const response = await db.query(sql, params);
-      const image = response.rows;
-      res.status(201).json(image);
+      const stories = response.rows;
+      res.status(201).json(stories);
     } catch (err) {
       next(err);
     }
@@ -265,7 +339,6 @@ app.post(
   authMiddleware,
   async (req, res, next) => {
     try {
-      console.log('Request Body:', req.body);
       const { title, content } = req.body;
       validateBody(title, 'title');
       validateBody(content, 'content');

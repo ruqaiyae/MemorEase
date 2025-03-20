@@ -36,10 +36,13 @@ export function Dashboard() {
               src="/MemoryTiles/Recipe.png"
               alt="Recipe Book"
               tileWidth="100%"
+              onSelect={() => navigate('recipes')}
               cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 className={className}>Generations of Flavor</h4>
+            <h4 onClick={() => navigate('recipes')} className={className}>
+              Generations of Flavor
+            </h4>
           </div>
           <div className="mt-4 md:my-10 w-[45%]">
             <MemoryTile
@@ -50,7 +53,7 @@ export function Dashboard() {
               cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 onClick={() => navigate('images')} className={className}>
+            <h4 onClick={() => navigate('stories')} className={className}>
               Family Folklore
             </h4>
           </div>

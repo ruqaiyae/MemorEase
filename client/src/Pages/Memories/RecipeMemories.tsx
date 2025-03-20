@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
-import { type Story, readStories } from '../../Lib/data';
+import { type Recipe, readRecipes } from '../../Lib/data';
 import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
 
-export function StoryMemories() {
+export function RecipeMemories() {
   const { currentFamily } = useFamily();
-  const [stories, setStories] = useState<Story[]>();
+  const [recipes, setRecipes] = useState<Recipe[]>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       try {
-        const res = await readStories(currentFamily?.familyId);
-        setStories(res);
+        const res = await readRecipes(currentFamily?.familyId);
+        setRecipes(res);
       } catch (err) {
         console.log(err);
       } finally {
@@ -25,20 +25,19 @@ export function StoryMemories() {
   return (
     <>
       <MemoriesContainer
-        header1="Dive into the stories that shape the "
-        header2=" family
-        - where each word is a chapter in our timeless legacy."
+        header1="Savor the flavors of the "
+        header2=" family - where every recipe is a taste of our heritage and a story passed down through generations."
         loading={isLoading}
-        content={stories}
+        content={recipes}
         memoryType="tale"
-        path="story-uploads">
-        {stories?.length !== 0 && (
+        path="recipe-uploads">
+        {recipes?.length !== 0 && (
           <div className="mb-10">
             <ul className="flex flex-wrap text-[#654A2F] text-[10px] md:text-[25px] md:my-10">
-              {stories?.map((story) => (
+              {recipes?.map((recipe) => (
                 <div className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F]">
-                  <li key={story.storyId} className="p-5">
-                    {story.title}
+                  <li key={recipe.recipeId} className="p-5">
+                    {recipe.dishName}
                   </li>
                 </div>
               ))}
