@@ -29,15 +29,6 @@ CREATE TABLE "FamilyMembers" (
   primary key ("userId", "familyId")
 );
 
-CREATE TABLE "StoryMemories" (
-  "storyId" serial PRIMARY KEY,
-  "userId" integer,
-  "familyId" integer,
-  "title" text NOT NULL,
-  "content" text NOT NULL,
-  "createdAt" timestamptz DEFAULT (CURRENT_TIMESTAMP),
-  "updatedAt" timestamptz DEFAULT (CURRENT_timestamp)
-);
 
 CREATE TABLE "ImageMemories" (
   "imageId" serial PRIMARY KEY,
@@ -46,6 +37,33 @@ CREATE TABLE "ImageMemories" (
   "imageUrl" text NOT NULL,
   "caption" text,
   "createdAt" timestamptz DEFAULT (CURRENT_timestamp)
+);
+
+
+CREATE TABLE "RecipeMemories" (
+  "recipeId" serial PRIMARY KEY,
+  "userId" integer,
+  "familyId" integer,
+  "dishName" text NOT NULL,
+  "category" text NOT NULL,
+  "cookingTime" text NOT NULL,
+  "ingredients" text NOT NULL,
+  "directions" text NOT NULL,
+  "creator" text NOT NULL,
+  "backstory" text,
+  "notes" text,
+  "createdAt" timestamptz DEFAULT (CURRENT_TIMESTAMP),
+  "updatedAt" timestamptz DEFAULT (CURRENT_timestamp)
+);
+
+CREATE TABLE "StoryMemories" (
+  "storyId" serial PRIMARY KEY,
+  "userId" integer,
+  "familyId" integer,
+  "title" text NOT NULL,
+  "content" text NOT NULL,
+  "createdAt" timestamptz DEFAULT (CURRENT_TIMESTAMP),
+  "updatedAt" timestamptz DEFAULT (CURRENT_timestamp)
 );
 
 CREATE TABLE "VideoMemories" (
@@ -80,13 +98,17 @@ ALTER TABLE "FamilyMembers" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("user
 
 ALTER TABLE "FamilyMembers" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
 
-ALTER TABLE "StoryMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
-
-ALTER TABLE "StoryMemories" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
-
 ALTER TABLE "ImageMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
 ALTER TABLE "ImageMemories" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
+
+ALTER TABLE "RecipeMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
+
+ALTER TABLE "RecipeMemories" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
+
+ALTER TABLE "StoryMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
+
+ALTER TABLE "StoryMemories" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
 
 ALTER TABLE "VideoMemories" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 

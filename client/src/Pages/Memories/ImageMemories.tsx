@@ -20,7 +20,7 @@ export function ImageMemories() {
       }
     }
     load();
-  });
+  }, [currentFamily?.familyId]);
 
   return (
     <MemoriesContainer
@@ -33,7 +33,7 @@ export function ImageMemories() {
       {images?.length !== 0 && (
         <div className="flex flex-wrap justify-center content-center md:my-10">
           {images?.map((image) => (
-            <div className="w-[50%] md:w-[30%] my-5 ">
+            <div key={image.imageId} className="w-[50%] md:w-[30%] my-5 ">
               <img
                 src={image.imageUrl}
                 className="w-[80%] rounded-lg mx-auto border-[1.5px] md:border-2 border-[#654A2F]"

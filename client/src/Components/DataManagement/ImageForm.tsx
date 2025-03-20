@@ -73,7 +73,7 @@ export function ImageForm() {
               accept=".png, .jpg, .jpeg, .gif"
               ref={uploadRef}
               // onChange={handleFileChange}
-              className="hidden"
+              // className="hidden"
             />
           </>
         )}

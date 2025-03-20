@@ -179,6 +179,54 @@ export async function uploadImage(
   return await res.json();
 }
 
+export type Recipe = {
+  recipeId: number;
+  userId: number;
+  familyId: number;
+  dishName: string;
+  category: string;
+  cookingTime: string;
+  ingredients: string;
+  directions: string;
+  notes: string;
+};
+
+export async function readRecipes(
+  familyId: number | undefined
+): Promise<Recipe[]> {
+  const req = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(`/api/family/${familyId}/dashboard/recipes`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function uploadRecipe(
+  recipeData: Partial<Recipe>,
+  familyId: number
+): Promise<Recipe> {
+  const res = await fetch(`/api/family/${familyId}/dashboard/recipe-uploads`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify(recipeData),
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
 export type Story = {
   storyId: number;
   userId: number;
