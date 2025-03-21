@@ -26,16 +26,17 @@ export function MemoriesContainer({
   const { currentFamily } = useFamily();
   const navigate = useNavigate();
 
-  console.log('content: ', content);
-
   return (
     <>
       <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[40px] my-4 md:my-15 mx-7 md:mx-30 whitespace-pre-line">
         {header1} {currentFamily?.familyName} {header2}
       </h1>
-      {loading && <p>Loading...</p>}
       <Container mobileWidth="80%" width="85%">
-        {!content?.length && (
+        {loading ? (
+          <p className="font-[artifika] text-[#654A2F] text-center text-[10px] md:text-[25px] mx-5 my-10 md:mt-20">
+            Loading...
+          </p>
+        ) : !content?.length ? (
           <>
             <p className="font-[artifika] text-[#654A2F] text-center text-[10px] md:text-[25px] mx-5 mt-10 md:mt-20">
               No memories here yet... but every legacy starts with a first{' '}
@@ -53,8 +54,7 @@ export function MemoriesContainer({
               </button>
             </div>
           </>
-        )}
-        {content?.length !== 0 && (
+        ) : (
           <div className="flex justify-end mr-5">
             <button
               onClick={() =>

@@ -148,13 +148,30 @@ export async function readImages(
   familyId: number | undefined
 ): Promise<Image[]> {
   const req = {
-    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
   };
   const res = await fetch(`/api/family/${familyId}/dashboard/images`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function readImage(
+  familyId: number | undefined,
+  imageId: number | undefined
+): Promise<Image> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/images/${imageId}`,
+    req
+  );
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
@@ -195,9 +212,7 @@ export async function readRecipes(
   familyId: number | undefined
 ): Promise<Recipe[]> {
   const req = {
-    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
   };
@@ -239,13 +254,30 @@ export async function readStories(
   familyId: number | undefined
 ): Promise<Story[]> {
   const req = {
-    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
   };
   const res = await fetch(`/api/family/${familyId}/dashboard/stories`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function readStory(
+  familyId: number | undefined,
+  storyId: number | undefined
+): Promise<Story> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/stories/${storyId}`,
+    req
+  );
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }

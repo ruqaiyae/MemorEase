@@ -208,6 +208,35 @@ app.get(
   }
 );
 
+app.get(
+  '/api/family/:familyId/dashboard/images/:imageId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const imageId = Number(req.params.imageId);
+      if (!Number.isInteger(imageId) || imageId < 1) {
+        throw new ClientError(400, 'imageId must be a positive integer');
+      }
+      const sql = `select *
+                    from "ImageMemories"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "imageId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, imageId];
+      const response = await db.query(sql, params);
+      const image = response.rows[0];
+      res.status(201).json(image);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 app.post(
   '/api/family/:familyId/dashboard/image-uploads',
   authMiddleware,
@@ -260,6 +289,35 @@ app.get(
   }
 );
 
+app.get(
+  '/api/family/:familyId/dashboard/stories/:storyId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const storyId = Number(req.params.storyId);
+      if (!Number.isInteger(storyId) || storyId < 1) {
+        throw new ClientError(400, 'storyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "StoryMemories"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "storyId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, storyId];
+      const response = await db.query(sql, params);
+      const story = response.rows[0];
+      res.status(201).json(story);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 app.post(
   '/api/family/:familyId/dashboard/recipe-uploads',
   authMiddleware,
@@ -304,8 +362,8 @@ app.post(
         notes,
       ];
       const response = await db.query(sql, params);
-      const story = response.rows[0];
-      res.status(201).json(story);
+      const recipe = response.rows[0];
+      res.status(201).json(recipe);
     } catch (err) {
       next(err);
     }

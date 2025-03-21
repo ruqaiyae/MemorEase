@@ -14,8 +14,10 @@ import { Dashboard } from './Pages/Dashboard';
 import { ImageForm, RecipeForm, StoryForm } from './Index/FormIndex';
 import {
   ImageMemories,
+  Image,
   RecipeMemories,
   StoryMemories,
+  Story,
 } from './Index/MemoriesIndex';
 import './index.css';
 
@@ -49,12 +51,20 @@ export default function App() {
                 element={<ImageMemories />}
               />
               <Route
+                path="family/:familyId/dashboard/images/:imageId"
+                element={<Image />}
+              />
+              <Route
                 path="family/:familyId/dashboard/recipe-uploads"
                 element={<RecipeForm />}
               />
               <Route
                 path="family/:familyId/dashboard/recipes"
                 element={<RecipeMemories />}
+              />
+              <Route
+                path="family/:familyId/dashboard/stories/:storyId"
+                element={<Story />}
               />
               <Route
                 path="family/:familyId/dashboard/story-uploads"

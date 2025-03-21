@@ -1,5 +1,5 @@
-import { type FormEvent, useRef, useState } from 'react';
-import { type Image, uploadImage } from '../../Lib/data';
+import { type FormEvent, useEffect, useRef, useState } from 'react';
+import { uploadImage } from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labelClass } from '../UserManagement/FormInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,19 +9,36 @@ import { FormContainer } from './FormContainer';
 export function ImageForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { familyId } = useParams();
-  const [imageFile, setImageFile] = useState<Partial<Image>>();
+  const [selectedFile, setSelectedFile] = useState<File>();
+  const [preview, setPreview] = useState<string | undefined>();
   const uploadRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // function handleFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
-  //   const imgUrl = event.target.files?.[0];
-  //   if (imgUrl) {
-  //     setImageFile({ imageUrl: URL.createObjectURL(imgUrl) });
-  //   }
-  // }
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+
+  function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    // Using the first image instead of multiple
+    setSelectedFile(e.target.files[0]);
+  }
 
   function handleRemove(): void {
-    setImageFile(undefined);
+    setSelectedFile(undefined);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -29,6 +46,9 @@ export function ImageForm() {
     try {
       setIsLoading(true);
       const imageData = new FormData(event.currentTarget);
+      if (selectedFile) {
+        imageData.append('image', selectedFile);
+      }
       await uploadImage(imageData, Number(familyId));
       handleRemove();
       navigate('/family/:familyId/dashboard/images');
@@ -44,12 +64,12 @@ export function ImageForm() {
       <FormContainer
         text="Your family's history, captured in every frame."
         onSubmit={(e) => handleSubmit(e)}>
-        {imageFile && (
+        {selectedFile && (
           <>
             <div className="flex justify-center">
               <img
                 className="w-[60%] mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
-                src={imageFile?.imageUrl}
+                src={preview}
               />
             </div>
             <FontAwesomeIcon
@@ -59,20 +79,23 @@ export function ImageForm() {
             />
           </>
         )}
-        {!imageFile && (
+        {!selectedFile && (
           <>
-            <button
+            {/* <button
               onClick={() => uploadRef.current?.click()}
               className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-5 md:mb-15 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
               Add a Picture to Your Memory Vault
-            </button>
+            </button> */}
+
+            <p className={labelClass}>Add a Picture to Your Memory Vault</p>
             <input
               required
               type="file"
               name="image"
               accept=".png, .jpg, .jpeg, .gif"
               ref={uploadRef}
-              // onChange={handleFileChange}
+              onChange={onSelectFile}
+              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-5 md:mb-15 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer"
               // className="hidden"
             />
           </>
@@ -91,7 +114,7 @@ export function ImageForm() {
           type="submit"
           disabled={isLoading}
           className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-10 md:mb-15 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
-          Upload
+          Upload your photo
         </button>
       </FormContainer>
     </>

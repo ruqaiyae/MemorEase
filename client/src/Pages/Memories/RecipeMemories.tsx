@@ -35,10 +35,10 @@ export function RecipeMemories() {
           <div className="mb-10">
             <ul className="flex flex-wrap text-[#654A2F] text-[10px] md:text-[25px] md:my-10">
               {recipes?.map((recipe) => (
-                <div className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F]">
-                  <li key={recipe.recipeId} className="p-5">
-                    {recipe.dishName}
-                  </li>
+                <div
+                  key={recipe.recipeId}
+                  className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F]">
+                  <li className="p-5">{recipe.dishName}</li>
                 </div>
               ))}
             </ul>
