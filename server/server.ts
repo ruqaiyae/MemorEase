@@ -290,7 +290,7 @@ app.get(
 );
 
 app.get(
-  '/api/family/:familyId/dashboard/stories/:storyId',
+  '/api/family/:familyId/dashboard/recipes/:recipeId',
   authMiddleware,
   async (req, res, next) => {
     try {
@@ -298,20 +298,20 @@ app.get(
       if (!Number.isInteger(familyId) || familyId < 1) {
         throw new ClientError(400, 'familyId must be a positive integer');
       }
-      const storyId = Number(req.params.storyId);
-      if (!Number.isInteger(storyId) || storyId < 1) {
-        throw new ClientError(400, 'storyId must be a positive integer');
+      const recipeId = Number(req.params.recipeId);
+      if (!Number.isInteger(recipeId) || recipeId < 1) {
+        throw new ClientError(400, 'recipeId must be a positive integer');
       }
       const sql = `select *
-                    from "StoryMemories"
+                    from "RecipeMemories"
                     where "userId" = $1
                     and "familyId" = $2
-                    and "storyId" = $3;
+                    and "recipeId" = $3;
                   `;
-      const params = [req.user?.userId, familyId, storyId];
+      const params = [req.user?.userId, familyId, recipeId];
       const response = await db.query(sql, params);
-      const story = response.rows[0];
-      res.status(201).json(story);
+      const recipe = response.rows[0];
+      res.status(201).json(recipe);
     } catch (err) {
       next(err);
     }
@@ -392,23 +392,53 @@ app.get(
   }
 );
 
+app.get(
+  '/api/family/:familyId/dashboard/stories/:storyId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const storyId = Number(req.params.storyId);
+      if (!Number.isInteger(storyId) || storyId < 1) {
+        throw new ClientError(400, 'storyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "StoryMemories"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "storyId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, storyId];
+      const response = await db.query(sql, params);
+      const story = response.rows[0];
+      res.status(201).json(story);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 app.post(
   '/api/family/:familyId/dashboard/story-uploads',
   authMiddleware,
   async (req, res, next) => {
     try {
-      const { title, content } = req.body;
+      const { title, content, author } = req.body;
       validateBody(title, 'title');
       validateBody(content, 'content');
+      validateBody(author, 'author');
       const familyId = Number(req.params.familyId);
       if (!Number.isInteger(familyId) || familyId < 1) {
         throw new ClientError(400, 'familyId must be a positive integer');
       }
-      const sql = `insert into "StoryMemories" ("userId", "familyId", "title", "content")
-                  values($1, $2, $3, $4)
+      const sql = `insert into "StoryMemories" ("userId", "familyId", "title", "content", "author")
+                  values($1, $2, $3, $4, $5)
                   returning *;
                   `;
-      const params = [req.user?.userId, familyId, title, content];
+      const params = [req.user?.userId, familyId, title, content, author];
       const response = await db.query(sql, params);
       const story = response.rows[0];
       res.status(201).json(story);

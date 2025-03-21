@@ -205,6 +205,8 @@ export type Recipe = {
   cookingTime: string;
   ingredients: string;
   directions: string;
+  creator: string;
+  backstory: string;
   notes: string;
 };
 
@@ -217,6 +219,25 @@ export async function readRecipes(
     },
   };
   const res = await fetch(`/api/family/${familyId}/dashboard/recipes`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function readRecipe(
+  familyId: number | undefined,
+  recipeId: number | undefined
+): Promise<Recipe> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/recipes/${recipeId}`,
+    req
+  );
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
@@ -248,6 +269,7 @@ export type Story = {
   familyId: number;
   title: string;
   content: string;
+  author: string;
 };
 
 export async function readStories(

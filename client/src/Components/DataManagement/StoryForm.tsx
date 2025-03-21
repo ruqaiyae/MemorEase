@@ -5,11 +5,13 @@ import { FormContainer } from './FormContainer';
 import { Story, uploadStory } from '../../Lib/data';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
+import { useUser } from '../UserManagement/useUser';
 
 export function StoryForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { familyId } = useParams();
   const navigate = useNavigate();
+  const { user } = useUser();
 
   function errorMsg() {
     toast(<Msg message="Error uploading story" />);
@@ -21,6 +23,7 @@ export function StoryForm() {
       setIsLoading(true);
       const formData = new FormData(event.currentTarget);
       const storyData = Object.fromEntries(formData) as Partial<Story>;
+      storyData.author = `${user?.firstName} ${user?.lastName}`;
       await uploadStory(storyData, Number(familyId));
       navigate('/family/:familyId/dashboard/stories');
     } catch (err) {

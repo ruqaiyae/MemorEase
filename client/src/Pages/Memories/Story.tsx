@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
 import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
-import { Container } from '../../Components/Layout/Container';
 
 export function Story() {
   const [story, setStory] = useState<Story>();
@@ -36,11 +35,16 @@ export function Story() {
 
   return (
     <MemoryContainer text={story ? story.title : ''} isLoading={isLoading}>
-      <Container mobileWidth="80%" width="70%">
-        <p className="font-[lato] text-[#654A2F] text-[12px] md:text-[20px] italic leading-[1.6] md:leading-[2] px-5 md:px-10 py-3 md:py-10">
-          {story?.content}
-        </p>
-      </Container>
+      <div className="border-[1.5px] md:border-2 border-[#654A2F] rounded-lg w-[80%] md:w=[30%] mx-auto mb-4 md:mb-6"></div>
+      <p className="font-[lato] text-[#654A2F] text-[12px] md:text-[23px] leading-[1.6] md:leading-[2] mt-3 px-10 md:px-40 md:py-10">
+        {story?.content}
+      </p>
+      <p className="font-[lato] text-[#654A2F] bold text-[10px] md:text-[20px] text-end mt-3 px-10 md:px-50">
+        Written by:{' '}
+        <span className="text-[12px] md:text-[22px] italic">
+          {story?.author}
+        </span>
+      </p>
     </MemoryContainer>
   );
 }

@@ -16,6 +16,7 @@ import {
   ImageMemories,
   Image,
   RecipeMemories,
+  Recipe,
   StoryMemories,
   Story,
 } from './Index/MemoriesIndex';
@@ -63,8 +64,8 @@ export default function App() {
                 element={<RecipeMemories />}
               />
               <Route
-                path="family/:familyId/dashboard/stories/:storyId"
-                element={<Story />}
+                path="family/:familyId/dashboard/recipes/:recipeId"
+                element={<Recipe />}
               />
               <Route
                 path="family/:familyId/dashboard/story-uploads"
@@ -73,6 +74,10 @@ export default function App() {
               <Route
                 path="family/:familyId/dashboard/stories"
                 element={<StoryMemories />}
+              />
+              <Route
+                path="family/:familyId/dashboard/stories/:storyId"
+                element={<Story />}
               />
               <Route path="*" element={<ComingSoon />} />
             </Route>
