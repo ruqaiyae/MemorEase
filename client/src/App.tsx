@@ -56,6 +56,10 @@ export default function App() {
                 element={<Image />}
               />
               <Route
+                path="family/:familyId/dashboard/images/:imageId/edit"
+                element={<ImageForm />}
+              />
+              <Route
                 path="family/:familyId/dashboard/recipe-uploads"
                 element={<RecipeForm />}
               />
@@ -68,6 +72,10 @@ export default function App() {
                 element={<Recipe />}
               />
               <Route
+                path="family/:familyId/dashboard/recipes/:recipeId/edit"
+                element={<RecipeForm />}
+              />
+              <Route
                 path="family/:familyId/dashboard/story-uploads"
                 element={<StoryForm />}
               />
@@ -78,6 +86,10 @@ export default function App() {
               <Route
                 path="family/:familyId/dashboard/stories/:storyId"
                 element={<Story />}
+              />
+              <Route
+                path="family/:familyId/dashboard/stories/:storyId/edit"
+                element={<StoryForm />}
               />
               <Route path="*" element={<ComingSoon />} />
             </Route>

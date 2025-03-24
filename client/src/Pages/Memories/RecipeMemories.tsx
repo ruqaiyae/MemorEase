@@ -31,7 +31,7 @@ export function RecipeMemories() {
         header2=" family - where every recipe is a taste of our heritage and a story passed down through generations."
         loading={isLoading}
         content={recipes}
-        memoryType="tale"
+        memoryType="recipe"
         path="recipe-uploads">
         {recipes?.length !== 0 && (
           <div className="mb-10">
