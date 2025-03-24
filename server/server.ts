@@ -7,10 +7,16 @@ import {
   errorMiddleware,
   authMiddleware,
   uploadsImageMiddleware,
+  uploadsVideoMiddleware,
 } from './lib/index.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import { type Image, type Recipe, type Story } from '../client/src/Lib/data.js';
+import {
+  type Image,
+  type Recipe,
+  type Story,
+  type Video,
+} from '../client/src/Lib/data.js';
 
 function validateBody(
   property: string | number | undefined,
@@ -329,7 +335,8 @@ app.get(
         throw new ClientError(400, 'familyId must be a positive integer');
       }
       const sql = `select * from "RecipeMemories"
-                  where "familyId" = $1;
+                  where "familyId" = $1
+                  order by "recipeId";
                   `;
       const response = await db.query<Recipe[]>(sql, [familyId]);
       const recipes = response.rows;
@@ -522,7 +529,8 @@ app.get(
         throw new ClientError(400, 'familyId must be a positive integer');
       }
       const sql = `select * from "StoryMemories"
-                  where "familyId" = $1;
+                  where "familyId" = $1
+                  order by "storyId";
                   `;
       const params = [familyId];
       const response = await db.query<Story[]>(sql, params);
@@ -603,7 +611,6 @@ app.put(
         throw new ClientError(400, 'imageId must be a positive integer');
       }
       const { title, content, author } = req.body;
-      console.log('title: ', title, 'content: ', content, 'author: ', author);
       validateBody(title, 'title');
       validateBody(content, 'content');
       validateBody(author, 'author');
@@ -655,6 +662,146 @@ app.delete(
       res.json(story);
     } catch (error) {
       next(error);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/videos',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select * from "VideoMemories"
+                  where "familyId" = $1
+                  order by "videoId"
+                  `;
+      const response = await db.query<Video[]>(sql, [familyId]);
+      const video = response.rows;
+      res.status(201).json(video);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/videos/:videoId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const videoId = Number(req.params.videoId);
+      if (!Number.isInteger(videoId) || videoId < 1) {
+        throw new ClientError(400, 'videoId must be a positive integer');
+      }
+      const sql = `select *
+                    from "VideoMemories"
+                    where "familyId" = $1
+                    and "videoId" = $2;
+                  `;
+      const params = [familyId, videoId];
+      const response = await db.query<Video>(sql, params);
+      const video = response.rows[0];
+      res.status(201).json(video);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.post(
+  '/api/family/:familyId/dashboard/video-uploads',
+  authMiddleware,
+  uploadsVideoMiddleware.single('video'),
+  async (req, res, next) => {
+    try {
+      if (!req.file)
+        throw new ClientError(400, 'No file provided in the request.');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      let { caption } = req.body as Partial<Video>;
+      validateBody(caption, 'caption');
+      if (!caption) caption = '';
+      const videoUrl = `/videos/${req.file.filename}`;
+      const sql = `insert into "VideoMemories" ("userId", "familyId", "videoUrl", "caption")
+                  values($1, $2, $3, $4)
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, videoUrl, caption];
+      const response = await db.query<Video>(sql, params);
+      const video = response.rows[0];
+      res.status(201).json(video);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.put(
+  '/api/family/:familyId/dashboard/videos/:videoId/edit',
+  authMiddleware,
+  uploadsVideoMiddleware.single('video'),
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const videoId = Number(req.params.videoId);
+      if (!Number.isInteger(videoId) || videoId < 1) {
+        throw new ClientError(400, 'videoId must be a positive integer');
+      }
+      let { caption } = req.body as Partial<Video>;
+      validateBody(caption, 'caption');
+      if (!caption) caption = '';
+      const videoUrl = `/videos/${req.file?.filename}`;
+      const sql = `update "VideoMemories"
+                  set "userId" = $1, "familyId" = $2, "videoUrl" = $3, "caption" = $4
+                  where "videoId" = $5
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, videoUrl, caption, videoId];
+      const response = await db.query<Video>(sql, params);
+      const video = response.rows[0];
+      res.status(201).json(video);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.delete(
+  '/api/family/:familyId/dashboard/videos/:videoId/edit',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const videoId = Number(req.params.videoId);
+      if (!Number.isInteger(videoId) || videoId < 1) {
+        throw new ClientError(400, 'videoId must be a positive integer');
+      }
+      const sql = `delete from "VideoMemories"
+                  where "userId" = $1 and "familyId" = $2 and "videoId" = $3
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, videoId];
+      const response = await db.query<Video>(sql, params);
+      const video = response.rows[0];
+      res.status(201).json(video);
+    } catch (err) {
+      next(err);
     }
   }
 );

@@ -138,9 +138,7 @@ export async function joinFamily(
   return await requestFamilyDetails(userId);
 }
 
-export async function requestFamilyDetails(
-  userId: number | undefined
-): Promise<Family[]> {
+export async function requestFamilyDetails(userId: number): Promise<Family[]> {
   const req = {
     method: 'POST',
     headers: {
@@ -163,9 +161,7 @@ export type Image = {
   caption: string;
 };
 
-export async function readImages(
-  familyId: number | undefined
-): Promise<Image[]> {
+export async function readImages(familyId: number): Promise<Image[]> {
   const req = {
     headers: {
       Authorization: `Bearer ${readToken()}`,
@@ -179,8 +175,8 @@ export async function readImages(
 }
 
 export async function readImage(
-  familyId: number | undefined,
-  imageId: number | undefined
+  familyId: number,
+  imageId: number
 ): Promise<Image> {
   const req = {
     headers: {
@@ -199,7 +195,7 @@ export async function readImage(
 
 export async function uploadImage(
   imageData: FormData,
-  familyId: number | undefined
+  familyId: number
 ): Promise<Image> {
   const res = await fetch(`/api/family/${familyId}/dashboard/image-uploads`, {
     method: 'POST',
@@ -217,8 +213,8 @@ export async function uploadImage(
 
 export async function updateImage(
   image: FormData,
-  familyId: number | undefined,
-  imageId: number | undefined
+  familyId: number,
+  imageId: number
 ): Promise<Image> {
   const req = {
     method: 'PUT',
@@ -270,9 +266,7 @@ export type Recipe = {
   notes: string;
 };
 
-export async function readRecipes(
-  familyId: number | undefined
-): Promise<Recipe[]> {
+export async function readRecipes(familyId: number): Promise<Recipe[]> {
   const req = {
     headers: {
       Authorization: `Bearer ${readToken()}`,
@@ -286,8 +280,8 @@ export async function readRecipes(
 }
 
 export async function readRecipe(
-  familyId: number | undefined,
-  recipeId: number | undefined
+  familyId: number,
+  recipeId: number
 ): Promise<Recipe> {
   const req = {
     headers: {
@@ -373,9 +367,7 @@ export type Story = {
   author: string;
 };
 
-export async function readStories(
-  familyId: number | undefined
-): Promise<Story[]> {
+export async function readStories(familyId: number): Promise<Story[]> {
   const req = {
     headers: {
       Authorization: `Bearer ${readToken()}`,
@@ -389,8 +381,8 @@ export async function readStories(
 }
 
 export async function readStory(
-  familyId: number | undefined,
-  storyId: number | undefined
+  familyId: number,
+  storyId: number
 ): Promise<Story> {
   const req = {
     headers: {
@@ -428,13 +420,13 @@ export async function uploadStory(
 
 export async function updateStory(
   story: Partial<Story>,
-  familyId: number | undefined,
-  storyId: number | undefined
+  familyId: number,
+  storyId: number
 ): Promise<Story> {
-  console.log('story in data: ', JSON.stringify(story));
   const req = {
     method: 'PUT',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
     body: JSON.stringify(story),
@@ -465,4 +457,103 @@ export async function deleteStory(
     throw new Error(`response status: ${response.status}`);
   }
   return (await response.json()) as Story;
+}
+
+export type Video = {
+  videoId: number;
+  userId: number;
+  familyId: number;
+  videoUrl: string;
+  caption: string;
+};
+
+export async function readVideos(familyId: number): Promise<Video[]> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(`/api/family/${familyId}/dashboard/videos`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function readVideo(
+  familyId: number,
+  videoId: number
+): Promise<Video> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/videos/${videoId}`,
+    req
+  );
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function uploadVideo(
+  videoData: FormData,
+  familyId: number
+): Promise<Video> {
+  const res = await fetch(`/api/family/${familyId}/dashboard/video-uploads`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: videoData,
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function updateVideo(
+  video: FormData,
+  familyId: number,
+  videoId: number
+): Promise<Video> {
+  const req = {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: video,
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/videos/${videoId}/edit`,
+    req
+  );
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Video;
+}
+
+export async function deleteVideo(
+  familyId: number,
+  videoId: number
+): Promise<Video> {
+  const bear = readToken();
+  const req = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${bear}`,
+    },
+  };
+  const response = await fetch(
+    `/api/family/${familyId}/dashboard/videos/${videoId}/edit`,
+    req
+  );
+  if (!response.ok) {
+    throw new Error(`response status: ${response.status}`);
+  }
+  return (await response.json()) as Video;
 }

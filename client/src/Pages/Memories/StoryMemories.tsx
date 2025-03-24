@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { type Story, readStories } from '../../Lib/data';
-import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
 
 export function StoryMemories() {
-  const { currentFamily } = useFamily();
+  const { familyId } = useParams();
   const [stories, setStories] = useState<Story[]>();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ export function StoryMemories() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await readStories(currentFamily?.familyId);
+        const res = await readStories(Number(familyId));
         setStories(res);
       } catch (err) {
         console.log(err);
@@ -22,7 +21,7 @@ export function StoryMemories() {
       }
     }
     load();
-  }, [currentFamily?.familyId]);
+  }, [familyId]);
 
   return (
     <>
@@ -42,7 +41,7 @@ export function StoryMemories() {
                   key={story.storyId}
                   onClick={() =>
                     navigate(
-                      `/family/${currentFamily?.familyId}/dashboard/stories/${story.storyId}`
+                      `/family/${familyId}/dashboard/stories/${story.storyId}`
                     )
                   }
                   className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F] cursor-pointer">

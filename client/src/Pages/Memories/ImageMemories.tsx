@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useFamily } from '../../Components/FamilyManagement/useFamily';
+import { useNavigate, useParams } from 'react-router-dom';
 import { type Image, readImages } from '../../Lib/data';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
 
 export function ImageMemories() {
-  const { currentFamily } = useFamily();
+  const { familyId } = useParams();
   const [images, setImages] = useState<Image[]>();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ export function ImageMemories() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await readImages(currentFamily?.familyId);
+        const res = await readImages(Number(familyId));
         setImages(res);
       } catch (err) {
         console.log(err);
@@ -22,11 +21,12 @@ export function ImageMemories() {
       }
     }
     load();
-  }, [currentFamily?.familyId]);
+  }, [familyId]);
 
   return (
     <MemoriesContainer
-      header1="Explore the Eternal Snapshots of the "
+      header1="Captured in frames, cherished for generations
+      - welcome to the visual legacy of the "
       header2=" family"
       loading={isLoading}
       content={images}
@@ -40,7 +40,7 @@ export function ImageMemories() {
               key={image.imageId}
               onClick={() =>
                 navigate(
-                  `/family/${currentFamily?.familyId}/dashboard/images/${image.imageId}`
+                  `/family/${familyId}/dashboard/images/${image.imageId}`
                 )
               }
               className="p-2 cursor-pointer w-20 md:w-40 h-20 md:h-40 object-cover"
