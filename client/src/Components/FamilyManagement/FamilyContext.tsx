@@ -1,5 +1,10 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
-import { requestFamilyDetails } from '../../Lib/data';
+import {
+  readFamily,
+  removeFamilyAuth,
+  requestFamilyDetails,
+  saveFamilyAuth,
+} from '../../Lib/data';
 import { useUser } from '../UserManagement/useUser';
 
 export type Family = {
@@ -38,6 +43,12 @@ export function FamilyProvider({ children }: Props) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const storedFamily = readFamily();
+
+    storedFamily && setCurrentFamily(storedFamily);
+  }, []);
+
+  useEffect(() => {
     async function load(userId: number | undefined) {
       try {
         const response = await requestFamilyDetails(userId);
@@ -53,6 +64,7 @@ export function FamilyProvider({ children }: Props) {
 
   function updateFamily(family: Family): void {
     setCurrentFamily(family);
+    saveFamilyAuth(family);
   }
 
   function addFamily(family: Family) {
@@ -61,6 +73,8 @@ export function FamilyProvider({ children }: Props) {
 
   function resetFamilies() {
     setFamilies([]);
+    setCurrentFamily(undefined);
+    removeFamilyAuth();
   }
 
   return (

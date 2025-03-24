@@ -62,6 +62,7 @@ CREATE TABLE "StoryMemories" (
   "familyId" integer,
   "title" text NOT NULL,
   "content" text NOT NULL,
+  "author" text NOT NULL,
   "createdAt" timestamptz DEFAULT (CURRENT_TIMESTAMP),
   "updatedAt" timestamptz DEFAULT (CURRENT_timestamp)
 );

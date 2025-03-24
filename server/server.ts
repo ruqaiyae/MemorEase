@@ -10,6 +10,7 @@ import {
 } from './lib/index.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
+import { type Image, type Recipe, type Story } from '../client/src/Lib/data.js';
 
 function validateBody(
   property: string | number | undefined,
@@ -89,8 +90,8 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     if (!(await argon2.verify(user.hashedPassword, password))) {
       throw new ClientError(401, 'invalid login');
     } else {
-      const { userId } = user;
-      const payload = { username, userId };
+      delete user.hashedPassword;
+      const payload = user;
       const token = jwt.sign(payload, hashKey);
       res.json({ user: payload, token });
     }
@@ -178,14 +179,6 @@ app.post('/api/family-details', authMiddleware, async (req, res, next) => {
   }
 });
 
-type Image = {
-  userId: number;
-  familyId: number;
-  imageId: number;
-  url: string;
-  caption: string;
-};
-
 app.get(
   '/api/family/:familyId/dashboard/images',
   authMiddleware,
@@ -196,11 +189,39 @@ app.get(
         throw new ClientError(400, 'familyId must be a positive integer');
       }
       const sql = `select * from "ImageMemories"
-                  where "userId" = $1 and "familyId" = $2;
+                  where "familyId" = $1
+                  order by "imageId"
                   `;
-      const params = [req.user?.userId, familyId];
-      const response = await db.query(sql, params);
+      const response = await db.query<Image[]>(sql, [familyId]);
       const image = response.rows;
+      res.status(201).json(image);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/images/:imageId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const imageId = Number(req.params.imageId);
+      if (!Number.isInteger(imageId) || imageId < 1) {
+        throw new ClientError(400, 'imageId must be a positive integer');
+      }
+      const sql = `select *
+                    from "ImageMemories"
+                    where "familyId" = $1
+                    and "imageId" = $2;
+                  `;
+      const params = [familyId, imageId];
+      const response = await db.query<Image>(sql, params);
+      const image = response.rows[0];
       res.status(201).json(image);
     } catch (err) {
       next(err);
@@ -221,7 +242,7 @@ app.post(
         throw new ClientError(400, 'familyId must be a positive integer');
       }
       let { caption } = req.body as Partial<Image>;
-      caption && validateBody(caption, 'caption');
+      validateBody(caption, 'caption');
       if (!caption) caption = '';
       const imageUrl = `/images/${req.file.filename}`;
       const sql = `insert into "ImageMemories" ("userId", "familyId", "imageUrl", "caption")
@@ -229,7 +250,67 @@ app.post(
                   returning *;
                   `;
       const params = [req.user?.userId, familyId, imageUrl, caption];
-      const response = await db.query(sql, params);
+      const response = await db.query<Image>(sql, params);
+      const image = response.rows[0];
+      res.status(201).json(image);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.put(
+  '/api/family/:familyId/dashboard/images/:imageId/edit',
+  authMiddleware,
+  uploadsImageMiddleware.single('image'),
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const imageId = Number(req.params.imageId);
+      if (!Number.isInteger(imageId) || imageId < 1) {
+        throw new ClientError(400, 'imageId must be a positive integer');
+      }
+      let { caption } = req.body as Partial<Image>;
+      validateBody(caption, 'caption');
+      if (!caption) caption = '';
+      const imageUrl = `/images/${req.file?.filename}`;
+      const sql = `update "ImageMemories"
+                  set "userId" = $1, "familyId" = $2, "imageUrl" = $3, "caption" = $4
+                  where "imageId" = $5
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, imageUrl, caption, imageId];
+      const response = await db.query<Image>(sql, params);
+      const image = response.rows[0];
+      res.status(201).json(image);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.delete(
+  '/api/family/:familyId/dashboard/images/:imageId/edit',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const imageId = Number(req.params.imageId);
+      if (!Number.isInteger(imageId) || imageId < 1) {
+        throw new ClientError(400, 'imageId must be a positive integer');
+      }
+      const sql = `delete from "ImageMemories"
+                  where "userId" = $1 and "familyId" = $2 and "imageId" = $3
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, imageId];
+      const response = await db.query<Image>(sql, params);
       const image = response.rows[0];
       res.status(201).json(image);
     } catch (err) {
@@ -248,12 +329,40 @@ app.get(
         throw new ClientError(400, 'familyId must be a positive integer');
       }
       const sql = `select * from "RecipeMemories"
-                  where "userId" = $1 and "familyId" = $2;
+                  where "familyId" = $1;
                   `;
-      const params = [req.user?.userId, familyId];
-      const response = await db.query(sql, params);
+      const response = await db.query<Recipe[]>(sql, [familyId]);
       const recipes = response.rows;
       res.status(201).json(recipes);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/recipes/:recipeId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const recipeId = Number(req.params.recipeId);
+      if (!Number.isInteger(recipeId) || recipeId < 1) {
+        throw new ClientError(400, 'recipeId must be a positive integer');
+      }
+      const sql = `select *
+                    from "RecipeMemories"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "recipeId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, recipeId];
+      const response = await db.query<Recipe>(sql, params);
+      const recipe = response.rows[0];
+      res.status(201).json(recipe);
     } catch (err) {
       next(err);
     }
@@ -303,11 +412,102 @@ app.post(
         backstory,
         notes,
       ];
-      const response = await db.query(sql, params);
-      const story = response.rows[0];
-      res.status(201).json(story);
+      const response = await db.query<Recipe>(sql, params);
+      const recipe = response.rows[0];
+      res.status(201).json(recipe);
     } catch (err) {
       next(err);
+    }
+  }
+);
+
+app.put(
+  '/api/family/:familyId/dashboard/recipes/:recipeId/edit',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const {
+        dishName,
+        category,
+        cookingTime,
+        ingredients,
+        directions,
+        creator,
+        backstory,
+        notes,
+      } = req.body;
+      validateBody(dishName, 'dishName');
+      validateBody(category, 'category');
+      validateBody(cookingTime, 'cookingTime');
+      validateBody(ingredients, 'ingredients');
+      validateBody(directions, 'directions');
+      validateBody(creator, 'creator');
+      validateBody(backstory, 'backstory');
+      validateBody(notes, 'notes');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const recipeId = Number(req.params.recipeId);
+      if (!Number.isInteger(recipeId) || recipeId < 1) {
+        throw new ClientError(400, 'recipeId must be a positive integer');
+      }
+
+      const sql = `update "RecipeMemories"
+                  set "userId" = $1, "familyId" = $2, "dishName" = $3, "category" = $4, "cookingTime" = $5, "ingredients" = $6, "directions" = $7, "creator" = $8, "backstory" = $9, "notes" = $10
+                  where "recipeId" = $11
+                  returning *;`;
+      const params = [
+        req.user?.userId,
+        familyId,
+        dishName,
+        category,
+        cookingTime,
+        ingredients,
+        directions,
+        creator,
+        backstory,
+        notes,
+        recipeId,
+      ];
+      const result = await db.query<Recipe>(sql, params);
+      const recipe = result.rows[0];
+      if (!recipe) {
+        throw new ClientError(404, 'No recipes are available');
+      }
+      res.json(recipe);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+app.delete(
+  '/api/family/:familyId/dashboard/recipes/:recipeId/edit',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const recipeId = Number(req.params.recipeId);
+      if (!Number.isInteger(recipeId) || recipeId < 1) {
+        throw new ClientError(400, 'recipeId must be a positive integer');
+      }
+      const sql = `delete from "RecipeMemories"
+                  where "userId" = $1 and "familyId" = $2 and "recipeId" = $3
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, recipeId];
+      const response = await db.query<Story>(sql, params);
+      const recipe = response.rows[0];
+      if (!recipe) {
+        throw new ClientError(404, 'No stories are available');
+      }
+      res.json(recipe);
+    } catch (error) {
+      next(error);
     }
   }
 );
@@ -322,12 +522,40 @@ app.get(
         throw new ClientError(400, 'familyId must be a positive integer');
       }
       const sql = `select * from "StoryMemories"
-                  where "userId" = $1 and "familyId" = $2;
+                  where "familyId" = $1;
                   `;
-      const params = [req.user?.userId, familyId];
-      const response = await db.query(sql, params);
+      const params = [familyId];
+      const response = await db.query<Story[]>(sql, params);
       const stories = response.rows;
       res.status(201).json(stories);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/stories/:storyId',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const storyId = Number(req.params.storyId);
+      if (!Number.isInteger(storyId) || storyId < 1) {
+        throw new ClientError(400, 'storyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "StoryMemories"
+                    where "familyId" = $1
+                    and "storyId" = $2;
+                  `;
+      const params = [familyId, storyId];
+      const response = await db.query<Story>(sql, params);
+      const story = response.rows[0];
+      res.status(201).json(story);
     } catch (err) {
       next(err);
     }
@@ -339,23 +567,94 @@ app.post(
   authMiddleware,
   async (req, res, next) => {
     try {
-      const { title, content } = req.body;
+      const { title, content, author } = req.body;
       validateBody(title, 'title');
       validateBody(content, 'content');
+      validateBody(author, 'author');
       const familyId = Number(req.params.familyId);
       if (!Number.isInteger(familyId) || familyId < 1) {
         throw new ClientError(400, 'familyId must be a positive integer');
       }
-      const sql = `insert into "StoryMemories" ("userId", "familyId", "title", "content")
-                  values($1, $2, $3, $4)
+      const sql = `insert into "StoryMemories" ("userId", "familyId", "title", "content", "author")
+                  values($1, $2, $3, $4, $5)
                   returning *;
                   `;
-      const params = [req.user?.userId, familyId, title, content];
-      const response = await db.query(sql, params);
+      const params = [req.user?.userId, familyId, title, content, author];
+      const response = await db.query<Story>(sql, params);
       const story = response.rows[0];
       res.status(201).json(story);
     } catch (err) {
       next(err);
+    }
+  }
+);
+
+app.put(
+  '/api/family/:familyId/dashboard/stories/:storyId/edit',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const storyId = Number(req.params.storyId);
+      if (!Number.isInteger(storyId) || storyId < 1) {
+        throw new ClientError(400, 'imageId must be a positive integer');
+      }
+      const { title, content, author } = req.body;
+      console.log('title: ', title, 'content: ', content, 'author: ', author);
+      validateBody(title, 'title');
+      validateBody(content, 'content');
+      validateBody(author, 'author');
+      const sql = `update "StoryMemories"
+                  set "userId" = $1, "familyId" = $2, "title" = $3, "content" = $4, author = $5
+                  where "storyId" = $6
+                  returning *;
+                  `;
+      const params = [
+        req.user?.userId,
+        familyId,
+        title,
+        content,
+        author,
+        storyId,
+      ];
+      const response = await db.query<Image>(sql, params);
+      const story = response.rows[0];
+      res.status(201).json(story);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.delete(
+  '/api/family/:familyId/dashboard/stories/:storyId/edit',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const storyId = Number(req.params.storyId);
+      if (!Number.isInteger(storyId) || storyId < 1) {
+        throw new ClientError(400, 'storyId must be a positive integer');
+      }
+      const sql = `delete from "StoryMemories"
+                  where "userId" = $1 and "familyId" = $2 and "storyId" = $3
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, storyId];
+      const response = await db.query<Story>(sql, params);
+      const story = response.rows[0];
+      if (!story) {
+        throw new ClientError(404, 'No stories are available');
+      }
+      res.json(story);
+    } catch (error) {
+      next(error);
     }
   }
 );

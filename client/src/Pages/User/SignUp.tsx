@@ -5,16 +5,16 @@ import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
 import { type Auth, type SignUpUser, requestSignUp } from '../../Lib/data';
 import { useUser } from '../../Components/UserManagement/useUser';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleCheck,
   faCircleXmark,
+  faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 
 export function SignUp() {
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<unknown>();
   const [icon, setIcon] = useState<ReactNode>(null);
   const [valid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,10 +31,6 @@ export function SignUp() {
     }
   }
 
-  function errorMsg() {
-    toast(<Msg message="Error registering user" />);
-  }
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
@@ -46,10 +42,25 @@ export function SignUp() {
       handleSignIn(user, token);
       navigate(`/family-form?action=signup-success`);
     } catch (err) {
-      errorMsg();
+      setError(err);
     } finally {
       setIsLoading(false);
     }
+  }
+
+  let message;
+  if (error) {
+    message = (
+      <div className="flex items-center ml-10 md:ml-70 mb-2">
+        <FontAwesomeIcon
+          icon={faTriangleExclamation}
+          className="text-[#B22222] text-[7px] md:text-[12px]"
+        />
+        <p className="w-100 text-center md:text-left text-[#B22222] text-[7px] md:text-[12px] md:p-2">
+          Username taken. Please try another.
+        </p>
+      </div>
+    );
   }
 
   let passwordError = '';
@@ -75,14 +86,19 @@ export function SignUp() {
               <FormInput labelName={'First Name:'} name={'firstName'} />
               <FormInput labelName={'Last Name:'} name={'lastName'} />
               <FormInput labelName={'Username:'} name={'username'} />
+              {message}
               <PasswordInput
                 labelName={'Password:'}
                 onInput={(e) => setPassword(e.target.value)}
               />
             </div>
             {passwordError !== '' && (
-              <div className="flex justify-center mb-2">
-                <p className="w-100 text-center md:text-left text-[#B22222] text-[7px] md:text-[12px] mx-3 md:ml-30">
+              <div className="flex items-start mb-2 md:ml-70 mx-2">
+                <FontAwesomeIcon
+                  icon={faTriangleExclamation}
+                  className="text-[#B22222] text-[7px] mt-0.5 md:mt-2 md:text-[12px]"
+                />
+                <p className="w-100 items-center md:text-left text-[#B22222] text-[7px] md:text-[12px] md:p-1 ">
                   {passwordError}
                 </p>
               </div>

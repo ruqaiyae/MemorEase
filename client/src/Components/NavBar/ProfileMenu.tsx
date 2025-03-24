@@ -35,10 +35,12 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
           top,
           left,
         }}>
-        <ul className="list-none m-0 py-[3px] font-[Lato] text-[#EBD199] text-right text-[9px] md:text-[15px]">
+        <ul className="list-none m-0 py-[3px] font-[Lato] text-[#EBD199] text-right text-[9px] md:text-[15px] cursor-pointer">
           {!user && (
             <>
-              <li onClick={onClose} className="pb-[5px] md:pb-[10px]">
+              <li
+                onClick={onClose}
+                className="pb-[5px] md:pb-[10px] cursor-pointer">
                 <Link to={'sign-in'}>Sign In</Link>
               </li>
 

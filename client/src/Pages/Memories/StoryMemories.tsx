@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { type Story, readStories } from '../../Lib/data';
 import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
@@ -7,6 +8,7 @@ export function StoryMemories() {
   const { currentFamily } = useFamily();
   const [stories, setStories] = useState<Story[]>();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
@@ -36,10 +38,15 @@ export function StoryMemories() {
           <div className="mb-10">
             <ul className="flex flex-wrap text-[#654A2F] text-[10px] md:text-[25px] md:my-10">
               {stories?.map((story) => (
-                <div className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F]">
-                  <li key={story.storyId} className="p-5">
-                    {story.title}
-                  </li>
+                <div
+                  key={story.storyId}
+                  onClick={() =>
+                    navigate(
+                      `/family/${currentFamily?.familyId}/dashboard/stories/${story.storyId}`
+                    )
+                  }
+                  className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F] cursor-pointer">
+                  <li className="p-5">{story.title}</li>
                 </div>
               ))}
             </ul>

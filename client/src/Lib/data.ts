@@ -66,6 +66,25 @@ export function readToken(): string | undefined {
   return (JSON.parse(auth) as Auth).token;
 }
 
+export type FamilyAuth = {
+  family: Family;
+};
+
+export function saveFamilyAuth(family: Family): void {
+  const familyAuth: FamilyAuth = { family };
+  localStorage.setItem('familyAuthKey', JSON.stringify(familyAuth));
+}
+
+export function removeFamilyAuth(): void {
+  localStorage.removeItem('familyAuthKey');
+}
+
+export function readFamily(): Family | undefined {
+  const familyAuth = localStorage.getItem('familyAuthKey');
+  if (!familyAuth) return undefined;
+  return (JSON.parse(familyAuth) as FamilyAuth).family;
+}
+
 export type CreateFamilyData = {
   familyName: string;
   password: string;
@@ -148,13 +167,30 @@ export async function readImages(
   familyId: number | undefined
 ): Promise<Image[]> {
   const req = {
-    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
   };
   const res = await fetch(`/api/family/${familyId}/dashboard/images`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function readImage(
+  familyId: number | undefined,
+  imageId: number | undefined
+): Promise<Image> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/images/${imageId}`,
+    req
+  );
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
@@ -179,6 +215,47 @@ export async function uploadImage(
   return await res.json();
 }
 
+export async function updateImage(
+  image: FormData,
+  familyId: number | undefined,
+  imageId: number | undefined
+): Promise<Image> {
+  const req = {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: image,
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/images/${imageId}/edit`,
+    req
+  );
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Image;
+}
+
+export async function deleteImage(
+  familyId: number,
+  imageId: number
+): Promise<Image> {
+  const bear = readToken();
+  const req = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${bear}`,
+    },
+  };
+  const response = await fetch(
+    `/api/family/${familyId}/dashboard/images/${imageId}/edit`,
+    req
+  );
+  if (!response.ok) {
+    throw new Error(`response status: ${response.status}`);
+  }
+  return (await response.json()) as Image;
+}
+
 export type Recipe = {
   recipeId: number;
   userId: number;
@@ -188,6 +265,8 @@ export type Recipe = {
   cookingTime: string;
   ingredients: string;
   directions: string;
+  creator: string;
+  backstory: string;
   notes: string;
 };
 
@@ -195,13 +274,30 @@ export async function readRecipes(
   familyId: number | undefined
 ): Promise<Recipe[]> {
   const req = {
-    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
   };
   const res = await fetch(`/api/family/${familyId}/dashboard/recipes`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function readRecipe(
+  familyId: number | undefined,
+  recipeId: number | undefined
+): Promise<Recipe> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/recipes/${recipeId}`,
+    req
+  );
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
@@ -227,25 +323,84 @@ export async function uploadRecipe(
   return await res.json();
 }
 
+export async function updateRecipe(
+  recipe: Partial<Recipe>,
+  familyId: number,
+  recipeId: number
+): Promise<Recipe> {
+  const req = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify(recipe),
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/recipes/${recipeId}/edit`,
+    req
+  );
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Recipe;
+}
+
+export async function deleteRecipe(
+  familyId: number,
+  recipeId: number
+): Promise<Recipe> {
+  const req = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const response = await fetch(
+    `/api/family/${familyId}/dashboard/recipes/${recipeId}/edit`,
+    req
+  );
+  if (!response.ok) {
+    throw new Error(`response status: ${response.status}`);
+  }
+  return (await response.json()) as Recipe;
+}
+
 export type Story = {
   storyId: number;
   userId: number;
   familyId: number;
   title: string;
   content: string;
+  author: string;
 };
 
 export async function readStories(
   familyId: number | undefined
 ): Promise<Story[]> {
   const req = {
-    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
   };
   const res = await fetch(`/api/family/${familyId}/dashboard/stories`, req);
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function readStory(
+  familyId: number | undefined,
+  storyId: number | undefined
+): Promise<Story> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/stories/${storyId}`,
+    req
+  );
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
@@ -269,4 +424,45 @@ export async function uploadStory(
     throw new Error(`fetch Error ${res.status}`);
   }
   return await res.json();
+}
+
+export async function updateStory(
+  story: Partial<Story>,
+  familyId: number | undefined,
+  storyId: number | undefined
+): Promise<Story> {
+  console.log('story in data: ', JSON.stringify(story));
+  const req = {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify(story),
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/stories/${storyId}/edit`,
+    req
+  );
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Story;
+}
+
+export async function deleteStory(
+  familyId: number,
+  storyId: number
+): Promise<Story> {
+  const req = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const response = await fetch(
+    `/api/family/${familyId}/dashboard/stories/${storyId}/edit`,
+    req
+  );
+  if (!response.ok) {
+    throw new Error(`response status: ${response.status}`);
+  }
+  return (await response.json()) as Story;
 }

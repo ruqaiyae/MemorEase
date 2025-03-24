@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { type Image, readImages } from '../../Lib/data';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
@@ -7,6 +8,7 @@ export function ImageMemories() {
   const { currentFamily } = useFamily();
   const [images, setImages] = useState<Image[]>();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
@@ -33,12 +35,16 @@ export function ImageMemories() {
       {images?.length !== 0 && (
         <div className="flex flex-wrap justify-center content-center md:my-10">
           {images?.map((image) => (
-            <div key={image.imageId} className="w-[50%] md:w-[30%] my-5 ">
-              <img
-                src={image.imageUrl}
-                className="w-[80%] rounded-lg mx-auto border-[1.5px] md:border-2 border-[#654A2F]"
-              />
-            </div>
+            <img
+              src={image.imageUrl}
+              key={image.imageId}
+              onClick={() =>
+                navigate(
+                  `/family/${currentFamily?.familyId}/dashboard/images/${image.imageId}`
+                )
+              }
+              className="p-2 cursor-pointer w-20 md:w-40 h-20 md:h-40 object-cover"
+            />
           ))}
         </div>
       )}
