@@ -1,5 +1,10 @@
 import { Container } from '../Layout/Container';
-import { type Image, type Recipe, type Story } from '../../Lib/data';
+import {
+  type Image,
+  type Recipe,
+  type Story,
+  type Video,
+} from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { useFamily } from '../FamilyManagement/useFamily';
@@ -8,7 +13,7 @@ type Props = {
   header1: string;
   header2: string;
   loading: boolean;
-  content: Image[] | Recipe[] | Story[] | undefined;
+  content: Image[] | Recipe[] | Story[] | Video[] | undefined;
   memoryType: string;
   path: string;
   children: ReactNode;
