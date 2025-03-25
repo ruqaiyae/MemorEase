@@ -1,33 +1,38 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { readImage, type Image } from '../../Lib/data';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import {
   faHeart as faHeartSolid,
   faPen,
 } from '@fortawesome/free-solid-svg-icons';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
+import {
+  readImage,
+  type Image,
+  dislikeMemory,
+  likeMemory,
+  readLike,
+} from '../../Lib/data';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function Image() {
   const [image, setImage] = useState<Image>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const { familyId, imageId } = useParams();
-
-  function errorMsg() {
-    toast(<Msg message="Error loading image. Please try again." />);
-  }
 
   useEffect(() => {
     async function loadImage(imageId: number) {
       try {
+        setIsLoading(true);
         const res = await readImage(Number(familyId), imageId);
         setImage(res);
+        const likedStatus = await readLike(Number(familyId), imageId);
+        if (!likedStatus) return;
+        likedStatus.imageId && setIsLiked(true);
       } catch (err) {
-        errorMsg();
+        errorMsg('Error loading image. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -38,6 +43,13 @@ export function Image() {
     }
   }, [familyId, imageId]);
 
+  async function handleClick() {
+    setIsLiked(!isLiked);
+    !isLiked && (await likeMemory(Number(familyId), 'image', Number(imageId)));
+    isLiked &&
+      (await dislikeMemory(Number(familyId), 'image', Number(imageId)));
+  }
+
   return (
     <MemoryContainer
       marginLeft="0"
@@ -45,34 +57,35 @@ export function Image() {
       text="A single photo can hold a thousand memories."
       isLoading={isLoading}>
       <div className="flex flex-wrap md:flex-nowrap md:justify-center">
-        <div className="w-[50%] md:w-[40%] mx-5 md:mx-20">
-          <div>
+        <div className="md:w-[40%] mx-5 md:mx-20">
+          <div className="relative inline-block">
             <img
               src={image?.imageUrl}
               className="object-contain border-[1.5px] md:border-2 border-[#654A2F] rounded-lg"
             />
-          </div>
-          <div className="flex justify-between content-center mt-1 md:mt-3 ">
-            <div className="flex items-center">
-              <Link to={`/family/${familyId}/dashboard/images/${imageId}/edit`}>
-                <FontAwesomeIcon
-                  icon={faPen}
-                  className="text-[8px] md:text-[20px] text-[#654A2F] pr-1 md:pr-2"
-                />
-              </Link>
-              <p className="text-[#654A2F] text-[12px] md:text-[20px]">
-                {image?.caption}
-              </p>
+            <div className="flex justify-between content-center mt-1 md:mt-3 w-full">
+              <div className="flex items-center">
+                <Link
+                  to={`/family/${familyId}/dashboard/images/${imageId}/edit`}>
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    className="text-[8px] md:text-[20px] text-[#654A2F] pr-1 md:pr-2"
+                  />
+                </Link>
+                <p className="text-[#654A2F] text-[12px] md:text-[20px]">
+                  {image?.caption}
+                </p>
+              </div>
+              <FontAwesomeIcon
+                icon={isLiked ? faHeartSolid : faHeartRegular}
+                onClick={handleClick}
+                className={
+                  isLiked
+                    ? 'text-[#d51010] md:text-[25px]'
+                    : 'text-[#654A2F] md:text-[25px]'
+                }
+              />
             </div>
-            <FontAwesomeIcon
-              icon={isLiked ? faHeartSolid : faHeartRegular}
-              onClick={() => setIsLiked(!isLiked)}
-              className={
-                isLiked
-                  ? 'text-[#d51010] md:text-[25px]'
-                  : 'text-[#654A2F] md:text-[25px]'
-              }
-            />
           </div>
         </div>
         <div className="w-[50%]">

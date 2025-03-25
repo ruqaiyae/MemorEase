@@ -5,17 +5,12 @@ import { Container } from '../../Components/Layout/Container';
 import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
 import { type Auth, type SignInUser, requestSignIn } from '../../Lib/data';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function SignIn() {
   const { handleSignIn } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  function errorMsg() {
-    toast(<Msg message="Invalid username or password. Please try again." />);
-  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,7 +24,7 @@ export function SignIn() {
       navigate('/');
       window.scrollTo(0, 0);
     } catch (err) {
-      errorMsg();
+      errorMsg('Invalid username or password. Please try again.');
     } finally {
       setIsLoading(false);
     }

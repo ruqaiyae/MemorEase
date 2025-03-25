@@ -1,21 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { readRecipe, type Recipe } from '../../Lib/data';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
 import { Container } from '../../Components/Layout/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function Recipe() {
   const [recipe, setRecipe] = useState<Recipe>();
   const [isLoading, setIsLoading] = useState(true);
   const { familyId, recipeId } = useParams();
-
-  function errorMsg() {
-    toast(<Msg message="Error loading recipe. Please try again." />);
-  }
 
   useEffect(() => {
     async function loadRecipe(recipeId: number) {
@@ -23,7 +18,7 @@ export function Recipe() {
         const res = await readRecipe(Number(familyId), recipeId);
         setRecipe(res);
       } catch (err) {
-        errorMsg();
+        errorMsg('Error loading recipe. Please try again.');
       } finally {
         setIsLoading(false);
       }

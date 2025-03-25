@@ -1,21 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { readStory, type Story } from '../../Lib/data';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
 import { Container } from '../../Components/Layout/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function Story() {
   const [story, setStory] = useState<Story>();
   const [isLoading, setIsLoading] = useState(true);
   const { familyId, storyId } = useParams();
-
-  function errorMsg() {
-    toast(<Msg message="Error loading story. Please try again." />);
-  }
 
   useEffect(() => {
     async function loadStory(storyId: number) {
@@ -23,7 +18,7 @@ export function Story() {
         const res = await readStory(Number(familyId), storyId);
         setStory(res);
       } catch (err) {
-        errorMsg();
+        errorMsg('Error loading story. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -40,8 +35,6 @@ export function Story() {
       marginRight="60px"
       text="Every story is a thread in the fabric of our family's legacy."
       isLoading={isLoading}>
-      {/* <MemoryContainer text={story ? story.title : ''} isLoading={isLoading}> */}
-      {/* <div className="border-[1.5px] md:border-2 border-[#654A2F] rounded-lg w-[80%] md:w=[30%] mx-auto md:mb-6"></div> */}
       <Container mobileWidth="80%" width="70%">
         <div className="w-[100%] text-right">
           <Link to={`/family/${familyId}/dashboard/stories/${storyId}/edit`}>

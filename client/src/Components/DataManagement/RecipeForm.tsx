@@ -7,9 +7,8 @@ import {
   updateRecipe,
   deleteRecipe,
 } from '../../Lib/data';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 import { Container } from '../Layout/Container';
+import { errorMsg } from '../Toast/errorToast';
 
 export function RecipeForm() {
   const [recipe, setRecipe] = useState<Recipe>();
@@ -17,11 +16,6 @@ export function RecipeForm() {
   const { familyId, recipeId } = useParams();
   const navigate = useNavigate();
   const isEditing = recipeId && recipeId !== '';
-
-  function errorMsg(editing: string) {
-    editing && toast(<Msg message="Error editing recipe" />);
-    !editing && toast(<Msg message="Error uploading recipe" />);
-  }
 
   useEffect(() => {
     async function load(id: number) {
@@ -33,7 +27,7 @@ export function RecipeForm() {
           setRecipe(recipe);
         }
       } catch (err) {
-        errorMsg('editing error');
+        errorMsg('Error editing recipe');
       } finally {
         setIsLoading(false);
       }
@@ -55,7 +49,7 @@ export function RecipeForm() {
       navigate(`/family/${familyId}/dashboard/recipes`);
       window.scrollTo(0, 0);
     } catch (err) {
-      errorMsg('');
+      errorMsg('Error uploading recipe');
     } finally {
       setIsLoading(false);
     }

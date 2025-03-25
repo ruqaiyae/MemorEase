@@ -833,6 +833,84 @@ app.get(
   }
 );
 
+app.get(
+  '/api/family/:familyId/dashboard/recipes/:recipeId/readLike',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const recipeId = Number(req.params.recipeId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Likes"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "recipeId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, recipeId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows[0] || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/stories/:storyId/readLike',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const storyId = Number(req.params.storyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Likes"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "storyId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, storyId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows[0] || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/videos/:videoId/readLike',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const videoId = Number(req.params.videoId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Likes"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "videoId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, videoId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows[0] || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 app.post(
   '/api/family/:familyId/dashboard/like-memory',
   authMiddleware,

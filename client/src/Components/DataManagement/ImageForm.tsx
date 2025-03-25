@@ -11,8 +11,7 @@ import { labelClass } from '../UserManagement/FormInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FormContainer } from './FormContainer';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
+import { errorMsg } from '../Toast/errorToast';
 
 export function ImageForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -104,10 +103,6 @@ export function ImageForm() {
     } finally {
       setIsLoading(false);
     }
-  }
-
-  function errorMsg(message: string) {
-    toast(<Msg message={message} />);
   }
 
   async function handleDelete() {

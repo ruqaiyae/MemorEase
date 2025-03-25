@@ -9,9 +9,8 @@ import {
   updateStory,
   deleteStory,
 } from '../../Lib/data';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 import { useUser } from '../UserManagement/useUser';
+import { errorMsg } from '../Toast/errorToast';
 
 export function StoryForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,10 +35,6 @@ export function StoryForm() {
     }
     if (isEditing && familyId) load(+familyId, +storyId);
   }, [familyId, storyId, isEditing]);
-
-  function errorMsg(message: string) {
-    toast(<Msg message={message} />);
-  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
