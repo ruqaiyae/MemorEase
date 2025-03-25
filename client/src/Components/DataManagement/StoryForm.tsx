@@ -3,11 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { labelClass } from '../UserManagement/FormInput';
 import { FormContainer } from './FormContainer';
 import {
-  deleteStory,
+  type Story,
   readStory,
-  Story,
-  updateStory,
   uploadStory,
+  updateStory,
+  deleteStory,
 } from '../../Lib/data';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
@@ -48,13 +48,12 @@ export function StoryForm() {
       const formData = new FormData(event.currentTarget);
       const storyData = Object.fromEntries(formData) as Partial<Story>;
       storyData.author = `${user?.firstName} ${user?.lastName}`;
-      console.log(storyData);
       if (isEditing) {
         await updateStory(storyData, Number(familyId), Number(storyId));
       } else {
         await uploadStory(storyData, Number(familyId));
       }
-      navigate('/family/:familyId/dashboard/stories');
+      navigate(`/family/${familyId}/dashboard/stories`);
     } catch (err) {
       errorMsg('Error uploading story');
     } finally {
@@ -66,7 +65,7 @@ export function StoryForm() {
     if (!story?.storyId) throw new Error('Should never happen');
     try {
       await deleteStory(Number(familyId), story.storyId);
-      navigate('/family/:familyId/dashboard/stories');
+      navigate(`/family/${familyId}/dashboard/stories`);
     } catch (err) {
       errorMsg('Error deleting story. Please try again.');
     }

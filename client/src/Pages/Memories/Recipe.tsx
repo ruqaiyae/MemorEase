@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 import { readRecipe, type Recipe } from '../../Lib/data';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
-import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
 import { Container } from '../../Components/Layout/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,8 +11,7 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 export function Recipe() {
   const [recipe, setRecipe] = useState<Recipe>();
   const [isLoading, setIsLoading] = useState(true);
-  const { recipeId } = useParams();
-  const { currentFamily } = useFamily();
+  const { familyId, recipeId } = useParams();
 
   function errorMsg() {
     toast(<Msg message="Error loading recipe. Please try again." />);
@@ -22,7 +20,7 @@ export function Recipe() {
   useEffect(() => {
     async function loadRecipe(recipeId: number) {
       try {
-        const res = await readRecipe(currentFamily?.familyId, recipeId);
+        const res = await readRecipe(Number(familyId), recipeId);
         setRecipe(res);
       } catch (err) {
         errorMsg();
@@ -34,19 +32,20 @@ export function Recipe() {
       setIsLoading(true);
       loadRecipe(+recipeId);
     }
-  }, [currentFamily?.familyId, recipeId]);
+  }, [familyId, recipeId]);
 
   const labelStyle =
     'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[25px] ml-2';
 
   return (
     <MemoryContainer
+      marginLeft="20px"
+      marginRight="20px"
       text="This recipe carries the flavors of our family's legacy"
       isLoading={isLoading}>
       <Container mobileWidth="60%" width="70%">
         <div className="w-[100%] text-right">
-          <Link
-            to={`/family/${currentFamily?.familyId}/dashboard/recipes/${recipeId}/edit`}>
+          <Link to={`/family/${familyId}/dashboard/recipes/${recipeId}/edit`}>
             <FontAwesomeIcon
               icon={faPenToSquare}
               className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5"

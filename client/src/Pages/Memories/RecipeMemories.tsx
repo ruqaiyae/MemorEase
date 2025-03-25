@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { type Recipe, readRecipes } from '../../Lib/data';
-import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
 
 export function RecipeMemories() {
-  const { currentFamily } = useFamily();
+  const { familyId } = useParams();
   const [recipes, setRecipes] = useState<Recipe[]>();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ export function RecipeMemories() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await readRecipes(currentFamily?.familyId);
+        const res = await readRecipes(Number(familyId));
         setRecipes(res);
       } catch (err) {
         console.log(err);
@@ -22,7 +21,7 @@ export function RecipeMemories() {
       }
     }
     load();
-  }, [currentFamily?.familyId]);
+  }, [familyId]);
 
   return (
     <>
@@ -41,7 +40,7 @@ export function RecipeMemories() {
                   key={recipe.recipeId}
                   onClick={() =>
                     navigate(
-                      `/family/${currentFamily?.familyId}/dashboard/recipes/${recipe.recipeId}`
+                      `/family/${familyId}/dashboard/recipes/${recipe.recipeId}`
                     )
                   }
                   className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F] cursor-pointer">

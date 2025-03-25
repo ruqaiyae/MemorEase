@@ -1,10 +1,10 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react';
 import {
-  deleteImage,
   type Image,
   readImage,
-  updateImage,
   uploadImage,
+  updateImage,
+  deleteImage,
 } from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labelClass } from '../UserManagement/FormInput';
@@ -97,7 +97,7 @@ export function ImageForm() {
       }
 
       handleRemove();
-      navigate('/family/:familyId/dashboard/images');
+      navigate(`/family/${familyId}/dashboard/images`);
     } catch (err) {
       errorMsg('Error uploading image');
     } finally {
@@ -113,7 +113,7 @@ export function ImageForm() {
     if (!image?.imageId) throw new Error('Should never happen');
     try {
       await deleteImage(Number(familyId), image.imageId);
-      navigate('/family/:familyId/dashboard/images');
+      navigate(`/family/${familyId}/dashboard/images`);
     } catch (err) {
       errorMsg('Error deleting image. Please try again.');
     }
@@ -181,7 +181,7 @@ export function ImageForm() {
           />
         </label>
         {isEditing ? (
-          <div className="flex justify-between md:w-[60%] mx-auto">
+          <div className="flex justify-between w-[75%] md:w-[60%] mx-auto">
             <button
               type="button"
               onClick={handleDelete}

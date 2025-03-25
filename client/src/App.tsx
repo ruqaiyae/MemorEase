@@ -11,7 +11,7 @@ import {
   JoinFamily,
 } from './Index/FamilyIndex';
 import { Dashboard } from './Pages/Dashboard';
-import { ImageForm, RecipeForm, StoryForm } from './Index/FormIndex';
+import { ImageForm, RecipeForm, StoryForm, VideoForm } from './Index/FormIndex';
 import {
   ImageMemories,
   Image,
@@ -19,6 +19,8 @@ import {
   Recipe,
   StoryMemories,
   Story,
+  VideoMemories,
+  Video,
 } from './Index/MemoriesIndex';
 import './index.css';
 
@@ -90,6 +92,22 @@ export default function App() {
               <Route
                 path="family/:familyId/dashboard/stories/:storyId/edit"
                 element={<StoryForm />}
+              />
+              <Route
+                path="family/:familyId/dashboard/video-uploads"
+                element={<VideoForm />}
+              />
+              <Route
+                path="family/:familyId/dashboard/videos"
+                element={<VideoMemories />}
+              />
+              <Route
+                path="family/:familyId/dashboard/videos/:videoId"
+                element={<Video />}
+              />
+              <Route
+                path="family/:familyId/dashboard/videos/:videoId/edit"
+                element={<VideoForm />}
               />
               <Route path="*" element={<ComingSoon />} />
             </Route>

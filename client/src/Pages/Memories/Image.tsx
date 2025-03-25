@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { readImage, type Image } from '../../Lib/data';
-import { useFamily } from '../../Components/FamilyManagement/useFamily';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -16,8 +15,7 @@ export function Image() {
   const [image, setImage] = useState<Image>();
   const [isLoading, setIsLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
-  const { imageId } = useParams();
-  const { currentFamily } = useFamily();
+  const { familyId, imageId } = useParams();
 
   function errorMsg() {
     toast(<Msg message="Error loading image. Please try again." />);
@@ -26,7 +24,7 @@ export function Image() {
   useEffect(() => {
     async function loadImage(imageId: number) {
       try {
-        const res = await readImage(currentFamily?.familyId, imageId);
+        const res = await readImage(Number(familyId), imageId);
         setImage(res);
       } catch (err) {
         errorMsg();
@@ -38,10 +36,12 @@ export function Image() {
       setIsLoading(true);
       loadImage(+imageId);
     }
-  }, [currentFamily?.familyId, imageId]);
+  }, [familyId, imageId]);
 
   return (
     <MemoryContainer
+      marginLeft="0"
+      marginRight="0"
       text="A single photo can hold a thousand memories."
       isLoading={isLoading}>
       <div className="flex flex-wrap md:flex-nowrap md:justify-center">
@@ -54,8 +54,7 @@ export function Image() {
           </div>
           <div className="flex justify-between content-center mt-1 md:mt-3 ">
             <div className="flex items-center">
-              <Link
-                to={`/family/${currentFamily?.familyId}/dashboard/images/${imageId}/edit`}>
+              <Link to={`/family/${familyId}/dashboard/images/${imageId}/edit`}>
                 <FontAwesomeIcon
                   icon={faPen}
                   className="text-[8px] md:text-[20px] text-[#654A2F] pr-1 md:pr-2"

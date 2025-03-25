@@ -62,10 +62,13 @@ export function Dashboard() {
               src="/MemoryTiles/Video.png"
               alt="Video Album"
               tileWidth="100%"
+              onSelect={() => navigate('videos')}
               cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 className={className}>Timeless Tapes</h4>
+            <h4 onClick={() => navigate('videos')} className={className}>
+              Timeless Tapes
+            </h4>
           </div>
         </div>
       </Container>

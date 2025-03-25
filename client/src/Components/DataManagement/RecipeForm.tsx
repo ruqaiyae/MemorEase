@@ -1,11 +1,11 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  deleteRecipe,
+  type Recipe,
   readRecipe,
-  Recipe,
-  updateRecipe,
   uploadRecipe,
+  updateRecipe,
+  deleteRecipe,
 } from '../../Lib/data';
 import { toast } from 'react-toastify';
 import { Msg } from '../../Components/Toast';
@@ -52,7 +52,7 @@ export function RecipeForm() {
       } else {
         await uploadRecipe(recipeData, Number(familyId));
       }
-      navigate('/family/:familyId/dashboard/recipes');
+      navigate(`/family/${familyId}/dashboard/recipes`);
     } catch (err) {
       errorMsg('');
     } finally {
@@ -64,7 +64,7 @@ export function RecipeForm() {
     if (!recipe?.recipeId) throw new Error('Should never happen');
     try {
       await deleteRecipe(Number(familyId), recipe.recipeId);
-      navigate('/family/:familyId/dashboard/recipes');
+      navigate(`/family/${familyId}/dashboard/recipes`);
     } catch (err) {
       errorMsg('Error deleting recipe. Please try again.');
     }
@@ -113,7 +113,7 @@ export function RecipeForm() {
                 Best Enjoyed As:
                 <select
                   name="category"
-                  defaultValue={recipe?.category ?? ''}
+                  required
                   className="w-[100%] md:w-[83%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 mb-1 md:my-[10px] text-[10px] md:text-[16px]">
                   <option value="">--Please choose one--</option>
                   <option value="Morning Delight">Morning Delight</option>
