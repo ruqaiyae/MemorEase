@@ -27,7 +27,7 @@ export const FamilyContext = createContext<FamilyDetails>({
   updateFamily: () => undefined,
   addFamily: () => undefined,
   resetFamilies: () => undefined,
-  isLoading: true,
+  isLoading: false,
 });
 
 type Props = {
@@ -40,7 +40,7 @@ export function FamilyProvider({ children }: Props) {
   const [currentFamily, setCurrentFamily] = useState<Family | undefined>(
     undefined
   );
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const storedFamily = readFamily();
@@ -51,6 +51,7 @@ export function FamilyProvider({ children }: Props) {
   useEffect(() => {
     async function load(userId: number | undefined) {
       try {
+        setIsLoading(true);
         const response = await requestFamilyDetails(userId);
         setFamilies(response);
       } catch (err) {
@@ -59,7 +60,7 @@ export function FamilyProvider({ children }: Props) {
         setIsLoading(false);
       }
     }
-    load(user?.userId);
+    if (user?.userId) load(user.userId);
   }, [user?.userId]);
 
   function updateFamily(family: Family): void {

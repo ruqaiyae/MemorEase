@@ -138,7 +138,9 @@ export async function joinFamily(
   return await requestFamilyDetails(userId);
 }
 
-export async function requestFamilyDetails(userId: number): Promise<Family[]> {
+export async function requestFamilyDetails(
+  userId: number | undefined
+): Promise<Family[]> {
   const req = {
     method: 'POST',
     headers: {
@@ -556,4 +558,117 @@ export async function deleteVideo(
     throw new Error(`response status: ${response.status}`);
   }
   return (await response.json()) as Video;
+}
+
+export type LikeMemory = {
+  userId: number;
+  familyId: number;
+  imageId?: number;
+  recipeId?: number;
+  storyId?: number;
+  videoId?: number;
+};
+
+export async function readLike(
+  familyId: number,
+  imageId: number
+): Promise<LikeMemory | undefined> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/images/${imageId}/readLike`,
+    req
+  );
+  return await res.json();
+}
+
+export async function likeMemory(
+  familyId: number,
+  memoryType: string,
+  imageId?: number,
+  recipeId?: number,
+  storyId?: number,
+  videoId?: number
+): Promise<LikeMemory> {
+  let id;
+  let desiredColumn;
+
+  if (!memoryType) throw new Error('Memory type is missing');
+  if (memoryType === 'image') {
+    id = imageId;
+    desiredColumn = 'imageId';
+  }
+  if (memoryType === 'recipe') {
+    id = recipeId;
+    desiredColumn = 'recipeId';
+  }
+  if (memoryType === 'story') {
+    id = storyId;
+    desiredColumn = 'storyId';
+  }
+  if (memoryType === 'video') {
+    id = videoId;
+    desiredColumn = 'videoId';
+  }
+
+  const res = await fetch(`/api/family/${familyId}/dashboard/like-memory`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify({ id, desiredColumn }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function dislikeMemory(
+  familyId: number,
+  memoryType: string,
+  imageId?: number,
+  recipeId?: number,
+  storyId?: number,
+  videoId?: number
+): Promise<LikeMemory> {
+  let id;
+  let desiredColumn;
+
+  if (!memoryType) throw new Error('Memory type is missing');
+  if (memoryType === 'image') {
+    id = imageId;
+    desiredColumn = 'imageId';
+  }
+  if (memoryType === 'recipe') {
+    id = recipeId;
+    desiredColumn = 'recipeId';
+  }
+  if (memoryType === 'story') {
+    id = storyId;
+    desiredColumn = 'storyId';
+  }
+  if (memoryType === 'video') {
+    id = videoId;
+    desiredColumn = 'videoId';
+  }
+
+  const res = await fetch(`/api/family/${familyId}/dashboard/dislike-memory`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify({ id, desiredColumn }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
 }

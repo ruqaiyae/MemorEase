@@ -98,6 +98,7 @@ export function ImageForm() {
 
       handleRemove();
       navigate(`/family/${familyId}/dashboard/images`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error uploading image');
     } finally {
@@ -114,6 +115,7 @@ export function ImageForm() {
     try {
       await deleteImage(Number(familyId), image.imageId);
       navigate(`/family/${familyId}/dashboard/images`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error deleting image. Please try again.');
     }

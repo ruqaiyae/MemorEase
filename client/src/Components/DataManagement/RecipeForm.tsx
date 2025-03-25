@@ -53,6 +53,7 @@ export function RecipeForm() {
         await uploadRecipe(recipeData, Number(familyId));
       }
       navigate(`/family/${familyId}/dashboard/recipes`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('');
     } finally {
@@ -65,6 +66,7 @@ export function RecipeForm() {
     try {
       await deleteRecipe(Number(familyId), recipe.recipeId);
       navigate(`/family/${familyId}/dashboard/recipes`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error deleting recipe. Please try again.');
     }

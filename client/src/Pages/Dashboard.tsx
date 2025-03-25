@@ -23,11 +23,19 @@ export function Dashboard() {
               src="/MemoryTiles/Album.png"
               alt="Album"
               tileWidth="100%"
-              onSelect={() => navigate('images')}
+              onSelect={() => {
+                navigate('images');
+                window.scrollTo(0, 0);
+              }}
               cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 onClick={() => navigate('images')} className={className}>
+            <h4
+              onClick={() => {
+                navigate('images');
+                window.scrollTo(0, 0);
+              }}
+              className={className}>
               Eternal Snapshots
             </h4>
           </div>
@@ -36,11 +44,19 @@ export function Dashboard() {
               src="/MemoryTiles/Recipe.png"
               alt="Recipe Book"
               tileWidth="100%"
-              onSelect={() => navigate('recipes')}
+              onSelect={() => {
+                navigate('recipes');
+                window.scrollTo(0, 0);
+              }}
               cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 onClick={() => navigate('recipes')} className={className}>
+            <h4
+              onClick={() => {
+                navigate('recipes');
+                window.scrollTo(0, 0);
+              }}
+              className={className}>
               Generations of Flavor
             </h4>
           </div>
@@ -49,11 +65,19 @@ export function Dashboard() {
               src="/MemoryTiles/Story.png"
               alt="Story Book"
               tileWidth="100%"
-              onSelect={() => navigate('stories')}
+              onSelect={() => {
+                navigate('stories');
+                window.scrollTo(0, 0);
+              }}
               cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 onClick={() => navigate('stories')} className={className}>
+            <h4
+              onClick={() => {
+                navigate('stories');
+                window.scrollTo(0, 0);
+              }}
+              className={className}>
               Family Folklore
             </h4>
           </div>
@@ -62,11 +86,19 @@ export function Dashboard() {
               src="/MemoryTiles/Video.png"
               alt="Video Album"
               tileWidth="100%"
-              onSelect={() => navigate('videos')}
+              onSelect={() => {
+                navigate('videos');
+                window.scrollTo(0, 0);
+              }}
               cursor="pointer"
             />
             <div className="h-[10px] md:h-[20px]" />
-            <h4 onClick={() => navigate('videos')} className={className}>
+            <h4
+              onClick={() => {
+                navigate('videos');
+                window.scrollTo(0, 0);
+              }}
+              className={className}>
               Timeless Tapes
             </h4>
           </div>

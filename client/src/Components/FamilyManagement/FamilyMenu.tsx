@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useFamily } from './useFamily';
+import { type Family } from './FamilyContext';
 
 type Prop = {
   onClose: () => void;
@@ -11,11 +12,12 @@ export function FamilyMenu({ onClose }: Prop) {
 
   return (
     <>
-      {families?.map((fam) => (
+      {families?.map((fam: Family) => (
         <li
           key={fam.familyId}
           onClick={() => {
             navigate(`family/${fam.familyId}/dashboard`);
+            window.scrollTo(0, 0);
             updateFamily(fam);
             onClose();
           }}>

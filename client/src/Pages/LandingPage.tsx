@@ -2,8 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { HeroImg } from '../Components/HeroImg';
 import { Container } from '../Components/Layout/Container';
 import { MemoryDescription, MemoryTile } from '../Components/MemoryShowcase';
+import { useUser } from '../Components/UserManagement/useUser';
+import { useFamily } from '../Components/FamilyManagement/useFamily';
 
 export function LandingPage() {
+  const { user } = useUser();
+  const { currentFamily } = useFamily();
   const navigate = useNavigate();
 
   return (
@@ -21,6 +25,17 @@ export function LandingPage() {
               src="/MemoryTiles/Album.png"
               alt="Album"
               tileWidth="40%"
+              onSelect={
+                user
+                  ? () => {
+                      navigate(
+                        `family/${currentFamily?.familyId}/dashboard/images`
+                      );
+                      window.scrollTo(0, 0);
+                    }
+                  : undefined
+              }
+              cursor={user ? 'pointer' : 'default'}
             />
             <div className="w-[10px] md:w-[20px]" />
             <MemoryDescription
@@ -40,6 +55,17 @@ A digital recipe book infused with the flavors of family history.`}
               src="/MemoryTiles/Recipe.png"
               alt="Recipe Book"
               tileWidth="40%"
+              onSelect={
+                user
+                  ? () => {
+                      navigate(
+                        `family/${currentFamily?.familyId}/dashboard/recipes`
+                      );
+                      window.scrollTo(0, 0);
+                    }
+                  : undefined
+              }
+              cursor={user ? 'pointer' : 'default'}
             />
           </div>
           <div className="flex my-10 md:my-20">
@@ -77,7 +103,10 @@ A digital recipe book infused with the flavors of family history.`}
         </div>
         <div className="flex justify-center">
           <button
-            onClick={() => navigate('sign-up')}
+            onClick={() => {
+              navigate('sign-up');
+              window.scrollTo(0, 0);
+            }}
             className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[25px] cursor-pointer">
             Get Started
           </button>

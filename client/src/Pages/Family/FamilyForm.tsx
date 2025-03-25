@@ -24,12 +24,18 @@ export function FamilyForm() {
           meaningful connection today!
         </h1>
         <button
-          onClick={() => navigate('create-family')}
+          onClick={() => {
+            navigate('create-family');
+            window.scrollTo(0, 0);
+          }}
           className="btn bg-[#654A2F] m-4 md:m-10 px-3 md:px-7 py-2 md:py-5 md:mt-10 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px] cursor-pointer">
           Create a family
         </button>
         <button
-          onClick={() => navigate('join-family')}
+          onClick={() => {
+            navigate('join-family');
+            window.scrollTo(0, 0);
+          }}
           className="btn bg-[#654A2F] m-4 md:m-10 px-3 md:px-7 py-2 md:py-5 md:mt-10 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px] cursor-pointer">
           Join a family
         </button>

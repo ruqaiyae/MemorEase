@@ -27,6 +27,7 @@ export function SignIn() {
       handleSignIn(user, token);
       // update: navigate to the family selection page, where the user picks a family space before entering its dashboard.
       navigate('/');
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg();
     } finally {
@@ -56,7 +57,10 @@ export function SignIn() {
             <p className="font-[Lato] text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
               Don&apos;t have an account?{' '}
               <span
-                onClick={() => navigate('/sign-up')}
+                onClick={() => {
+                  navigate('/sign-up');
+                  window.scrollTo(0, 0);
+                }}
                 className="font-bold underline cursor-pointer">
                 Sign up
               </span>
