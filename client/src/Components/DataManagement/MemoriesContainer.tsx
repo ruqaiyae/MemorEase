@@ -1,10 +1,5 @@
 import { Container } from '../Layout/Container';
-import {
-  type Image,
-  type Recipe,
-  type Story,
-  type Video,
-} from '../../Lib/data';
+import { type Image, type Recipe, type Story } from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { useFamily } from '../FamilyManagement/useFamily';
@@ -13,7 +8,7 @@ type Props = {
   header1: string;
   header2: string;
   loading: boolean;
-  content: Image[] | Recipe[] | Story[] | Video[] | undefined;
+  content: Image[] | Recipe[] | Story[] | undefined;
   memoryType: string;
   path: string;
   children: ReactNode;
@@ -50,9 +45,10 @@ export function MemoriesContainer({
             </p>
             <div className="text-center">
               <button
-                onClick={() =>
-                  navigate(`/family/${familyId}/dashboard/${path}`)
-                }
+                onClick={() => {
+                  navigate(`/family/${familyId}/dashboard/${path}`);
+                  window.scrollTo(0, 0);
+                }}
                 className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 mt-5 mb-10 md:my-16 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
                 Upload Now
               </button>
@@ -61,7 +57,10 @@ export function MemoriesContainer({
         ) : (
           <div className="flex justify-end mr-5">
             <button
-              onClick={() => navigate(`/family/${familyId}/dashboard/${path}`)}
+              onClick={() => {
+                navigate(`/family/${familyId}/dashboard/${path}`);
+                window.scrollTo(0, 0);
+              }}
               className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
               Add a New Memory
             </button>

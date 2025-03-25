@@ -41,6 +41,7 @@ export function SignUp() {
       const { user, token } = (await requestSignUp(userData)) as Auth;
       handleSignIn(user, token);
       navigate(`/family-form?action=signup-success`);
+      window.scrollTo(0, 0);
     } catch (err) {
       setError(err);
     } finally {
@@ -120,7 +121,10 @@ export function SignUp() {
             <p className="font-[Lato] text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
               Already have an account?{' '}
               <span
-                onClick={() => navigate('/sign-in')}
+                onClick={() => {
+                  navigate('/sign-in');
+                  window.scrollTo(0, 0);
+                }}
                 className="font-bold underline cursor-pointer">
                 Log in
               </span>

@@ -42,7 +42,17 @@ export function VideoForm() {
     if (isEditing && familyId) load(+familyId, +videoId);
   }, [familyId, videoId, isEditing]);
 
-  // for image preview before submit
+  function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    // Using the first image instead of multiple
+    setSelectedFile(e.target.files[0]);
+  }
+
+  // for video preview before submit
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
@@ -50,28 +60,13 @@ export function VideoForm() {
     }
 
     const objectUrl = URL.createObjectURL(selectedFile);
+    console.log('selectedFile', selectedFile);
+    console.log('objectUrl', objectUrl);
     setPreview(objectUrl);
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
-
-  function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
-      return;
-    }
-
-    const file = e.target.files[0];
-    if (file.type.startsWith('video/')) {
-      setSelectedFile(file);
-    } else {
-      // Handle non-video files
-      toast(<Msg message="Please select a valid video file." />);
-    }
-    // Using the first image instead of multiple
-    // setSelectedFile(e.target.files[0]);
-  }
 
   function handleRemove(): void {
     setSelectedFile(undefined);
@@ -105,6 +100,7 @@ export function VideoForm() {
 
       handleRemove();
       navigate(`/family/${familyId}/dashboard/videos`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error uploading video');
     } finally {
@@ -121,6 +117,7 @@ export function VideoForm() {
     try {
       await deleteVideo(Number(familyId), video.videoId);
       navigate(`/family/${familyId}/dashboard/videos`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error deleting video. Please try again.');
     }
@@ -134,12 +131,15 @@ export function VideoForm() {
         {isEditing && videoUrl ? (
           <>
             <div className="flex justify-center">
-              <video controls width="300">
+              <video
+                controls
+                className="w-[90%] mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
+                preload="metadata">
                 <source
-                  className="w-[60%] mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
                   src={videoUrl}
                   type={selectedFile?.type || 'video/mp4'}
                 />
+                Your browser does not support the video tag.
               </video>
             </div>
 
@@ -154,11 +154,10 @@ export function VideoForm() {
             <div className="flex justify-center">
               <video
                 controls
-                className="w-[90%] mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg">
-                <source
-                  src={preview}
-                  type={selectedFile?.type || 'video/mp4'}
-                />
+                className="w-[90%] mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
+                preload="metadata"
+                src={preview}>
+                Your browser does not support the video tag.
               </video>
             </div>
             <FontAwesomeIcon

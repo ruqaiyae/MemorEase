@@ -15,7 +15,10 @@ export function NavBar() {
         <div className="w-[65%] md:w-[70%] my-2">
           <img
             src="/logo.png"
-            onClick={() => navigate('/')}
+            onClick={() => {
+              navigate('/');
+              window.scrollTo(0, 0);
+            }}
             className="w-8 md:w-15 cursor-pointer"
           />
         </div>
@@ -26,7 +29,9 @@ export function NavBar() {
             <NavBtn btnName="Vault" path={'family/dashboard'} />
             <FontAwesomeIcon
               icon={faUser}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
               ref={iconRef}
               className="text-[#654a2f] md:text-3xl mt-1 md:mt cursor-pointer"
             />

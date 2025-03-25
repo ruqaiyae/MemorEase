@@ -54,6 +54,7 @@ export function StoryForm() {
         await uploadStory(storyData, Number(familyId));
       }
       navigate(`/family/${familyId}/dashboard/stories`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error uploading story');
     } finally {
@@ -66,6 +67,7 @@ export function StoryForm() {
     try {
       await deleteStory(Number(familyId), story.storyId);
       navigate(`/family/${familyId}/dashboard/stories`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error deleting story. Please try again.');
     }

@@ -20,8 +20,6 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
   const top = r ? `${r.bottom + 4}px` : '8%';
   const left = r ? `${r.left - 50}px` : '95%';
 
-  if (isLoading) return;
-
   return createPortal(
     <>
       <div
@@ -60,6 +58,7 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
               <li
                 onClick={() => {
                   navigate('family-form');
+                  window.scrollTo(0, 0);
                   onClose();
                 }}
                 className="cursor-pointer">

@@ -39,6 +39,7 @@ export function JoinFamily() {
       addFamily(family);
       updateFamily(family);
       navigate(`/family/${family.familyId}/dashboard`);
+      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg();
     } finally {

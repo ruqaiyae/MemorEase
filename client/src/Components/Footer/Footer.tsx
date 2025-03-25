@@ -10,7 +10,10 @@ export function Footer() {
         <div className="flex w-[85%] md:w-[90%] mx-auto">
           <div className="w-[80%] content-center my-5 md:my-12">
             <h1
-              onClick={() => navigate('/')}
+              onClick={() => {
+                navigate('/');
+                window.scrollTo(0, 0);
+              }}
               className="font-[Fondamento] text-[#EBD199] md:text-5xl cursor-pointer w-[20%]">
               MemorEase
             </h1>

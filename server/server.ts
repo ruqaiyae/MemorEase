@@ -16,6 +16,7 @@ import {
   type Recipe,
   type Story,
   type Video,
+  type LikeMemory,
 } from '../client/src/Lib/data.js';
 
 function validateBody(
@@ -200,7 +201,7 @@ app.get(
                   `;
       const response = await db.query<Image[]>(sql, [familyId]);
       const image = response.rows;
-      res.status(201).json(image);
+      res.json(image);
     } catch (err) {
       next(err);
     }
@@ -228,7 +229,7 @@ app.get(
       const params = [familyId, imageId];
       const response = await db.query<Image>(sql, params);
       const image = response.rows[0];
-      res.status(201).json(image);
+      res.json(image);
     } catch (err) {
       next(err);
     }
@@ -291,7 +292,7 @@ app.put(
       const params = [req.user?.userId, familyId, imageUrl, caption, imageId];
       const response = await db.query<Image>(sql, params);
       const image = response.rows[0];
-      res.status(201).json(image);
+      res.json(image);
     } catch (err) {
       next(err);
     }
@@ -318,7 +319,7 @@ app.delete(
       const params = [req.user?.userId, familyId, imageId];
       const response = await db.query<Image>(sql, params);
       const image = response.rows[0];
-      res.status(201).json(image);
+      res.sendStatus(204);
     } catch (err) {
       next(err);
     }
@@ -340,7 +341,7 @@ app.get(
                   `;
       const response = await db.query<Recipe[]>(sql, [familyId]);
       const recipes = response.rows;
-      res.status(201).json(recipes);
+      res.json(recipes);
     } catch (err) {
       next(err);
     }
@@ -369,7 +370,7 @@ app.get(
       const params = [req.user?.userId, familyId, recipeId];
       const response = await db.query<Recipe>(sql, params);
       const recipe = response.rows[0];
-      res.status(201).json(recipe);
+      res.json(recipe);
     } catch (err) {
       next(err);
     }
@@ -512,7 +513,7 @@ app.delete(
       if (!recipe) {
         throw new ClientError(404, 'No stories are available');
       }
-      res.json(recipe);
+      res.sendStatus(204);
     } catch (error) {
       next(error);
     }
@@ -535,7 +536,7 @@ app.get(
       const params = [familyId];
       const response = await db.query<Story[]>(sql, params);
       const stories = response.rows;
-      res.status(201).json(stories);
+      res.json(stories);
     } catch (err) {
       next(err);
     }
@@ -563,7 +564,7 @@ app.get(
       const params = [familyId, storyId];
       const response = await db.query<Story>(sql, params);
       const story = response.rows[0];
-      res.status(201).json(story);
+      res.json(story);
     } catch (err) {
       next(err);
     }
@@ -629,7 +630,7 @@ app.put(
       ];
       const response = await db.query<Image>(sql, params);
       const story = response.rows[0];
-      res.status(201).json(story);
+      res.json(story);
     } catch (err) {
       next(err);
     }
@@ -659,7 +660,7 @@ app.delete(
       if (!story) {
         throw new ClientError(404, 'No stories are available');
       }
-      res.json(story);
+      res.sendStatus(204);
     } catch (error) {
       next(error);
     }
@@ -681,7 +682,7 @@ app.get(
                   `;
       const response = await db.query<Video[]>(sql, [familyId]);
       const video = response.rows;
-      res.status(201).json(video);
+      res.json(video);
     } catch (err) {
       next(err);
     }
@@ -709,7 +710,7 @@ app.get(
       const params = [familyId, videoId];
       const response = await db.query<Video>(sql, params);
       const video = response.rows[0];
-      res.status(201).json(video);
+      res.json(video);
     } catch (err) {
       next(err);
     }
@@ -772,7 +773,7 @@ app.put(
       const params = [req.user?.userId, familyId, videoUrl, caption, videoId];
       const response = await db.query<Video>(sql, params);
       const video = response.rows[0];
-      res.status(201).json(video);
+      res.json(video);
     } catch (err) {
       next(err);
     }
@@ -799,9 +800,90 @@ app.delete(
       const params = [req.user?.userId, familyId, videoId];
       const response = await db.query<Video>(sql, params);
       const video = response.rows[0];
-      res.status(201).json(video);
+      res.sendStatus(204);
     } catch (err) {
       next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/images/:imageId/readLike',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const imageId = Number(req.params.imageId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Likes"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "imageId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, imageId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows[0] || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.post(
+  '/api/family/:familyId/dashboard/like-memory',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { id, desiredColumn } = req.body;
+      validateBody(id, 'id');
+      validateBody(desiredColumn, 'desiredColumn');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `insert into "Likes" ("userId", "familyId", "${desiredColumn}")
+                  values($1, $2, $3)
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, id];
+      const response = await db.query<Story>(sql, params);
+      const memoryLiked = response.rows[0];
+      res.status(201).json(memoryLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.delete(
+  '/api/family/:familyId/dashboard/dislike-memory',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { id, desiredColumn } = req.body;
+      validateBody(id, 'id');
+      validateBody(desiredColumn, 'desiredColumn');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `delete from "Likes"
+                  where "userId" = $1 and "familyId" = $2 and "${desiredColumn}" = $3
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, id];
+      const response = await db.query<Story>(sql, params);
+      const story = response.rows[0];
+      if (!story) {
+        throw new ClientError(404, 'No memory available');
+      }
+      res.sendStatus(204);
+    } catch (error) {
+      next(error);
     }
   }
 );

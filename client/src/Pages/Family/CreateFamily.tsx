@@ -28,6 +28,7 @@ export function CreateFamily() {
       const { familyName, password } = familyData;
       await joinFamily({ familyId, password });
       navigate(`/family/${familyId}/dashboard`);
+      window.scrollTo(0, 0);
       const family = { familyId, familyName };
       updateFamily(family);
       addFamily(family);
