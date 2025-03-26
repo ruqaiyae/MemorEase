@@ -6,11 +6,13 @@ import { Container } from '../../Components/Layout/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { errorMsg } from '../../Components/Toast/errorToast';
+import { useUser } from '../../Components/UserManagement/useUser';
 
 export function Story() {
   const [story, setStory] = useState<Story>();
   const [isLoading, setIsLoading] = useState(true);
   const { familyId, storyId } = useParams();
+  const { user } = useUser();
 
   useEffect(() => {
     async function loadStory(storyId: number) {
@@ -37,12 +39,14 @@ export function Story() {
       isLoading={isLoading}>
       <Container mobileWidth="80%" width="70%">
         <div className="w-[100%] text-right">
-          <Link to={`/family/${familyId}/dashboard/stories/${storyId}/edit`}>
-            <FontAwesomeIcon
-              icon={faPenToSquare}
-              className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5"
-            />
-          </Link>
+          {story?.author === `${user?.firstName} ${user?.lastName}` ? (
+            <Link to={`/family/${familyId}/dashboard/stories/${storyId}/edit`}>
+              <FontAwesomeIcon
+                icon={faPenToSquare}
+                className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5"
+              />
+            </Link>
+          ) : null}
         </div>
         <h2 className="font-[fondamento] text-[#654A2F] text-center text-[14px] md:text-[30px] mb-4 md:my-15 mx-7 md:mx-30">
           {story?.title}

@@ -79,8 +79,10 @@ CREATE TABLE "VideoMemories" (
 CREATE TABLE "Likes" (
   "likeId" serial PRIMARY KEY,
   "userId" integer,
-  "storyId" integer,
+  "familyId" integer,
   "imageId" integer,
+  "recipeId" integer,
+  "storyId" integer,
   "videoId" integer,
   "createdAt" timestamptz DEFAULT (CURRENT_timestamp)
 );
@@ -88,9 +90,10 @@ CREATE TABLE "Likes" (
 CREATE TABLE "Comments" (
   "commentsId" serial PRIMARY KEY,
   "userId" integer,
-  "storyId" integer,
+  "familyId" integer,
   "imageId" integer,
   "videoId" integer,
+  "author" text,
   "comment" text NOT NULL,
   "createdAt" timestamptz DEFAULT (CURRENT_timestamp)
 );
@@ -119,13 +122,17 @@ ALTER TABLE "Likes" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
 ALTER TABLE "Comments" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
 
-ALTER TABLE "Likes" ADD CONSTRAINT "Likes_StoryMemories" FOREIGN KEY ("storyId") REFERENCES "StoryMemories" ("storyId");
+ALTER TABLE "Likes" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
+
+ALTER TABLE "Comments" ADD FOREIGN KEY ("familyId") REFERENCES "Families" ("familyId");
 
 ALTER TABLE "Likes" ADD CONSTRAINT "Likes_ImageMemories" FOREIGN KEY ("imageId") REFERENCES "ImageMemories" ("imageId");
 
-ALTER TABLE "Likes" ADD CONSTRAINT "Likes_VideoMemories" FOREIGN KEY ("videoId") REFERENCES "VideoMemories" ("videoId");
+ALTER TABLE "Likes" ADD CONSTRAINT "Likes_RecipeMemories" FOREIGN KEY ("recipeId") REFERENCES "RecipeMemories" ("recipeId");
 
-ALTER TABLE "Comments" ADD CONSTRAINT "Comments_StoryMemories" FOREIGN KEY ("storyId") REFERENCES "StoryMemories" ("storyId");
+ALTER TABLE "Likes" ADD CONSTRAINT "Likes_StoryMemories" FOREIGN KEY ("storyId") REFERENCES "StoryMemories" ("storyId");
+
+ALTER TABLE "Likes" ADD CONSTRAINT "Likes_VideoMemories" FOREIGN KEY ("videoId") REFERENCES "VideoMemories" ("videoId");
 
 ALTER TABLE "Comments" ADD CONSTRAINT "Comments_ImageMemories" FOREIGN KEY ("imageId") REFERENCES "ImageMemories" ("imageId");
 

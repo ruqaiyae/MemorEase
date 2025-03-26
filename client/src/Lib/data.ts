@@ -597,10 +597,10 @@ export async function readRecipeLike(
   return await res.json();
 }
 
-export async function readStoryLike(
+export async function readStoryLikes(
   familyId: number,
   storyId: number
-): Promise<LikeMemory | undefined> {
+): Promise<LikeMemory[] | undefined> {
   const req = {
     headers: {
       Authorization: `Bearer ${readToken()}`,
@@ -642,7 +642,6 @@ export async function likeMemory(
   if (memoryType === 'story') desiredColumn = 'storyId';
   if (memoryType === 'video') desiredColumn = 'videoId';
 
-  console.log('data 661 - id: ', memoryId, 'desired column: ', desiredColumn);
   const res = await fetch(`/api/family/${familyId}/dashboard/like-memory`, {
     method: 'POST',
     headers: {
@@ -677,6 +676,114 @@ export async function dislikeMemory(
       Authorization: `Bearer ${readToken()}`,
     },
     body: JSON.stringify({ memoryId, desiredColumn }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+}
+
+export type Comment = {
+  commentsId: number;
+  userId?: number;
+  familyId?: number;
+  imageId?: number;
+  recipeId?: number;
+  storyId?: number;
+  videoId?: number;
+  author: string | undefined;
+  comment: string;
+};
+
+export async function readImageComment(
+  familyId: number,
+  imageId: number
+): Promise<Comment[]> {
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/images/${imageId}/readComment`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${readToken()}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function readVideoComment(
+  familyId: number,
+  videoId: number
+): Promise<Comment[]> {
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/videos/${videoId}/readComment`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${readToken()}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function addComment(
+  familyId: number,
+  memoryType: string,
+  memoryId: number,
+  author: string | undefined,
+  comment: string
+): Promise<Comment> {
+  let desiredColumn;
+
+  if (!memoryType) throw new Error('Memory type is missing');
+  if (memoryType === 'image') desiredColumn = 'imageId';
+  if (memoryType === 'story') desiredColumn = 'storyId';
+  if (memoryType === 'video') desiredColumn = 'videoId';
+
+  const res = await fetch(`/api/family/${familyId}/dashboard/add-comment`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify({ memoryId, desiredColumn, author, comment }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+  return await res.json();
+}
+
+export async function deleteComment(
+  commentId: number,
+  familyId: number,
+  memoryType: string,
+  memoryId: number
+): Promise<void> {
+  let desiredColumn;
+  if (!memoryType) throw new Error('Memory type is missing');
+  if (memoryType === 'image') desiredColumn = 'imageId';
+  if (memoryType === 'recipe') desiredColumn = 'recipeId';
+  if (memoryType === 'story') desiredColumn = 'storyId';
+  if (memoryType === 'video') desiredColumn = 'videoId';
+
+  const res = await fetch(`/api/family/${familyId}/dashboard/delete-comment`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify({ commentId, memoryId, desiredColumn }),
   });
 
   if (!res.ok) {
