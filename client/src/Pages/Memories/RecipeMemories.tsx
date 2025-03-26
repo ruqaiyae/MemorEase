@@ -2,20 +2,22 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { type Recipe, readRecipes } from '../../Lib/data';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function RecipeMemories() {
   const { familyId } = useParams();
   const [recipes, setRecipes] = useState<Recipe[]>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
       try {
+        setIsLoading(true);
         const res = await readRecipes(Number(familyId));
         setRecipes(res);
       } catch (err) {
-        console.log(err);
+        errorMsg('Error loading recipe. Please try again.');
       } finally {
         setIsLoading(false);
       }

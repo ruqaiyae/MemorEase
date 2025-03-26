@@ -5,6 +5,8 @@ import {
   uploadImage,
   updateImage,
   deleteImage,
+  readImageLike,
+  dislikeMemory,
 } from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labelClass } from '../UserManagement/FormInput';
@@ -108,6 +110,9 @@ export function ImageForm() {
   async function handleDelete() {
     if (!image?.imageId) throw new Error('Should never happen');
     try {
+      const isLiked = await readImageLike(Number(familyId), image.imageId);
+      isLiked &&
+        (await dislikeMemory(Number(familyId), 'image', image.imageId));
       await deleteImage(Number(familyId), image.imageId);
       navigate(`/family/${familyId}/dashboard/images`);
       window.scrollTo(0, 0);
@@ -133,7 +138,7 @@ export function ImageForm() {
             <FontAwesomeIcon
               icon={faCircleXmark}
               onClick={handleRemove}
-              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-31 md:top-[34%] right-29 md:right-[34%]"
+              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-31 md:top-[34%] right-29 md:right-[34%] cursor-pointer"
             />
           </>
         ) : selectedFile ? (

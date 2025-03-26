@@ -25,6 +25,7 @@ export function RecipeForm() {
           const recipe = await readRecipe(+familyId, +recipeId);
           if (!recipe) throw new Error(`Recipe with ID ${id} not found`);
           setRecipe(recipe);
+          window.scrollTo(0, 0);
         }
       } catch (err) {
         errorMsg('Error editing recipe');

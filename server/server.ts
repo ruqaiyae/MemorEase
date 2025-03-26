@@ -916,8 +916,8 @@ app.post(
   authMiddleware,
   async (req, res, next) => {
     try {
-      const { id, desiredColumn } = req.body;
-      validateBody(id, 'id');
+      const { memoryId, desiredColumn } = req.body;
+      validateBody(memoryId, 'memoryId');
       validateBody(desiredColumn, 'desiredColumn');
       const familyId = Number(req.params.familyId);
       if (!Number.isInteger(familyId) || familyId < 1) {
@@ -927,7 +927,7 @@ app.post(
                   values($1, $2, $3)
                   returning *;
                   `;
-      const params = [req.user?.userId, familyId, id];
+      const params = [req.user?.userId, familyId, memoryId];
       const response = await db.query<Story>(sql, params);
       const memoryLiked = response.rows[0];
       res.status(201).json(memoryLiked);
@@ -942,8 +942,8 @@ app.delete(
   authMiddleware,
   async (req, res, next) => {
     try {
-      const { id, desiredColumn } = req.body;
-      validateBody(id, 'id');
+      const { memoryId, desiredColumn } = req.body;
+      validateBody(memoryId, 'memoryId');
       validateBody(desiredColumn, 'desiredColumn');
       const familyId = Number(req.params.familyId);
       if (!Number.isInteger(familyId) || familyId < 1) {
@@ -953,7 +953,7 @@ app.delete(
                   where "userId" = $1 and "familyId" = $2 and "${desiredColumn}" = $3
                   returning *;
                   `;
-      const params = [req.user?.userId, familyId, id];
+      const params = [req.user?.userId, familyId, memoryId];
       const response = await db.query<Story>(sql, params);
       const story = response.rows[0];
       if (!story) {

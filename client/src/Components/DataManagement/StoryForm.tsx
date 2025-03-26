@@ -64,6 +64,7 @@ export function StoryForm() {
       navigate(`/family/${familyId}/dashboard/stories`);
       window.scrollTo(0, 0);
     } catch (err) {
+      console.log('err', err);
       errorMsg('Error deleting story. Please try again.');
     }
   }

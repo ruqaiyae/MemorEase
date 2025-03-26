@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { readVideo, type Video } from '../../Lib/data';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -9,18 +8,29 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
 import { errorMsg } from '../../Components/Toast/errorToast';
+import {
+  type Video,
+  readVideo,
+  likeMemory,
+  dislikeMemory,
+  readVideoLike,
+} from '../../Lib/data';
 
 export function Video() {
   const [video, setVideo] = useState<Video>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const { familyId, videoId } = useParams();
 
   useEffect(() => {
-    async function loadVideo(videoId: number) {
+    async function loadVideo(familyId: number, videoId: number) {
       try {
-        const res = await readVideo(Number(familyId), videoId);
+        setIsLoading(true);
+        const res = await readVideo(familyId, videoId);
         setVideo(res);
+        const likedStatus = await readVideoLike(familyId, videoId);
+        if (!likedStatus) return;
+        likedStatus.videoId && setIsLiked(true);
       } catch (err) {
         errorMsg('Error loading video. Please try again.');
       } finally {
@@ -29,9 +39,16 @@ export function Video() {
     }
     if (videoId) {
       setIsLoading(true);
-      loadVideo(+videoId);
+      loadVideo(Number(familyId), +videoId);
     }
   }, [familyId, videoId]);
+
+  async function handleClick() {
+    setIsLiked(!isLiked);
+    !isLiked && (await likeMemory(Number(familyId), 'video', Number(videoId)));
+    isLiked &&
+      (await dislikeMemory(Number(familyId), 'video', Number(videoId)));
+  }
 
   return (
     <MemoryContainer
@@ -42,7 +59,8 @@ export function Video() {
       <div className="flex flex-wrap md:flex-nowrap md:justify-center">
         <div className="md:w-[40%] mx-5 md:mx-20">
           <div className="relative inline-block">
-            <img
+            <video
+              controls
               src={video?.videoUrl}
               className="object-contain border-[1.5px] md:border-2 border-[#654A2F] rounded-lg"
             />
@@ -61,7 +79,7 @@ export function Video() {
               </div>
               <FontAwesomeIcon
                 icon={isLiked ? faHeartSolid : faHeartRegular}
-                onClick={() => setIsLiked(!isLiked)}
+                onClick={handleClick}
                 className={
                   isLiked
                     ? 'text-[#d51010] md:text-[25px]'

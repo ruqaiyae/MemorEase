@@ -7,14 +7,14 @@ import {
   faPen,
 } from '@fortawesome/free-solid-svg-icons';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
-import {
-  readImage,
-  type Image,
-  dislikeMemory,
-  likeMemory,
-  readLike,
-} from '../../Lib/data';
 import { errorMsg } from '../../Components/Toast/errorToast';
+import {
+  type Image,
+  readImage,
+  likeMemory,
+  dislikeMemory,
+  readImageLike,
+} from '../../Lib/data';
 
 export function Image() {
   const [image, setImage] = useState<Image>();
@@ -23,12 +23,12 @@ export function Image() {
   const { familyId, imageId } = useParams();
 
   useEffect(() => {
-    async function loadImage(imageId: number) {
+    async function loadImage(familyId: number, imageId: number) {
       try {
         setIsLoading(true);
-        const res = await readImage(Number(familyId), imageId);
+        const res = await readImage(familyId, imageId);
         setImage(res);
-        const likedStatus = await readLike(Number(familyId), imageId);
+        const likedStatus = await readImageLike(familyId, imageId);
         if (!likedStatus) return;
         likedStatus.imageId && setIsLiked(true);
       } catch (err) {
@@ -39,7 +39,7 @@ export function Image() {
     }
     if (imageId) {
       setIsLoading(true);
-      loadImage(+imageId);
+      loadImage(Number(familyId), +imageId);
     }
   }, [familyId, imageId]);
 

@@ -236,7 +236,7 @@ export async function updateImage(
 export async function deleteImage(
   familyId: number,
   imageId: number
-): Promise<Image> {
+): Promise<void> {
   const bear = readToken();
   const req = {
     method: 'DELETE',
@@ -251,7 +251,6 @@ export async function deleteImage(
   if (!response.ok) {
     throw new Error(`response status: ${response.status}`);
   }
-  return (await response.json()) as Image;
 }
 
 export type Recipe = {
@@ -343,7 +342,7 @@ export async function updateRecipe(
 export async function deleteRecipe(
   familyId: number,
   recipeId: number
-): Promise<Recipe> {
+): Promise<void> {
   const req = {
     method: 'DELETE',
     headers: {
@@ -357,7 +356,6 @@ export async function deleteRecipe(
   if (!response.ok) {
     throw new Error(`response status: ${response.status}`);
   }
-  return (await response.json()) as Recipe;
 }
 
 export type Story = {
@@ -444,7 +442,7 @@ export async function updateStory(
 export async function deleteStory(
   familyId: number,
   storyId: number
-): Promise<Story> {
+): Promise<void> {
   const req = {
     method: 'DELETE',
     headers: {
@@ -458,7 +456,6 @@ export async function deleteStory(
   if (!response.ok) {
     throw new Error(`response status: ${response.status}`);
   }
-  return (await response.json()) as Story;
 }
 
 export type Video = {
@@ -542,7 +539,7 @@ export async function updateVideo(
 export async function deleteVideo(
   familyId: number,
   videoId: number
-): Promise<Video> {
+): Promise<void> {
   const bear = readToken();
   const req = {
     method: 'DELETE',
@@ -557,7 +554,6 @@ export async function deleteVideo(
   if (!response.ok) {
     throw new Error(`response status: ${response.status}`);
   }
-  return (await response.json()) as Video;
 }
 
 export type LikeMemory = {
@@ -569,7 +565,7 @@ export type LikeMemory = {
   videoId?: number;
 };
 
-export async function readLike(
+export async function readImageLike(
   familyId: number,
   imageId: number
 ): Promise<LikeMemory | undefined> {
@@ -585,42 +581,75 @@ export async function readLike(
   return await res.json();
 }
 
+export async function readRecipeLike(
+  familyId: number,
+  recipeId: number | undefined
+): Promise<LikeMemory | undefined> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/recipes/${recipeId}/readLike`,
+    req
+  );
+  return await res.json();
+}
+
+export async function readStoryLike(
+  familyId: number,
+  storyId: number
+): Promise<LikeMemory | undefined> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/stories/${storyId}/readLike`,
+    req
+  );
+  return await res.json();
+}
+
+export async function readVideoLike(
+  familyId: number,
+  videoId: number
+): Promise<LikeMemory | undefined> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const res = await fetch(
+    `/api/family/${familyId}/dashboard/videos/${videoId}/readLike`,
+    req
+  );
+  return await res.json();
+}
+
 export async function likeMemory(
   familyId: number,
   memoryType: string,
-  imageId?: number,
-  recipeId?: number,
-  storyId?: number,
-  videoId?: number
+  memoryId: number
 ): Promise<LikeMemory> {
-  let id;
   let desiredColumn;
 
   if (!memoryType) throw new Error('Memory type is missing');
-  if (memoryType === 'image') {
-    id = imageId;
-    desiredColumn = 'imageId';
-  }
-  if (memoryType === 'recipe') {
-    id = recipeId;
-    desiredColumn = 'recipeId';
-  }
-  if (memoryType === 'story') {
-    id = storyId;
-    desiredColumn = 'storyId';
-  }
-  if (memoryType === 'video') {
-    id = videoId;
-    desiredColumn = 'videoId';
-  }
+  if (memoryType === 'image') desiredColumn = 'imageId';
+  if (memoryType === 'recipe') desiredColumn = 'recipeId';
+  if (memoryType === 'story') desiredColumn = 'storyId';
+  if (memoryType === 'video') desiredColumn = 'videoId';
 
+  console.log('data 661 - id: ', memoryId, 'desired column: ', desiredColumn);
   const res = await fetch(`/api/family/${familyId}/dashboard/like-memory`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
-    body: JSON.stringify({ id, desiredColumn }),
+    body: JSON.stringify({ memoryId, desiredColumn }),
   });
 
   if (!res.ok) {
@@ -632,31 +661,14 @@ export async function likeMemory(
 export async function dislikeMemory(
   familyId: number,
   memoryType: string,
-  imageId?: number,
-  recipeId?: number,
-  storyId?: number,
-  videoId?: number
-): Promise<LikeMemory> {
-  let id;
+  memoryId: number
+): Promise<void> {
   let desiredColumn;
-
   if (!memoryType) throw new Error('Memory type is missing');
-  if (memoryType === 'image') {
-    id = imageId;
-    desiredColumn = 'imageId';
-  }
-  if (memoryType === 'recipe') {
-    id = recipeId;
-    desiredColumn = 'recipeId';
-  }
-  if (memoryType === 'story') {
-    id = storyId;
-    desiredColumn = 'storyId';
-  }
-  if (memoryType === 'video') {
-    id = videoId;
-    desiredColumn = 'videoId';
-  }
+  if (memoryType === 'image') desiredColumn = 'imageId';
+  if (memoryType === 'recipe') desiredColumn = 'recipeId';
+  if (memoryType === 'story') desiredColumn = 'storyId';
+  if (memoryType === 'video') desiredColumn = 'videoId';
 
   const res = await fetch(`/api/family/${familyId}/dashboard/dislike-memory`, {
     method: 'DELETE',
@@ -664,11 +676,10 @@ export async function dislikeMemory(
       'Content-Type': 'application/json',
       Authorization: `Bearer ${readToken()}`,
     },
-    body: JSON.stringify({ id, desiredColumn }),
+    body: JSON.stringify({ memoryId, desiredColumn }),
   });
 
   if (!res.ok) {
     throw new Error(`fetch Error ${res.status}`);
   }
-  return await res.json();
 }
