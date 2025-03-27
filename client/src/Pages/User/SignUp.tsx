@@ -94,7 +94,7 @@ export function SignUp() {
               />
             </div>
             {passwordError !== '' && (
-              <div className="flex items-start mb-2 md:ml-70 mx-2">
+              <div className="flex items-start mb-2 md:ml-60 mx-2">
                 <FontAwesomeIcon
                   icon={faTriangleExclamation}
                   className="text-[#B22222] text-[7px] mt-0.5 md:mt-2 md:text-[12px]"

@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { readRecipe, type Recipe } from '../../Lib/data';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
 import { Container } from '../../Components/Layout/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function Recipe() {
   const [recipe, setRecipe] = useState<Recipe>();
   const [isLoading, setIsLoading] = useState(true);
   const { familyId, recipeId } = useParams();
-
-  function errorMsg() {
-    toast(<Msg message="Error loading recipe. Please try again." />);
-  }
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadRecipe(recipeId: number) {
@@ -23,7 +19,7 @@ export function Recipe() {
         const res = await readRecipe(Number(familyId), recipeId);
         setRecipe(res);
       } catch (err) {
-        errorMsg();
+        errorMsg('Error loading recipe. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -45,12 +41,16 @@ export function Recipe() {
       isLoading={isLoading}>
       <Container mobileWidth="60%" width="70%">
         <div className="w-[100%] text-right">
-          <Link to={`/family/${familyId}/dashboard/recipes/${recipeId}/edit`}>
-            <FontAwesomeIcon
-              icon={faPenToSquare}
-              className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5"
-            />
-          </Link>
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            onClick={() => {
+              window.scrollTo(0, 0);
+              navigate(
+                `/family/${familyId}/dashboard/recipes/${recipeId}/edit`
+              );
+            }}
+            className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5"
+          />
         </div>
         <div className="flex flex-wrap md:flex-nowrap content-start mt-3 md:mt-12 md:mb-4 md:w-[100%]">
           <div className="md:w-[70%]">

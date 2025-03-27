@@ -5,14 +5,17 @@ import {
   uploadVideo,
   updateVideo,
   deleteVideo,
+  dislikeMemory,
+  readVideoLike,
+  readVideoComment,
+  deleteComments,
 } from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labelClass } from '../UserManagement/FormInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FormContainer } from './FormContainer';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
+import { errorMsg } from '../Toast/errorToast';
 
 export function VideoForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -108,13 +111,17 @@ export function VideoForm() {
     }
   }
 
-  function errorMsg(message: string) {
-    toast(<Msg message={message} />);
-  }
-
   async function handleDelete() {
     if (!video?.videoId) throw new Error('Should never happen');
     try {
+      const isLiked = await readVideoLike(Number(familyId), video.videoId);
+      isLiked &&
+        (await dislikeMemory(Number(familyId), 'video', video.videoId));
+
+      const comments = await readVideoComment(Number(familyId), video.videoId);
+      comments &&
+        (await deleteComments(Number(familyId), 'video', video.videoId));
+
       await deleteVideo(Number(familyId), video.videoId);
       navigate(`/family/${familyId}/dashboard/videos`);
       window.scrollTo(0, 0);

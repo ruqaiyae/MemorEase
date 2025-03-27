@@ -1,16 +1,13 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
 import { useEffect } from 'react';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function FamilyForm() {
   const [params] = useSearchParams();
 
   useEffect(() => {
-    function successMsg() {
-      toast(<Msg message="Registered successfully" />);
-    }
-    params.get('action') === 'signup-success' && successMsg();
+    params.get('action') === 'signup-success' &&
+      errorMsg('Registered successfully');
   }, [params]);
 
   const navigate = useNavigate();

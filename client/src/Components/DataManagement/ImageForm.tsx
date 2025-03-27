@@ -5,14 +5,18 @@ import {
   uploadImage,
   updateImage,
   deleteImage,
+  readImageLike,
+  dislikeMemory,
+  readImageComment,
+  deleteComments,
 } from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labelClass } from '../UserManagement/FormInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FormContainer } from './FormContainer';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
+import { errorMsg } from '../Toast/errorToast';
+import { LoadingCircleSpinner } from '../LoadingSpinner';
 
 export function ImageForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -106,13 +110,16 @@ export function ImageForm() {
     }
   }
 
-  function errorMsg(message: string) {
-    toast(<Msg message={message} />);
-  }
-
   async function handleDelete() {
     if (!image?.imageId) throw new Error('Should never happen');
     try {
+      const isLiked = await readImageLike(Number(familyId), image.imageId);
+      isLiked &&
+        (await dislikeMemory(Number(familyId), 'image', image.imageId));
+      const comments = await readImageComment(Number(familyId), image.imageId);
+      comments &&
+        (await deleteComments(Number(familyId), 'image', image.imageId));
+
       await deleteImage(Number(familyId), image.imageId);
       navigate(`/family/${familyId}/dashboard/images`);
       window.scrollTo(0, 0);
@@ -138,7 +145,7 @@ export function ImageForm() {
             <FontAwesomeIcon
               icon={faCircleXmark}
               onClick={handleRemove}
-              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-31 md:top-[34%] right-29 md:right-[34%]"
+              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-31 md:top-[34%] right-29 md:right-[34%] cursor-pointer"
             />
           </>
         ) : selectedFile ? (
@@ -189,7 +196,11 @@ export function ImageForm() {
               onClick={handleDelete}
               disabled={isLoading}
               className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-10 md:mb-15 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
-              Delete
+              {isLoading ? (
+                <LoadingCircleSpinner width="20px" height="20px" />
+              ) : (
+                'Delete'
+              )}
             </button>
             <button
               type="submit"

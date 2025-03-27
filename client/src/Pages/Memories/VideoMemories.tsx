@@ -35,7 +35,7 @@ export function VideoMemories() {
       {videos?.length !== 0 && (
         <div className="flex flex-wrap justify-center content-center md:my-10">
           {videos?.map((video) => (
-            <img
+            <video
               src={video.videoUrl}
               key={video.videoId}
               onClick={() =>

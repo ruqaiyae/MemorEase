@@ -135,9 +135,9 @@ async function validatePassword(
             where "familyId" = $1`;
   const response = await db.query(sql, [familyId]);
   const family = response.rows[0];
-  if (!family) throw new ClientError(401, 'invalid login');
+  if (!family) throw new ClientError(401, 'invalid id or password');
   if (!(await argon2.verify(family.hashedPassword, password))) {
-    throw new ClientError(401, 'invalid login');
+    throw new ClientError(401, 'incorrect password');
   }
   return true;
 }
@@ -833,13 +833,91 @@ app.get(
   }
 );
 
+app.get(
+  '/api/family/:familyId/dashboard/recipes/:recipeId/readLike',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const recipeId = Number(req.params.recipeId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Likes"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "recipeId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, recipeId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows[0] || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/stories/storyId/readLike',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const storyId = Number(req.params.storyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Likes"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "storyId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, storyId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows[0] || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/videos/:videoId/readLike',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const videoId = Number(req.params.videoId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Likes"
+                    where "userId" = $1
+                    and "familyId" = $2
+                    and "videoId" = $3;
+                  `;
+      const params = [req.user?.userId, familyId, videoId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows[0] || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 app.post(
   '/api/family/:familyId/dashboard/like-memory',
   authMiddleware,
   async (req, res, next) => {
     try {
-      const { id, desiredColumn } = req.body;
-      validateBody(id, 'id');
+      const { memoryId, desiredColumn } = req.body;
+      validateBody(memoryId, 'memoryId');
       validateBody(desiredColumn, 'desiredColumn');
       const familyId = Number(req.params.familyId);
       if (!Number.isInteger(familyId) || familyId < 1) {
@@ -849,10 +927,10 @@ app.post(
                   values($1, $2, $3)
                   returning *;
                   `;
-      const params = [req.user?.userId, familyId, id];
-      const response = await db.query<Story>(sql, params);
-      const memoryLiked = response.rows[0];
-      res.status(201).json(memoryLiked);
+      const params = [req.user?.userId, familyId, memoryId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const liked = response.rows[0];
+      res.status(201).json(liked);
     } catch (err) {
       next(err);
     }
@@ -864,8 +942,8 @@ app.delete(
   authMiddleware,
   async (req, res, next) => {
     try {
-      const { id, desiredColumn } = req.body;
-      validateBody(id, 'id');
+      const { memoryId, desiredColumn } = req.body;
+      validateBody(memoryId, 'memoryId');
       validateBody(desiredColumn, 'desiredColumn');
       const familyId = Number(req.params.familyId);
       if (!Number.isInteger(familyId) || familyId < 1) {
@@ -875,15 +953,123 @@ app.delete(
                   where "userId" = $1 and "familyId" = $2 and "${desiredColumn}" = $3
                   returning *;
                   `;
-      const params = [req.user?.userId, familyId, id];
-      const response = await db.query<Story>(sql, params);
-      const story = response.rows[0];
-      if (!story) {
+      const params = [req.user?.userId, familyId, memoryId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const disliked = response.rows[0];
+      if (!disliked) {
         throw new ClientError(404, 'No memory available');
       }
       res.sendStatus(204);
     } catch (error) {
       next(error);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/images/:imageId/readComment',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const imageId = Number(req.params.imageId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Comments"
+                    where "familyId" = $1
+                    and "imageId" = $2;
+                  `;
+      const params = [familyId, imageId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/family/:familyId/dashboard/videos/:videoId/readComment',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const familyId = Number(req.params.familyId);
+      const videoId = Number(req.params.videoId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `select *
+                    from "Comments"
+                    where "familyId" = $1
+                    and "videoId" = $2;
+                  `;
+      const params = [familyId, videoId];
+      const response = await db.query<LikeMemory>(sql, params);
+      const isLiked = response.rows || null;
+      res.json(isLiked);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.post(
+  '/api/family/:familyId/dashboard/add-comment',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { memoryId, desiredColumn, author, comment } = req.body;
+      validateBody(memoryId, 'memoryId');
+      validateBody(desiredColumn, 'desiredColumn');
+      validateBody(author, 'author');
+      validateBody(comment, 'comment');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `insert into "Comments" ("userId", "familyId", "${desiredColumn}", "author", "comment")
+                  values($1, $2, $3, $4, $5)
+                  returning *;
+                  `;
+      const params = [req.user?.userId, familyId, memoryId, author, comment];
+      const response = await db.query<Comment>(sql, params);
+      const addedComment = response.rows[0];
+      res.status(201).json(addedComment);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.delete(
+  '/api/family/:familyId/dashboard/delete-comment',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { commentId, memoryId, desiredColumn } = req.body;
+      validateBody(commentId, 'commentId');
+      validateBody(memoryId, 'memoryId');
+      validateBody(desiredColumn, 'desiredColumn');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `delete from "Comments"
+                  where "commentsId" = $1 and "userId" = $2 and "familyId" = $3 and "${desiredColumn}" = $4
+                  returning *;
+                  `;
+      const params = [commentId, req.user?.userId, familyId, memoryId];
+      const response = await db.query<Comment>(sql, params);
+      const deletedComment = response.rows[0];
+      if (!deletedComment) {
+        throw new ClientError(404, 'No memory available');
+      }
+      res.sendStatus(204);
+    } catch (err) {
+      next(err);
     }
   }
 );

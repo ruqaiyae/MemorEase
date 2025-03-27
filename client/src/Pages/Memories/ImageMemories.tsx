@@ -6,12 +6,13 @@ import { MemoriesContainer } from '../../Components/DataManagement/MemoriesConta
 export function ImageMemories() {
   const { familyId } = useParams();
   const [images, setImages] = useState<Image[]>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
       try {
+        setIsLoading(true);
         const res = await readImages(Number(familyId));
         setImages(res);
       } catch (err) {

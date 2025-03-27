@@ -4,19 +4,12 @@ import { createFamily, CreateFamilyData, joinFamily } from '../../Lib/data';
 import { FormInput } from '../../Components/UserManagement/FormInput';
 import { PasswordInput } from '../../Components/UserManagement/PasswordInput';
 import { useFamily } from '../../Components/FamilyManagement/useFamily';
-import { toast } from 'react-toastify';
-import { Msg } from '../../Components/Toast';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function CreateFamily() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { updateFamily, addFamily } = useFamily();
-
-  function errorMsg() {
-    toast(
-      <Msg message="Failed to create family. Please refresh and try again." />
-    );
-  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,7 +26,7 @@ export function CreateFamily() {
       updateFamily(family);
       addFamily(family);
     } catch (err) {
-      errorMsg();
+      errorMsg('Failed to create family. Please refresh and try again.');
     } finally {
       setIsLoading(false);
     }
