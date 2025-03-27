@@ -171,7 +171,8 @@ app.post('/api/family-details', authMiddleware, async (req, res, next) => {
     validateBody(userId, 'userId');
     const sql = `select * from "FamilyMembers"
               join "Families" using ("familyId")
-              where "userId" = $1;
+              where "userId" = $1
+              order by "familyId";
               `;
     const response = await db.query(sql, [userId]);
     const familyDetails = response.rows;

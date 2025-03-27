@@ -63,6 +63,17 @@ export function JoinFamily() {
                 className="btn bg-[#654A2F] px-4 md:px-7 py-[5px] md:py-3 my-6 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px] cursor-pointer">
                 Join
               </button>
+              <p className="font-[Lato] text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
+                No family to join?{' '}
+                <span
+                  onClick={() => {
+                    navigate('/family-form/create-family');
+                    window.scrollTo(0, 0);
+                  }}
+                  className="font-bold underline cursor-pointer">
+                  Create your own legacy now.
+                </span>
+              </p>
             </div>
           </form>
         </div>
