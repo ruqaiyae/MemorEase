@@ -808,7 +808,7 @@ app.delete(
 );
 
 app.get(
-  '/api/family/:familyId/dashboard/images/:imageId/readLike',
+  '/api/family/:familyId/dashboard/images/:imageId/like',
   authMiddleware,
   async (req, res, next) => {
     try {
@@ -834,12 +834,11 @@ app.get(
 );
 
 app.get(
-  '/api/family/:familyId/dashboard/recipes/:recipeId/readLike',
+  '/api/family/:familyId/dashboard/recipes/titles/likes',
   authMiddleware,
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      const recipeId = Number(req.params.recipeId);
       if (!Number.isInteger(familyId) || familyId < 1) {
         throw new ClientError(400, 'familyId must be a positive integer');
       }
@@ -847,9 +846,8 @@ app.get(
                     from "Likes"
                     where "userId" = $1
                     and "familyId" = $2
-                    and "recipeId" = $3;
                   `;
-      const params = [req.user?.userId, familyId, recipeId];
+      const params = [req.user?.userId, familyId];
       const response = await db.query<LikeMemory>(sql, params);
       const isLiked = response.rows[0] || null;
       res.json(isLiked);
@@ -860,24 +858,22 @@ app.get(
 );
 
 app.get(
-  '/api/family/:familyId/dashboard/stories/storyId/readLike',
+  '/api/family/:familyId/dashboard/stories/titles/likes',
   authMiddleware,
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      const storyId = Number(req.params.storyId);
       if (!Number.isInteger(familyId) || familyId < 1) {
         throw new ClientError(400, 'familyId must be a positive integer');
       }
-      const sql = `select *
+      const sql = `select "storyId"
                     from "Likes"
                     where "userId" = $1
                     and "familyId" = $2
-                    and "storyId" = $3;
                   `;
-      const params = [req.user?.userId, familyId, storyId];
+      const params = [req.user?.userId, familyId];
       const response = await db.query<LikeMemory>(sql, params);
-      const isLiked = response.rows[0] || null;
+      const isLiked = response.rows;
       res.json(isLiked);
     } catch (err) {
       next(err);
@@ -886,7 +882,7 @@ app.get(
 );
 
 app.get(
-  '/api/family/:familyId/dashboard/videos/:videoId/readLike',
+  '/api/family/:familyId/dashboard/videos/:videoId/like',
   authMiddleware,
   async (req, res, next) => {
     try {

@@ -575,15 +575,14 @@ export async function readImageLike(
     },
   };
   const res = await fetch(
-    `/api/family/${familyId}/dashboard/images/${imageId}/readLike`,
+    `/api/family/${familyId}/dashboard/images/${imageId}/like`,
     req
   );
   return await res.json();
 }
 
 export async function readRecipeLike(
-  familyId: number,
-  recipeId: number | undefined
+  familyId: number
 ): Promise<LikeMemory | undefined> {
   const req = {
     headers: {
@@ -591,15 +590,14 @@ export async function readRecipeLike(
     },
   };
   const res = await fetch(
-    `/api/family/${familyId}/dashboard/recipes/${recipeId}/readLike`,
+    `/api/family/${familyId}/dashboard/recipes/titles/likes`,
     req
   );
   return await res.json();
 }
 
-export async function readStoryLikes(
-  familyId: number,
-  storyId: number
+export async function readStoryLike(
+  familyId: number
 ): Promise<LikeMemory[] | undefined> {
   const req = {
     headers: {
@@ -607,7 +605,7 @@ export async function readStoryLikes(
     },
   };
   const res = await fetch(
-    `/api/family/${familyId}/dashboard/stories/${storyId}/readLike`,
+    `/api/family/${familyId}/dashboard/stories/titles/likes`,
     req
   );
   return await res.json();
@@ -623,7 +621,7 @@ export async function readVideoLike(
     },
   };
   const res = await fetch(
-    `/api/family/${familyId}/dashboard/videos/${videoId}/readLike`,
+    `/api/family/${familyId}/dashboard/videos/${videoId}/like`,
     req
   );
   return await res.json();
