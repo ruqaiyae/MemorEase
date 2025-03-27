@@ -790,3 +790,29 @@ export async function deleteComment(
     throw new Error(`fetch Error ${res.status}`);
   }
 }
+
+export async function deleteComments(
+  familyId: number,
+  memoryType: string,
+  memoryId: number
+): Promise<void> {
+  let desiredColumn;
+  if (!memoryType) throw new Error('Memory type is missing');
+  if (memoryType === 'image') desiredColumn = 'imageId';
+  if (memoryType === 'recipe') desiredColumn = 'recipeId';
+  if (memoryType === 'story') desiredColumn = 'storyId';
+  if (memoryType === 'video') desiredColumn = 'videoId';
+
+  const res = await fetch(`/api/family/${familyId}/dashboard/delete-comments`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${readToken()}`,
+    },
+    body: JSON.stringify({ memoryId, desiredColumn }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`fetch Error ${res.status}`);
+  }
+}

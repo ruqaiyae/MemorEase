@@ -8,6 +8,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { useFamily } from '../FamilyManagement/useFamily';
+import { LoadingCircleSpinner } from '../LoadingSpinner';
 
 type Props = {
   header1: string;
@@ -39,9 +40,7 @@ export function MemoriesContainer({
       </h1>
       <Container mobileWidth="80%" width="85%">
         {loading ? (
-          <p className="font-[artifika] text-[#654A2F] text-center text-[10px] md:text-[25px] mx-5 my-10 md:mt-20">
-            Loading...
-          </p>
+          <LoadingCircleSpinner width="100px" height="100px" text="loading" />
         ) : !content?.length ? (
           <>
             <p className="font-[artifika] text-[#654A2F] text-center text-[10px] md:text-[25px] mx-5 mt-10 md:mt-20">

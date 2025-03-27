@@ -70,14 +70,11 @@ export function Video() {
         user?.username,
         value
       );
-      setComments([
-        ...comments,
-        {
-          commentsId: Math.floor(Math.random() * 100000),
-          author: user?.username,
-          comment: value,
-        },
-      ]);
+      const updatedComments = await readVideoComment(
+        Number(familyId),
+        Number(videoId)
+      );
+      setComments(updatedComments);
       setValue('');
     } catch (err) {
       errorMsg('Error adding comment. Please try again!');
@@ -158,7 +155,7 @@ export function Video() {
                   <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() => handleDelete(comment.commentsId)}
-                    className="mr-2"
+                    className="mr-2 cursor-pointer"
                   />
                 ) : null}
               </li>
