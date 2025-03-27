@@ -25,6 +25,7 @@ export function Dashboard() {
               tileWidth="100%"
               onSelect={() => {
                 navigate('images');
+                window.scrollTo(0, 0);
               }}
               cursor="pointer"
             />
@@ -32,6 +33,7 @@ export function Dashboard() {
             <h4
               onClick={() => {
                 navigate('images');
+                window.scrollTo(0, 0);
               }}
               className={className}>
               Eternal Snapshots
