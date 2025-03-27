@@ -52,6 +52,17 @@ export function CreateFamily() {
                 className="btn bg-[#654A2F] px-4 md:px-7 py-[5px] md:py-3 my-6 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px] cursor-pointer">
                 Create
               </button>
+              <p className="font-[Lato] text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
+                Your family's story is already being written?{' '}
+                <span
+                  onClick={() => {
+                    navigate('/family-form/join-family');
+                    window.scrollTo(0, 0);
+                  }}
+                  className="font-bold underline cursor-pointer">
+                  Join them
+                </span>
+              </p>
             </div>
           </form>
         </div>

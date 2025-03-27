@@ -18,7 +18,6 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
 
   const r = positionTo?.getBoundingClientRect();
   const top = r ? `${r.bottom + 4}px` : '8%';
-  const left = r ? `${r.left - 50}px` : '95%';
 
   return createPortal(
     <>
@@ -29,9 +28,11 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
       <div
         className="bg-[#654A2F] border-2 border-[#654A2F] rounded-lg px-[10px] md:px-[30px] py-[5px]"
         style={{
+          width: 'auto',
+          whiteSpace: 'nowrap',
           position: 'absolute',
           top,
-          left,
+          right: 0,
         }}>
         <ul className="list-none m-0 py-[3px] font-[Lato] text-[#EBD199] text-right text-[9px] md:text-[15px] cursor-pointer">
           {!user && (

@@ -4,23 +4,31 @@ import { Container } from '../Components/Layout/Container';
 import { MemoryDescription, MemoryTile } from '../Components/MemoryShowcase';
 import { useUser } from '../Components/UserManagement/useUser';
 import { useFamily } from '../Components/FamilyManagement/useFamily';
+import { motion } from 'framer-motion';
 
 export function LandingPage() {
   const { user } = useUser();
   const { currentFamily } = useFamily();
   const navigate = useNavigate();
 
+  const fadeInAnimation = {
+    initial: { opacity: 0, y: 150 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 1.5, ease: 'easeInOut' },
+    viewport: { once: true },
+  };
+
   return (
     <>
       <HeroImg />
       <div className="bg-[#654A2F] w-[70%] mx-auto rounded-[50%]">
-        <h1 className="font-[fondamento] font-bold text-[#EBD199] text-[15px] md:text-[40px] text-center my-6 md:my-12 md:my-6 py-2 md:py-4">
+        <h1 className="font-[fondamento] font-bold text-[#EBD199] text-[15px] md:text-[40px] text-center my-6 md:my-20 py-2 md:py-4">
           Preserve Memories, Share Your Legacy
         </h1>
       </div>
       <Container mobileWidth="85%" width="80%">
         <div className="px-6 md:px-30">
-          <div className="flex mt-7 md:my-20">
+          <motion.div className="flex mt-7 md:my-20" {...fadeInAnimation}>
             <MemoryTile
               src="/MemoryTiles/Album.png"
               alt="Album"
@@ -42,8 +50,8 @@ export function LandingPage() {
               title="Eternal Snapshots"
               description="A treasure trove of cherished photographs capturing the essence of your family's journey. From vintage portraits to modern-day celebrations, a timeless collection of preserved memories."
             />
-          </div>
-          <div className="flex my-10 md:my-20">
+          </motion.div>
+          <motion.div className="flex my-10 md:my-20" {...fadeInAnimation}>
             <MemoryDescription
               title="Generations of Flavor"
               description={`Handwritten recipes, secret family dishes, and culinary traditions passed down through the ages.
@@ -67,8 +75,8 @@ A digital recipe book infused with the flavors of family history.`}
               }
               cursor={user ? 'pointer' : 'default'}
             />
-          </div>
-          <div className="flex my-10 md:my-20">
+          </motion.div>
+          <motion.div className="flex my-10 md:my-20" {...fadeInAnimation}>
             <MemoryTile
               src="/MemoryTiles/Story.png"
               alt="Story Book"
@@ -79,8 +87,8 @@ A digital recipe book infused with the flavors of family history.`}
               title="Family Folklore"
               description="Legends, bedtime stories, and unforgettable tales defining your family's heritage through words and wisdom, carried across generations."
             />
-          </div>
-          <div className="flex mb-7 mt-10 md:my-20">
+          </motion.div>
+          <motion.div className="flex mb-7 mt-10 md:my-20" {...fadeInAnimation}>
             <MemoryDescription
               title="Timeless Tapes"
               description="A vault of voices, sounds, and recordings, echoing the past through heartfelt messages, nostalgic melodies, and home videos."
@@ -92,7 +100,7 @@ A digital recipe book infused with the flavors of family history.`}
               alt="Video Album"
               tileWidth="40%"
             />
-          </div>
+          </motion.div>
         </div>
       </Container>
       <div className="md:mb-30">
