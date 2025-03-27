@@ -1074,6 +1074,33 @@ app.delete(
   }
 );
 
+app.delete(
+  '/api/family/:familyId/dashboard/delete-comments',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { memoryId, desiredColumn } = req.body;
+      validateBody(memoryId, 'memoryId');
+      validateBody(desiredColumn, 'desiredColumn');
+      const familyId = Number(req.params.familyId);
+      if (!Number.isInteger(familyId) || familyId < 1) {
+        throw new ClientError(400, 'familyId must be a positive integer');
+      }
+      const sql = `delete from "Comments"
+                  where "familyId" = $1 and "${desiredColumn}" = $2
+                  returning *;
+                  `;
+      const params = [familyId, memoryId];
+      const response = await db.query<Comment>(sql, params);
+      const deletedComment = response.rows;
+      if (!deletedComment) return undefined;
+      res.sendStatus(204);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 /*
  * Handles paths that aren't handled by any other route handler.
  * It responds with `index.html` to support page refreshes with React Router.
