@@ -122,10 +122,8 @@ export function Image() {
               <FontAwesomeIcon
                 icon={isLiked ? faHeartSolid : faHeartRegular}
                 onClick={handleLike}
-                className={`md:text-[25px] cursor-pointer {
-                  isLiked
-                    ? 'text-[#d51010]'
-                    : 'text-[#654A2F]'
+                className={`md:text-[25px] cursor-pointer ${
+                  isLiked ? 'text-[#d51010]' : 'text-[#654A2F]'
                 }`}
               />
             </div>
