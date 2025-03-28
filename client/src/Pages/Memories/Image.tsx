@@ -28,6 +28,7 @@ export function Image() {
   const [isLiked, setIsLiked] = useState(false);
   const [value, setValue] = useState('');
   const [comments, setComments] = useState<Comment[]>([]);
+  const [owner, setOwner] = useState<number>();
   const { familyId, imageId } = useParams();
   const { user } = useUser();
 
@@ -35,8 +36,9 @@ export function Image() {
     async function loadImage(familyId: number, imageId: number) {
       try {
         setIsLoading(true);
-        const res = await readImage(familyId, imageId);
-        setImage(res);
+        const image = await readImage(familyId, imageId);
+        setImage(image);
+        setOwner(image.userId);
         const likedStatus = await readImageLike(familyId, imageId);
         likedStatus?.imageId && setIsLiked(true);
         const imageComments = await readImageComment(familyId, imageId);
@@ -104,13 +106,15 @@ export function Image() {
             />
             <div className="flex justify-between content-center mt-1 md:mt-3 w-full">
               <div className="flex items-center">
-                <Link
-                  to={`/family/${familyId}/dashboard/images/${imageId}/edit`}>
-                  <FontAwesomeIcon
-                    icon={faPen}
-                    className="text-[8px] md:text-[20px] text-[#654A2F] pr-1 md:pr-2"
-                  />
-                </Link>
+                {user?.userId === owner ? (
+                  <Link
+                    to={`/family/${familyId}/dashboard/images/${imageId}/edit`}>
+                    <FontAwesomeIcon
+                      icon={faPen}
+                      className="text-[8px] md:text-[20px] text-[#654A2F] pr-1 md:pr-2"
+                    />
+                  </Link>
+                ) : null}
                 <p className="text-[#654A2F] text-[12px] md:text-[20px]">
                   {image?.caption}
                 </p>
@@ -118,11 +122,11 @@ export function Image() {
               <FontAwesomeIcon
                 icon={isLiked ? faHeartSolid : faHeartRegular}
                 onClick={handleLike}
-                className={
+                className={`md:text-[25px] cursor-pointer {
                   isLiked
-                    ? 'text-[#d51010] md:text-[25px]'
-                    : 'text-[#654A2F] md:text-[25px]'
-                }
+                    ? 'text-[#d51010]'
+                    : 'text-[#654A2F]'
+                }`}
               />
             </div>
           </div>
@@ -154,7 +158,7 @@ export function Image() {
                   <FontAwesomeIcon
                     icon={faTrash}
                     onClick={() => handleDelete(comment.commentsId)}
-                    className="mr-2"
+                    className="mr-2 cursor-pointer"
                   />
                 ) : null}
               </li>

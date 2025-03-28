@@ -51,7 +51,6 @@ export function MemoriesContainer({
               <button
                 onClick={() => {
                   navigate(`/family/${familyId}/dashboard/${path}`);
-                  window.scrollTo(0, 0);
                 }}
                 className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 mt-5 mb-10 md:my-16 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
                 Upload Now
@@ -63,7 +62,6 @@ export function MemoriesContainer({
             <button
               onClick={() => {
                 navigate(`/family/${familyId}/dashboard/${path}`);
-                window.scrollTo(0, 0);
               }}
               className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
               Add a New Memory

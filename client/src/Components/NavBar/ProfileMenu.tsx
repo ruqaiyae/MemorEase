@@ -59,7 +59,6 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
               <li
                 onClick={() => {
                   navigate('family-form');
-                  window.scrollTo(0, 0);
                   onClose();
                 }}
                 className="cursor-pointer">
@@ -72,7 +71,7 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
                   resetFamilies();
                   onClose();
                 }}
-                className="py-[3px] md:pb-[10px]">
+                className="py-[3px] md:pb-[10px] cursor-pointer">
                 <Link to={'/'}>Sign Out</Link>
               </li>
             </>

@@ -1,6 +1,6 @@
 import { Container } from '../Components/Layout/Container';
 import { useFamily } from '../Components/FamilyManagement/useFamily';
-import { MemoryTile } from '../Components/MemoryShowcase';
+import { MemoryTile } from '../Components/DataManagement/MemoryShowcase';
 import { useNavigate } from 'react-router-dom';
 
 export function Dashboard() {
@@ -25,7 +25,6 @@ export function Dashboard() {
               tileWidth="100%"
               onSelect={() => {
                 navigate('images');
-                window.scrollTo(0, 0);
               }}
               cursor="pointer"
             />
@@ -33,7 +32,6 @@ export function Dashboard() {
             <h4
               onClick={() => {
                 navigate('images');
-                window.scrollTo(0, 0);
               }}
               className={className}>
               Eternal Snapshots
@@ -46,7 +44,6 @@ export function Dashboard() {
               tileWidth="100%"
               onSelect={() => {
                 navigate('recipes');
-                window.scrollTo(0, 0);
               }}
               cursor="pointer"
             />
@@ -54,7 +51,6 @@ export function Dashboard() {
             <h4
               onClick={() => {
                 navigate('recipes');
-                window.scrollTo(0, 0);
               }}
               className={className}>
               Generations of Flavor
@@ -67,7 +63,6 @@ export function Dashboard() {
               tileWidth="100%"
               onSelect={() => {
                 navigate('stories');
-                window.scrollTo(0, 0);
               }}
               cursor="pointer"
             />
@@ -75,7 +70,6 @@ export function Dashboard() {
             <h4
               onClick={() => {
                 navigate('stories');
-                window.scrollTo(0, 0);
               }}
               className={className}>
               Family Folklore
@@ -88,7 +82,6 @@ export function Dashboard() {
               tileWidth="100%"
               onSelect={() => {
                 navigate('videos');
-                window.scrollTo(0, 0);
               }}
               cursor="pointer"
             />
@@ -96,7 +89,6 @@ export function Dashboard() {
             <h4
               onClick={() => {
                 navigate('videos');
-                window.scrollTo(0, 0);
               }}
               className={className}>
               Timeless Tapes

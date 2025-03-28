@@ -34,7 +34,6 @@ export function JoinFamily() {
       addFamily(family);
       updateFamily(family);
       navigate(`/family/${family.familyId}/dashboard`);
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Invalid family id or password. Please try again.');
     } finally {
@@ -68,7 +67,6 @@ export function JoinFamily() {
                 <span
                   onClick={() => {
                     navigate('/family-form/create-family');
-                    window.scrollTo(0, 0);
                   }}
                   className="font-bold underline cursor-pointer">
                   Create your own legacy now.

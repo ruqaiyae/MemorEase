@@ -103,7 +103,6 @@ export function VideoForm() {
 
       handleRemove();
       navigate(`/family/${familyId}/dashboard/videos`);
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error uploading video');
     } finally {
@@ -124,7 +123,6 @@ export function VideoForm() {
 
       await deleteVideo(Number(familyId), video.videoId);
       navigate(`/family/${familyId}/dashboard/videos`);
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error deleting video. Please try again.');
     }
@@ -136,11 +134,11 @@ export function VideoForm() {
         text="Some moments are best remembered in motion."
         onSubmit={(e) => handleSubmit(e)}>
         {isEditing && videoUrl ? (
-          <>
+          <div className="inline-block relative">
             <div className="flex justify-center">
               <video
                 controls
-                className="w-[90%] mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
+                className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
                 preload="metadata">
                 <source
                   src={videoUrl}
@@ -153,15 +151,15 @@ export function VideoForm() {
             <FontAwesomeIcon
               icon={faCircleXmark}
               onClick={handleRemove}
-              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-31 md:top-70 right-20 md:right-101"
+              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-3 -right-2 cursor-pointer"
             />
-          </>
+          </div>
         ) : selectedFile ? (
-          <>
+          <div className="inline-block relative">
             <div className="flex justify-center">
               <video
                 controls
-                className="w-[90%] mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
+                className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
                 preload="metadata"
                 src={preview}>
                 Your browser does not support the video tag.
@@ -170,9 +168,9 @@ export function VideoForm() {
             <FontAwesomeIcon
               icon={faCircleXmark}
               onClick={handleRemove}
-              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-31 md:top-70 right-20 md:right-101"
+              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-3 -right-2 cursor-pointer"
             />
-          </>
+          </div>
         ) : (
           <>
             <p className={labelClass}>Add a Video to Your Memory Vault</p>
@@ -192,7 +190,6 @@ export function VideoForm() {
           <textarea
             cols={40}
             rows={10}
-            autoFocus
             id="caption"
             name="caption"
             defaultValue={video?.caption ?? ''}
