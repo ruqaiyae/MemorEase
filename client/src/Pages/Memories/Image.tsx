@@ -28,7 +28,7 @@ export function Image() {
   const [isLiked, setIsLiked] = useState(false);
   const [value, setValue] = useState('');
   const [comments, setComments] = useState<Comment[]>([]);
-  const [owner, setOwner] = useState<number>();
+  const [ownerId, setOwnerId] = useState<number>();
   const { familyId, imageId } = useParams();
   const { user } = useUser();
 
@@ -38,13 +38,13 @@ export function Image() {
         setIsLoading(true);
         const image = await readImage(familyId, imageId);
         setImage(image);
-        setOwner(image.userId);
+        setOwnerId(image.userId);
         const likedStatus = await readImageLike(familyId, imageId);
         likedStatus?.imageId && setIsLiked(true);
         const imageComments = await readImageComment(familyId, imageId);
         imageComments && setComments(imageComments);
       } catch (err) {
-        errorMsg('Error loading image. Please try again.');
+        console.log(err);
       } finally {
         setIsLoading(false);
       }
@@ -106,7 +106,7 @@ export function Image() {
             />
             <div className="flex justify-between content-center mt-1 md:mt-3 w-full">
               <div className="flex items-center">
-                {user?.userId === owner ? (
+                {user?.userId === ownerId ? (
                   <Link
                     to={`/family/${familyId}/dashboard/images/${imageId}/edit`}>
                     <FontAwesomeIcon
