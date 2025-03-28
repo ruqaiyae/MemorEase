@@ -21,7 +21,6 @@ export function CreateFamily() {
       const { familyName, password } = familyData;
       await joinFamily({ familyId, password });
       navigate(`/family/${familyId}/dashboard`);
-      window.scrollTo(0, 0);
       const family = { familyId, familyName };
       updateFamily(family);
       addFamily(family);
@@ -57,7 +56,6 @@ export function CreateFamily() {
                 <span
                   onClick={() => {
                     navigate('/family-form/join-family');
-                    window.scrollTo(0, 0);
                   }}
                   className="font-bold underline cursor-pointer">
                   Join them

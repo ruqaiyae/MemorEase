@@ -119,11 +119,9 @@ export function Video() {
               <FontAwesomeIcon
                 icon={isLiked ? faHeartSolid : faHeartRegular}
                 onClick={handleLike}
-                className={
-                  isLiked
-                    ? 'text-[#d51010] md:text-[25px]'
-                    : 'text-[#654A2F] md:text-[25px]'
-                }
+                className={`md:text-[25px] cursor-pointer ${
+                  isLiked ? 'text-[#d51010]' : 'text-[#654A2F]'
+                }`}
               />
             </div>
           </div>

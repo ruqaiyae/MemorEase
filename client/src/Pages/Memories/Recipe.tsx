@@ -44,12 +44,11 @@ export function Recipe() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             onClick={() => {
-              window.scrollTo(0, 0);
               navigate(
                 `/family/${familyId}/dashboard/recipes/${recipeId}/edit`
               );
             }}
-            className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5"
+            className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5 cursor-pointer"
           />
         </div>
         <div className="flex flex-wrap md:flex-nowrap content-start mt-3 md:mt-12 md:mb-4 md:w-[100%]">

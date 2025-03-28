@@ -17,7 +17,6 @@ export function NavBar() {
             src="/logo.png"
             onClick={() => {
               navigate('/');
-              window.scrollTo(0, 0);
             }}
             className="w-8 md:w-15 cursor-pointer"
           />

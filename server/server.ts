@@ -187,15 +187,19 @@ app.post('/api/family-details', authMiddleware, async (req, res, next) => {
   }
 });
 
+function validateFamilyId(id: number): void {
+  if (!Number.isInteger(id) || id < 1) {
+    throw new ClientError(400, 'familyId must be a positive integer');
+  }
+}
+
 app.get(
   '/api/family/:familyId/dashboard/images',
   authMiddleware,
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select * from "ImageMemories"
                   where "familyId" = $1
                   order by "imageId"
@@ -215,9 +219,7 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const imageId = Number(req.params.imageId);
       if (!Number.isInteger(imageId) || imageId < 1) {
         throw new ClientError(400, 'imageId must be a positive integer');
@@ -246,9 +248,7 @@ app.post(
       if (!req.file)
         throw new ClientError(400, 'No file provided in the request.');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       let { caption } = req.body as Partial<Image>;
       validateBody(caption, 'caption');
       if (!caption) caption = '';
@@ -274,9 +274,7 @@ app.put(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const imageId = Number(req.params.imageId);
       if (!Number.isInteger(imageId) || imageId < 1) {
         throw new ClientError(400, 'imageId must be a positive integer');
@@ -306,9 +304,7 @@ app.delete(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const imageId = Number(req.params.imageId);
       if (!Number.isInteger(imageId) || imageId < 1) {
         throw new ClientError(400, 'imageId must be a positive integer');
@@ -333,9 +329,7 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select * from "RecipeMemories"
                   where "familyId" = $1
                   order by "recipeId";
@@ -355,9 +349,7 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const recipeId = Number(req.params.recipeId);
       if (!Number.isInteger(recipeId) || recipeId < 1) {
         throw new ClientError(400, 'recipeId must be a positive integer');
@@ -402,9 +394,7 @@ app.post(
       validateBody(backstory, 'backstory');
       validateBody(notes, 'notes');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `insert into "RecipeMemories" ("userId", "familyId", "dishName", "category", "cookingTime", "ingredients", "directions", "creator", "backstory", "notes")
                   values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                   returning *;
@@ -454,9 +444,7 @@ app.put(
       validateBody(backstory, 'backstory');
       validateBody(notes, 'notes');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const recipeId = Number(req.params.recipeId);
       if (!Number.isInteger(recipeId) || recipeId < 1) {
         throw new ClientError(400, 'recipeId must be a positive integer');
@@ -497,9 +485,7 @@ app.delete(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const recipeId = Number(req.params.recipeId);
       if (!Number.isInteger(recipeId) || recipeId < 1) {
         throw new ClientError(400, 'recipeId must be a positive integer');
@@ -527,9 +513,7 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select * from "StoryMemories"
                   where "familyId" = $1
                   order by "storyId";
@@ -550,9 +534,7 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const storyId = Number(req.params.storyId);
       if (!Number.isInteger(storyId) || storyId < 1) {
         throw new ClientError(400, 'storyId must be a positive integer');
@@ -582,9 +564,7 @@ app.post(
       validateBody(content, 'content');
       validateBody(author, 'author');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `insert into "StoryMemories" ("userId", "familyId", "title", "content", "author")
                   values($1, $2, $3, $4, $5)
                   returning *;
@@ -605,9 +585,7 @@ app.put(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const storyId = Number(req.params.storyId);
       if (!Number.isInteger(storyId) || storyId < 1) {
         throw new ClientError(400, 'imageId must be a positive integer');
@@ -644,9 +622,7 @@ app.delete(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const storyId = Number(req.params.storyId);
       if (!Number.isInteger(storyId) || storyId < 1) {
         throw new ClientError(400, 'storyId must be a positive integer');
@@ -674,9 +650,7 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select * from "VideoMemories"
                   where "familyId" = $1
                   order by "videoId"
@@ -696,9 +670,7 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const videoId = Number(req.params.videoId);
       if (!Number.isInteger(videoId) || videoId < 1) {
         throw new ClientError(400, 'videoId must be a positive integer');
@@ -727,9 +699,7 @@ app.post(
       if (!req.file)
         throw new ClientError(400, 'No file provided in the request.');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       let { caption } = req.body as Partial<Video>;
       validateBody(caption, 'caption');
       if (!caption) caption = '';
@@ -755,9 +725,7 @@ app.put(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const videoId = Number(req.params.videoId);
       if (!Number.isInteger(videoId) || videoId < 1) {
         throw new ClientError(400, 'videoId must be a positive integer');
@@ -787,9 +755,7 @@ app.delete(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const videoId = Number(req.params.videoId);
       if (!Number.isInteger(videoId) || videoId < 1) {
         throw new ClientError(400, 'videoId must be a positive integer');
@@ -815,9 +781,7 @@ app.get(
     try {
       const familyId = Number(req.params.familyId);
       const imageId = Number(req.params.imageId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select *
                     from "Likes"
                     where "userId" = $1
@@ -840,17 +804,15 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
-      const sql = `select *
+      validateFamilyId(familyId);
+      const sql = `select "recipeId"
                     from "Likes"
                     where "userId" = $1
                     and "familyId" = $2
                   `;
       const params = [req.user?.userId, familyId];
       const response = await db.query<LikeMemory>(sql, params);
-      const isLiked = response.rows[0] || null;
+      const isLiked = response.rows;
       res.json(isLiked);
     } catch (err) {
       next(err);
@@ -864,9 +826,7 @@ app.get(
   async (req, res, next) => {
     try {
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select "storyId"
                     from "Likes"
                     where "userId" = $1
@@ -889,9 +849,7 @@ app.get(
     try {
       const familyId = Number(req.params.familyId);
       const videoId = Number(req.params.videoId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select *
                     from "Likes"
                     where "userId" = $1
@@ -917,9 +875,7 @@ app.post(
       validateBody(memoryId, 'memoryId');
       validateBody(desiredColumn, 'desiredColumn');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `insert into "Likes" ("userId", "familyId", "${desiredColumn}")
                   values($1, $2, $3)
                   returning *;
@@ -943,14 +899,12 @@ app.delete(
       validateBody(memoryId, 'memoryId');
       validateBody(desiredColumn, 'desiredColumn');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `delete from "Likes"
-                  where "userId" = $1 and "familyId" = $2 and "${desiredColumn}" = $3
+                  where "familyId" = $1 and "${desiredColumn}" = $2
                   returning *;
                   `;
-      const params = [req.user?.userId, familyId, memoryId];
+      const params = [familyId, memoryId];
       const response = await db.query<LikeMemory>(sql, params);
       const disliked = response.rows[0];
       if (!disliked) {
@@ -970,9 +924,7 @@ app.get(
     try {
       const familyId = Number(req.params.familyId);
       const imageId = Number(req.params.imageId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select *
                     from "Comments"
                     where "familyId" = $1
@@ -995,9 +947,7 @@ app.get(
     try {
       const familyId = Number(req.params.familyId);
       const videoId = Number(req.params.videoId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `select *
                     from "Comments"
                     where "familyId" = $1
@@ -1024,9 +974,7 @@ app.post(
       validateBody(author, 'author');
       validateBody(comment, 'comment');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `insert into "Comments" ("userId", "familyId", "${desiredColumn}", "author", "comment")
                   values($1, $2, $3, $4, $5)
                   returning *;
@@ -1051,9 +999,7 @@ app.delete(
       validateBody(memoryId, 'memoryId');
       validateBody(desiredColumn, 'desiredColumn');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `delete from "Comments"
                   where "commentsId" = $1 and "userId" = $2 and "familyId" = $3 and "${desiredColumn}" = $4
                   returning *;
@@ -1080,9 +1026,7 @@ app.delete(
       validateBody(memoryId, 'memoryId');
       validateBody(desiredColumn, 'desiredColumn');
       const familyId = Number(req.params.familyId);
-      if (!Number.isInteger(familyId) || familyId < 1) {
-        throw new ClientError(400, 'familyId must be a positive integer');
-      }
+      validateFamilyId(familyId);
       const sql = `delete from "Comments"
                   where "familyId" = $1 and "${desiredColumn}" = $2
                   returning *;

@@ -22,7 +22,6 @@ export function SignIn() {
       handleSignIn(user, token);
       // update: navigate to the family selection page, where the user picks a family space before entering its dashboard.
       navigate('/');
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Invalid username or password. Please try again.');
     } finally {
@@ -54,7 +53,6 @@ export function SignIn() {
               <span
                 onClick={() => {
                   navigate('/sign-up');
-                  window.scrollTo(0, 0);
                 }}
                 className="font-bold underline cursor-pointer">
                 Sign up

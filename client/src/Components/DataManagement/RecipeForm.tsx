@@ -25,7 +25,6 @@ export function RecipeForm() {
           const recipe = await readRecipe(+familyId, +recipeId);
           if (!recipe) throw new Error(`Recipe with ID ${id} not found`);
           setRecipe(recipe);
-          window.scrollTo(0, 0);
         }
       } catch (err) {
         errorMsg('Error editing recipe');
@@ -48,7 +47,6 @@ export function RecipeForm() {
         await uploadRecipe(recipeData, Number(familyId));
       }
       navigate(`/family/${familyId}/dashboard/recipes`);
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error uploading recipe');
     } finally {
@@ -61,7 +59,6 @@ export function RecipeForm() {
     try {
       await deleteRecipe(Number(familyId), recipe.recipeId);
       navigate(`/family/${familyId}/dashboard/recipes`);
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error deleting recipe. Please try again.');
     }
@@ -139,7 +136,6 @@ export function RecipeForm() {
                 Ingredients from the Heart:
                 <textarea
                   cols={30}
-                  autoFocus
                   name="ingredients"
                   defaultValue={recipe?.ingredients ?? ''}
                   placeholder="List each treasured ingredient, just like it was passed down.
@@ -155,7 +151,6 @@ export function RecipeForm() {
                 Steps to Perfection:
                 <textarea
                   cols={30}
-                  autoFocus
                   name="directions"
                   defaultValue={recipe?.directions ?? ''}
                   placeholder="Guide the next generation, one step at a time.
@@ -171,7 +166,6 @@ export function RecipeForm() {
                 A Story to Remember:
                 <textarea
                   cols={30}
-                  autoFocus
                   name="backstory"
                   defaultValue={recipe?.backstory ?? ''}
                   placeholder="The memory behind this dish - a cherished moment, a family tradition, or a story worth telling."
@@ -186,7 +180,6 @@ export function RecipeForm() {
                 Secret Touches & Notes:
                 <textarea
                   cols={30}
-                  autoFocus
                   name="notes"
                   defaultValue={recipe?.notes ?? ''}
                   placeholder="Any special tips, family secrets, or personal twists?"

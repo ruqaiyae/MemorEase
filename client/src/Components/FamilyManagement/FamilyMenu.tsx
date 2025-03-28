@@ -17,7 +17,6 @@ export function FamilyMenu({ onClose }: Prop) {
           key={fam.familyId}
           onClick={() => {
             navigate(`family/${fam.familyId}/dashboard`);
-            window.scrollTo(0, 0);
             updateFamily(fam);
             onClose();
           }}>

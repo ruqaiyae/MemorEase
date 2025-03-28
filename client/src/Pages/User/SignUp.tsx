@@ -28,6 +28,7 @@ export function SignUp() {
       setIsValid(true);
     } else {
       setIcon(<FontAwesomeIcon icon={faCircleXmark} className={iconClass} />);
+      setIsValid(false);
     }
   }
 
@@ -41,7 +42,6 @@ export function SignUp() {
       const { user, token } = (await requestSignUp(userData)) as Auth;
       handleSignIn(user, token);
       navigate(`/family-form?action=signup-success`);
-      window.scrollTo(0, 0);
     } catch (err) {
       setError(err);
     } finally {
@@ -123,7 +123,6 @@ export function SignUp() {
               <span
                 onClick={() => {
                   navigate('/sign-in');
-                  window.scrollTo(0, 0);
                 }}
                 className="font-bold underline cursor-pointer">
                 Log in

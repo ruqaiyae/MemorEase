@@ -102,7 +102,6 @@ export function ImageForm() {
 
       handleRemove();
       navigate(`/family/${familyId}/dashboard/images`);
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error uploading image');
     } finally {
@@ -122,7 +121,6 @@ export function ImageForm() {
 
       await deleteImage(Number(familyId), image.imageId);
       navigate(`/family/${familyId}/dashboard/images`);
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error deleting image. Please try again.');
     }
@@ -135,34 +133,36 @@ export function ImageForm() {
         onSubmit={(e) => handleSubmit(e)}>
         {isEditing && imageUrl ? (
           <>
-            <div className="flex justify-center">
-              <img
-                className="w-[60%] mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
-                src={imageUrl}
-                alt="Image preview"
+            <div className="inline-block relative">
+              <div className="flex justify-center">
+                <img
+                  className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
+                  src={imageUrl}
+                  alt="Image preview"
+                />
+              </div>
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                onClick={handleRemove}
+                className="text-[#654a2f] text-[15px] md:text-[25px] cursor-pointer absolute top-3 -right-2"
               />
             </div>
-            <FontAwesomeIcon
-              icon={faCircleXmark}
-              onClick={handleRemove}
-              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-31 md:top-[34%] right-29 md:right-[34%] cursor-pointer"
-            />
           </>
         ) : selectedFile ? (
-          <>
+          <div className="inline-block relative">
             <div className="flex justify-center">
               <img
-                className="w-[60%] mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
+                className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
                 src={preview}
                 alt="Image preview"
               />
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                onClick={handleRemove}
+                className="text-[#654a2f] text-[15px] md:text-[25px] cursor-pointer absolute top-3 -right-2"
+              />
             </div>
-            <FontAwesomeIcon
-              icon={faCircleXmark}
-              onClick={handleRemove}
-              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-31 md:top-[34%] right-29 md:right-[34%]"
-            />
-          </>
+          </div>
         ) : (
           <>
             <p className={labelClass}>Add a Picture to Your Memory Vault</p>
@@ -181,7 +181,6 @@ export function ImageForm() {
           Tell the Story Behind This Photo:
           <textarea
             cols={30}
-            autoFocus
             id="caption"
             name="caption"
             defaultValue={image?.caption ?? ''}

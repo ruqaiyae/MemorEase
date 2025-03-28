@@ -265,6 +265,7 @@ export type Recipe = {
   creator: string;
   backstory: string;
   notes: string;
+  isLiked?: boolean;
 };
 
 export async function readRecipes(familyId: number): Promise<Recipe[]> {
@@ -365,6 +366,7 @@ export type Story = {
   title: string;
   content: string;
   author: string;
+  isLiked?: boolean;
 };
 
 export async function readStories(familyId: number): Promise<Story[]> {
@@ -583,7 +585,7 @@ export async function readImageLike(
 
 export async function readRecipeLike(
   familyId: number
-): Promise<LikeMemory | undefined> {
+): Promise<LikeMemory[] | undefined> {
   const req = {
     headers: {
       Authorization: `Bearer ${readToken()}`,

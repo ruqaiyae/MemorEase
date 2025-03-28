@@ -49,7 +49,6 @@ export function StoryForm() {
         await uploadStory(storyData, Number(familyId));
       }
       navigate(`/family/${familyId}/dashboard/stories`);
-      window.scrollTo(0, 0);
     } catch (err) {
       errorMsg('Error uploading story');
     } finally {
@@ -62,7 +61,6 @@ export function StoryForm() {
     try {
       await deleteStory(Number(familyId), story.storyId);
       navigate(`/family/${familyId}/dashboard/stories`);
-      window.scrollTo(0, 0);
     } catch (err) {
       console.log('err', err);
       errorMsg('Error deleting story. Please try again.');
@@ -88,7 +86,6 @@ export function StoryForm() {
           Write a Story to Remember
           <textarea
             cols={30}
-            autoFocus
             id="content"
             name="content"
             defaultValue={story?.content ?? ''}

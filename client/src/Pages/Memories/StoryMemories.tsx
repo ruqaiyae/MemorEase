@@ -4,32 +4,63 @@ import {
   type Story,
   readStories,
   readStoryLike,
+  type LikeMemory,
   likeMemory,
   dislikeMemory,
-  LikeMemory,
 } from '../../Lib/data';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
+import { errorMsg } from '../../Components/Toast/errorToast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
 export function StoryMemories() {
   const { familyId } = useParams();
-  const [stories, setStories] = useState<Story[]>();
-  const [isLiked, setIsLiked] = useState(false);
-  const [likedStories, setLikedStories] = useState<LikeMemory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [stories, setStories] = useState<Story[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function load(familyId: number) {
       try {
-        const res = await readStories(familyId);
-        setStories(res);
+        setIsLoading(true);
+        const response = await readStories(familyId);
         const likedStories = await readStoryLike(familyId);
-        likedStories && setLikedStories(likedStories);
+
+        if (response && likedStories) {
+          const likedStoryIds = new Set(
+            likedStories.map((story) => story.storyId)
+          );
+
+          const updatedStories = response.map((story) => ({
+            ...story,
+            isLiked: likedStoryIds.has(story.storyId),
+          }));
+
+          setStories(updatedStories);
+        }
+
+        // if (likedStories) {
+        //   for (let i = 0; i < res?.length; i++) {
+        //     const foundStory = likedStories.find(
+        //       ({ storyId }) => storyId === res[i].storyId
+        //     );
+        //     if (foundStory) {
+        //       res[i] = {
+        //         ...res[i],
+        //         isLiked: true,
+        //       };
+        //     } else {
+        //       res[i] = {
+        //         ...res[i],
+        //         isLiked: false,
+        //       };
+        //     }
+        //   }
+        //   setStories(res);
+        // }
       } catch (err) {
-        console.log(err);
+        errorMsg('Error loading recipes. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -38,12 +69,19 @@ export function StoryMemories() {
   }, [familyId]);
 
   async function handleLike(story: LikeMemory) {
-    setIsLiked(!isLiked);
-    !isLiked &&
-      (await likeMemory(Number(familyId), 'story', Number(story.storyId)));
-    setLikedStories([...likedStories, story]);
-    isLiked &&
-      (await dislikeMemory(Number(familyId), 'story', Number(story.storyId)));
+    const temp = [...stories];
+
+    for (let i = 0; i < temp.length; i++) {
+      if (temp[i].storyId === story.storyId) {
+        temp[i].isLiked = !temp[i]?.isLiked;
+        setStories(temp);
+        if (temp[i].isLiked) {
+          likeMemory(Number(familyId), 'story', Number(story.storyId));
+        } else {
+          dislikeMemory(Number(familyId), 'story', Number(story.storyId));
+        }
+      }
+    }
   }
 
   return (
@@ -59,37 +97,29 @@ export function StoryMemories() {
         {stories?.length !== 0 && (
           <div className="mb-10">
             <ul className="flex flex-wrap text-[#654A2F] text-[10px] md:text-[25px] md:my-10">
-              {stories?.map((story) => {
-                const isStoryLiked = likedStories.some(
-                  (likedStory) => likedStory.storyId === story.storyId
-                );
+              {stories?.map((story) => (
+                <div
+                  key={story.storyId}
+                  className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F]  text-center">
+                  <li
+                    onClick={() =>
+                      navigate(
+                        `/family/${familyId}/dashboard/stories/${story.storyId}`
+                      )
+                    }
+                    className="px-5 mt-5 cursor-pointer">
+                    {story.title}
+                  </li>
 
-                return (
-                  <>
-                    <div
-                      key={story.storyId}
-                      className="mx-auto my-3 border-[1.5px] rounded-lg md:border-2 border-[#654A2F] cursor-pointer text-center">
-                      <li
-                        onClick={() =>
-                          navigate(
-                            `/family/${familyId}/dashboard/stories/${story.storyId}`
-                          )
-                        }
-                        className="px-5 pt-5">
-                        {story.title}
-                      </li>
-
-                      <FontAwesomeIcon
-                        icon={isStoryLiked ? faHeartSolid : faHeartRegular}
-                        onClick={() => handleLike(story)}
-                        className={`text-[25px] ${
-                          isStoryLiked ? 'text-[#d51010]' : 'text-[#654A2F]'
-                        }`}
-                      />
-                    </div>
-                  </>
-                );
-              })}
+                  <FontAwesomeIcon
+                    icon={story.isLiked ? faHeartSolid : faHeartRegular}
+                    onClick={() => handleLike(story)}
+                    className={`text-[25px] cursor-pointer ${
+                      story.isLiked ? 'text-[#d51010]' : 'text-[#654A2F]'
+                    }`}
+                  />
+                </div>
+              ))}
             </ul>
           </div>
         )}

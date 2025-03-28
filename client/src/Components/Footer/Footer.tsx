@@ -12,7 +12,6 @@ export function Footer() {
             <h1
               onClick={() => {
                 navigate('/');
-                window.scrollTo(0, 0);
               }}
               className="font-[Fondamento] text-[#EBD199] md:text-5xl cursor-pointer w-[20%]">
               MemorEase
