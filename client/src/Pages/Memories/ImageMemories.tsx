@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { type Image, readImages } from '../../Lib/data';
 import { MemoriesContainer } from '../../Components/DataManagement/MemoriesContainer';
+import { errorMsg } from '../../Components/Toast/errorToast';
 
 export function ImageMemories() {
   const { familyId } = useParams();
@@ -16,7 +17,7 @@ export function ImageMemories() {
         const res = await readImages(Number(familyId));
         setImages(res);
       } catch (err) {
-        console.log(err);
+        errorMsg('Error loading images. Please try again.');
       } finally {
         setIsLoading(false);
       }
