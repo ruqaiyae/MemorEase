@@ -6,7 +6,7 @@ MemorEase is a **full-stack web application** built to help families capture, pr
 
 &nbsp;
 ## 🎬 Live Demo
-Check out the live version: [MemorEase Demo](https://github.com/ruqaiyae/MemorEase#:~:text=ec2%2D18%2D119%2D39%2D165.us%2Deast%2D2.compute.amazonaws.com/)
+Check out the live version: [MemorEase Demo](http://github.com/ruqaiyae/MemorEase#:~:text=ec2%2D18%2D119%2D39%2D165.us%2Deast%2D2.compute.amazonaws.com/)
 
 ### How it works
 Explore MemorEase and begin preserving your family's legacy in just a few steps!
