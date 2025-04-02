@@ -93,6 +93,28 @@ Explore MemorEase and begin preserving your family's legacy in just a few steps!
 - `motion` – Animations and transitions
 
 &nbsp;
+## 📦 Installation & Setup
+### Clone the repository:
+```
+git clone https://github.com/your-username/MemorEase.git
+cd MemorEase
+```
+
+### Install dependencies:
+```
+npm install
+```
+
+### Set up the database:
+- Ensure PostgreSQL is installed and running.
+- Create a .env file and configure database credentials.
+
+### Run the development server:
+```
+npm run dev
+```
+
+&nbsp;
 ## 🛠 Feature Requests & Bug Reports
 • [Request a Feature](https://github.com/ruqaiyae/MemorEase/issues/new?template=new-feature.md) 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [Submit a Design Suggestion](https://github.com/ruqaiyae/MemorEase/issues/new?template=design-update.md) 
