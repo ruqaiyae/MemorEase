@@ -18,6 +18,6 @@ const storage = multer.diskStorage({
 export const uploadsVideoMiddleware = multer({
   storage,
   limits: {
-    fieldSize: 8 * 1024 * 1024,
+    fileSize: 2 * 1024 * 1024 * 1024,
   },
 });
