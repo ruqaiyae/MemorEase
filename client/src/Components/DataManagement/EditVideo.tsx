@@ -3,19 +3,18 @@ import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
   videoSrc: string | undefined;
-  type?: string;
   onRemove: () => void;
 };
 
-export function EditVideo({ videoSrc, type, onRemove }: Props) {
+export function EditVideo({ videoSrc, onRemove }: Props) {
   return (
     <div className="inline-block relative">
       <div className="flex justify-center">
         <video
           controls
           className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
-          preload="metadata">
-          <source src={videoSrc} type={type} />
+          preload="metadata"
+          src={videoSrc}>
           Your browser does not support the video tag.
         </video>
       </div>

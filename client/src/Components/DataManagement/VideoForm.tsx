@@ -133,11 +133,7 @@ export function VideoForm() {
         text="Some moments are best remembered in motion."
         onSubmit={(e) => handleSubmit(e)}>
         {isEditing && videoUrl ? (
-          <EditVideo
-            videoSrc={videoUrl}
-            type={selectedFile?.type || 'video/mp4'}
-            onRemove={handleRemove}
-          />
+          <EditVideo videoSrc={videoUrl} onRemove={handleRemove} />
         ) : selectedFile ? (
           <EditVideo videoSrc={preview} onRemove={handleRemove} />
         ) : (
