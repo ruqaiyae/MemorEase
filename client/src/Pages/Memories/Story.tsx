@@ -51,10 +51,10 @@ export function Story() {
         <h2 className="font-[fondamento] text-[#654A2F] text-center text-[14px] md:text-[30px] mb-4 md:my-15 mx-7 md:mx-30">
           {story?.title}
         </h2>
-        <p className="font-[lato] text-[#654A2F] text-[12px] md:text-[23px] leading-[1.6] md:leading-[2] mt-1 px-10 md:px-40 md:py-10">
+        <p className="font-[lato] text-[#654A2F] text-[12px] md:text-[23px] text-justify indent-20 leading-[1.6] md:leading-[2] mt-1 px-10 md:px-30 md:py-10">
           {story?.content}
         </p>
-        <p className="font-[lato] text-[#654A2F] bold text-[10px] md:text-[20px] text-end my-3 px-4 md:px-50">
+        <p className="font-[lato] text-[#654A2F] bold text-[10px] md:text-[20px] text-end mt-3 mb-10 px-4 md:px-10">
           Written by:{' '}
           <span className="text-[12px] md:text-[22px] italic">
             {story?.author}
