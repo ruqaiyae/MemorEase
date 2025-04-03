@@ -39,26 +39,6 @@ export function StoryMemories() {
 
           setStories(updatedStories);
         }
-
-        // if (likedStories) {
-        //   for (let i = 0; i < res?.length; i++) {
-        //     const foundStory = likedStories.find(
-        //       ({ storyId }) => storyId === res[i].storyId
-        //     );
-        //     if (foundStory) {
-        //       res[i] = {
-        //         ...res[i],
-        //         isLiked: true,
-        //       };
-        //     } else {
-        //       res[i] = {
-        //         ...res[i],
-        //         isLiked: false,
-        //       };
-        //     }
-        //   }
-        //   setStories(res);
-        // }
       } catch (err) {
         errorMsg('Error loading recipes. Please try again.');
       } finally {
