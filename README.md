@@ -96,7 +96,7 @@ Explore MemorEase and begin preserving your family's legacy in just a few steps!
 ## 📦 Installation & Setup
 ### Clone the repository:
 ```
-git clone https://github.com/your-username/MemorEase.git
+git clone https://github.com/ruqaiyae/MemorEase.git
 cd MemorEase
 ```
 
