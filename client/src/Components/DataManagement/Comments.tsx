@@ -33,7 +33,7 @@ export function Comments({
             placeholder="Add your comment"
             onChange={(e) => onInputChange(e)}
             value={value}
-            className="border md:border-2 focus:border-2 md:focus:border-3 focus:outline-none border-[#654A2F] rounded md:rounded-md  md:p-4 md:h-8 w-55 md:w-[600px] mt-1 text-[#654A2F] text-[10px] md:text-[17px]"
+            className="border md:border-2 focus:border-2 md:focus:border-3 focus:outline-none border-[#654A2F] rounded md:rounded-md px-1 md:p-4 md:h-8 w-[100%] md:w-[600px] mt-1 text-[#654A2F] text-[10px] md:text-[17px]"
           />
         </label>
       </form>

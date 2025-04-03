@@ -136,7 +136,7 @@ export function Image() {
           onInputChange={(e) => setValue(e.target.value)}
           value={value}
           comments={comments}
-          onDelete={(commentsId) => handleDelete(commentsId)}
+          onDelete={(commentId) => handleDelete(commentId)}
         />
       </div>
     </MemoryContainer>
