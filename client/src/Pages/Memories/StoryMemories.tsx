@@ -87,14 +87,14 @@ export function StoryMemories() {
                         `/family/${familyId}/dashboard/stories/${story.storyId}`
                       )
                     }
-                    className="px-5 mt-5 cursor-pointer">
+                    className="px-5 mt-2 mb-1 md:mt-5 cursor-pointer">
                     {story.title}
                   </li>
 
                   <FontAwesomeIcon
                     icon={story.isLiked ? faHeartSolid : faHeartRegular}
                     onClick={() => handleLike(story)}
-                    className={`text-[25px] cursor-pointer ${
+                    className={`text-[12px] md:text-[25px] mb-1 cursor-pointer ${
                       story.isLiked ? 'text-[#d51010]' : 'text-[#654A2F]'
                     }`}
                   />
