@@ -12,10 +12,9 @@ import {
 } from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labelClass } from '../UserManagement/FormInput';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FormContainer } from './FormContainer';
 import { errorMsg } from '../Toast/errorToast';
+import { EditVideo } from './EditVideo';
 
 export function VideoForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -134,43 +133,13 @@ export function VideoForm() {
         text="Some moments are best remembered in motion."
         onSubmit={(e) => handleSubmit(e)}>
         {isEditing && videoUrl ? (
-          <div className="inline-block relative">
-            <div className="flex justify-center">
-              <video
-                controls
-                className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
-                preload="metadata">
-                <source
-                  src={videoUrl}
-                  type={selectedFile?.type || 'video/mp4'}
-                />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-
-            <FontAwesomeIcon
-              icon={faCircleXmark}
-              onClick={handleRemove}
-              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-3 -right-2 cursor-pointer"
-            />
-          </div>
+          <EditVideo
+            videoSrc={videoUrl}
+            type={selectedFile?.type || 'video/mp4'}
+            onRemove={handleRemove}
+          />
         ) : selectedFile ? (
-          <div className="inline-block relative">
-            <div className="flex justify-center">
-              <video
-                controls
-                className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
-                preload="metadata"
-                src={preview}>
-                Your browser does not support the video tag.
-              </video>
-            </div>
-            <FontAwesomeIcon
-              icon={faCircleXmark}
-              onClick={handleRemove}
-              className="text-[#654a2f] text-[15px] md:text-[25px] absolute top-3 -right-2 cursor-pointer"
-            />
-          </div>
+          <EditVideo videoSrc={preview} onRemove={handleRemove} />
         ) : (
           <>
             <p className={labelClass}>Add a Video to Your Memory Vault</p>
