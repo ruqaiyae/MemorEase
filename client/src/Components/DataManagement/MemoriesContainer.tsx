@@ -35,7 +35,7 @@ export function MemoriesContainer({
 
   return (
     <>
-      <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[40px] my-4 md:my-15 mx-7 md:mx-30 whitespace-pre-line">
+      <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[40px] my-4 md:my-15 mx-7 md:mx-30 md:whitespace-pre-line">
         {header1} {currentFamily?.familyName} {header2}
       </h1>
       <Container mobileWidth="80%" width="85%">
