@@ -50,13 +50,13 @@ export function Story() {
             </Link>
           ) : null}
         </div>
-        <h2 className="font-[fondamento] text-[#654A2F] text-center text-[14px] md:text-[30px] mb-4 mt-3 md:mt-15 mx-7 md:mx-30">
+        <h2 className="font-[fondamento] text-[#654A2F] text-center text-[14px] md:text-[30px] mb-4 md:mb-10 mt-3 md:mt-15 mx-7 md:mx-30">
           {story?.title}
         </h2>
         {paragraphs?.map((para, index) => (
           <p
             key={index}
-            className='className="font-[lato] text-[#654A2F] text-[12px] md:text-[23px] text-justify indent-7 md:indent-20 leading-[1.6] md:leading-[2] mt-1 px-10 md:px-30 md:py-10'
+            className='className="font-[lato] text-[#654A2F] text-[12px] md:text-[23px] text-justify indent-7 md:indent-20 leading-[1.6] md:leading-[2] mt-1 px-10 md:px-30'
             style={{ textIndent: '2em', marginBottom: '1em' }}>
             {para}
           </p>
