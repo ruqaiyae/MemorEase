@@ -91,20 +91,20 @@ export function Video() {
 
   return (
     <MemoryContainer
-      marginLeft=""
-      marginRight=""
+      marginLeft="40px"
+      marginRight="40px"
       text="A single video brings voices, laughter, and moments back to life."
       isLoading={isLoading}>
-      <div className="flex flex-wrap md:flex-nowrap justify-center">
-        <div className="md:w-[40%] mx-5 md:mx-20">
+      <div className="flex flex-wrap md:flex-nowrap justify-center mt-5">
+        <div className="w-[80%] md:w-[60%] mx-5 md:mx-20">
           <div className="relative inline-block">
             <video
               controls
               src={video?.videoUrl}
               className="object-contain border-[1.5px] md:border-2 border-[#654A2F] rounded-lg"
             />
-            <div className="flex justify-between content-center mt-1 md:mt-3 w-full">
-              <div className="flex items-center">
+            <div className="flex justify-between items-end mt-1 md:mt-3 w-full">
+              <div className="flex items-end">
                 <Link
                   to={`/family/${familyId}/dashboard/videos/${videoId}/edit`}>
                   <FontAwesomeIcon
@@ -127,7 +127,7 @@ export function Video() {
           </div>
         </div>
         <Comments
-          width="90%"
+          width="80%"
           onCommentSubmit={(e) => handleSubmit(e)}
           onInputChange={(e) => setValue(e.target.value)}
           value={value}
