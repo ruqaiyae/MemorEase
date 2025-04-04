@@ -35,7 +35,7 @@ export function Recipe() {
   }, [familyId, recipeId]);
 
   const labelStyle =
-    'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[25px] md:ml-2 w-[200px]';
+    'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[25px] text-center md:ml-2';
 
   return (
     <MemoryContainer
