@@ -28,6 +28,7 @@ export function Video() {
   const [isLiked, setIsLiked] = useState(false);
   const [value, setValue] = useState('');
   const [comments, setComments] = useState<Comment[]>([]);
+  const [ownerId, setOwnerId] = useState<number>();
   const { familyId, videoId } = useParams();
   const { user } = useUser();
 
@@ -37,6 +38,7 @@ export function Video() {
         setIsLoading(true);
         const res = await readVideo(familyId, videoId);
         setVideo(res);
+        setOwnerId(res.userId);
         const likedStatus = await readVideoLike(familyId, videoId);
         likedStatus?.videoId && setIsLiked(true);
         const videoComments = await readVideoComment(familyId, videoId);
@@ -105,13 +107,15 @@ export function Video() {
             />
             <div className="flex justify-between items-end mt-1 md:mt-3 w-full">
               <div className="flex items-end">
-                <Link
-                  to={`/family/${familyId}/dashboard/videos/${videoId}/edit`}>
-                  <FontAwesomeIcon
-                    icon={faPen}
-                    className="text-[8px] md:text-[20px] text-[#654A2F] pr-1 md:pr-2"
-                  />
-                </Link>
+                {user?.userId === ownerId ? (
+                  <Link
+                    to={`/family/${familyId}/dashboard/videos/${videoId}/edit`}>
+                    <FontAwesomeIcon
+                      icon={faPen}
+                      className="text-[8px] md:text-[20px] text-[#654A2F] pr-1 md:pr-2"
+                    />
+                  </Link>
+                ) : null}
                 <p className="text-[#654A2F] text-[12px] md:text-[20px]">
                   {video?.caption}
                 </p>
