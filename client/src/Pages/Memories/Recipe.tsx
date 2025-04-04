@@ -1,23 +1,27 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { readRecipe, type Recipe } from '../../Lib/data';
 import { MemoryContainer } from '../../Components/DataManagement/MemoryContainer';
 import { Container } from '../../Components/Layout/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { errorMsg } from '../../Components/Toast/errorToast';
+import { useUser } from '../../Components/UserManagement/useUser';
 
 export function Recipe() {
   const [recipe, setRecipe] = useState<Recipe>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [ownerId, setOwnerId] = useState<number>();
   const { familyId, recipeId } = useParams();
-  const navigate = useNavigate();
+  const { user } = useUser();
 
   useEffect(() => {
-    async function loadRecipe(recipeId: number) {
+    async function loadRecipe(familyId: number, recipeId: number) {
       try {
-        const res = await readRecipe(Number(familyId), recipeId);
-        setRecipe(res);
+        setIsLoading(true);
+        const recipe = await readRecipe(familyId, recipeId);
+        setRecipe(recipe);
+        setOwnerId(recipe.userId);
       } catch (err) {
         errorMsg('Error loading recipe. Please try again.');
       } finally {
@@ -26,7 +30,7 @@ export function Recipe() {
     }
     if (recipeId) {
       setIsLoading(true);
-      loadRecipe(+recipeId);
+      loadRecipe(Number(familyId), +recipeId);
     }
   }, [familyId, recipeId]);
 
@@ -41,15 +45,14 @@ export function Recipe() {
       isLoading={isLoading}>
       <Container mobileWidth="70%" width="70%">
         <div className="w-[100%] text-right">
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            onClick={() => {
-              navigate(
-                `/family/${familyId}/dashboard/recipes/${recipeId}/edit`
-              );
-            }}
-            className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5 cursor-pointer"
-          />
+          {user?.userId === ownerId ? (
+            <Link to={`/family/${familyId}/dashboard/recipes/${recipeId}/edit`}>
+              <FontAwesomeIcon
+                icon={faPenToSquare}
+                className="text-[#654A2F] text-[12px] md:text-[25px] md:pt-5 pr-2 md:pr-5 cursor-pointer"
+              />
+            </Link>
+          ) : null}
         </div>
         <div className="flex flex-wrap md:flex-nowrap content-start mt-3 md:mt-12 md:mb-4 md:w-[100%]">
           <div className="md:w-[300%]">
