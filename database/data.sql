@@ -1,20 +1,20 @@
 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
-values ('Guest', 'User', 'Guest', '$argon2id$v=19$m=65536,t=3,p=4$vr9eyHdrynesh+KyezNqWQ$sCyJ3RY1CzpGMmSrUyfJDFOXZK6eFuUohCPQl876jXY');
+values ('Guest', 'User', 'guest', '$argon2id$v=19$m=65536,t=3,p=4$vr9eyHdrynesh+KyezNqWQ$sCyJ3RY1CzpGMmSrUyfJDFOXZK6eFuUohCPQl876jXY');
 
 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
-values ('Sarah', 'Smith', 'sarah.s', '');
+values ('Sarah', 'Smith', 'sarah.s', '$argon2id$v=19$m=65536,t=3,p=4$DXonwVGGWYViXOmu/Oo6pQ$Dxe+7RPmeS0rkJSJSd+38KyoAz0dGE4eYGtSkd/kNp8');
 
 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
-values ('Mark', 'Smith', 'marksmith', '');
+values ('Mark', 'Smith', 'marksmith', '$argon2id$v=19$m=65536,t=3,p=4$jTc/MKPAsJjLCjQl1v5xfw$aYNKUjtr3aM0IKxd9Q2WlLR/JExPs9HH5grNGVnUN8c');
 
 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
-values ('John', 'Smith', 'j.smith', '');
+values ('John', 'Smith', 'j.smith', '$argon2id$v=19$m=65536,t=3,p=4$XWP/2UqakyMDOSNymbSLIQ$+aoC+S/HaiiNIEL6nzvdT1lHrOUrb9bBVJ2HxfJSWVw');
 
 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
-values ('Lily', 'Smith', 'lily.smith', '');
+values ('Lily', 'Smith', 'lily.smith', '$argon2id$v=19$m=65536,t=3,p=4$BlVEEhG33IsikPQ7MVgy3g$n0AMzTNJ5DyDweXaYjP0ZqR1ONNA7gOm5MgyiWY3rOo');
 
 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
-values ('Emily', 'Smith', 'em.smith', '');
+values ('Emily', 'Smith', 'em.smith', '$argon2id$v=19$m=65536,t=3,p=4$OQjbH1N4iCtWVDl3w4s5CA$5hP2ghWAiMlHhqQ4JbI5fwL5E/nJR8TApM+O6bz3pJc');
 
 insert into "Families" ("familyName", "hashedPassword")
 values ('Smith', '$argon2id$v=19$m=65536,t=3,p=4$VMm6gn7kmQ6FfNyX2U34UA$x0QkiKPWw4yDdm8Zw73Vjda2BEXgJrm53PEi4Xt0zQE');
@@ -53,19 +53,43 @@ insert into "VideoMemories" ("userId", "familyId", "videoUrl", "caption")
 values (1, 1, '/videos/Celebrating christmas-1743799804211.mp4', 'Lights, laughter, and love—Christmas is in the air! 🎄✨');
 
 insert into "Likes" ("userId", "familyId", "imageId", "recipeId", "storyId", "videoId")
-values (1, 1, 1)
+values (1, 1, 1, NULL, NULL, NULL);
 
 insert into "Likes" ("userId", "familyId", "imageId", "recipeId", "storyId", "videoId")
-values (1, 1, Null, 1)
+values (1, 1, Null, 1, NULL, NULL);
 
 insert into "Likes" ("userId", "familyId", "imageId", "recipeId", "storyId", "videoId")
-values (1, 1, Null, Null, 2)
+values (1, 1, Null, Null, 2, NULL);
 
 insert into "Likes" ("userId", "familyId", "imageId", "recipeId", "storyId", "videoId")
-values (1, 1, Null, Null, Null, 1)
+values (1, 1, Null, Null, Null, 1);
 
 insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
-values (3, 1, 2, Null, 'marksmith' 'Nothing beats a day outdoors with my favorite people!');
+values (3, 1, 2, Null, 'marksmith', 'Nothing beats a day outdoors with my favorite people!');
 
 insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
-values (2, 1, 2, Null, 'sarah.s' 'These smiles make my heart so full.');
+values (2, 1, 2, Null, 'sarah.s', 'These smiles make my heart so full.');
+
+insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
+values (1, 1, 1, NULL, 'guest', 'Such a wholesome family pic! ❤️✨');
+
+insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
+values (2, 1, 1, NULL, 'sarah.s', 'Omg, this turned out so good!! Love you all! 😍');
+
+insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
+values (3, 1, 1, NULL, 'marksmith', 'Best day ever! Also, who’s responsible for the color coordination? 😂');
+
+insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
+values (4, 1, 1, NULL, 'j.smith', 'Right?! It’s like we planned it… but didn’t. 😂');
+
+insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
+values (5, 1, 1, NULL, 'lily.smith', 'Lowkey obsessed with how perfect this is.');
+
+insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
+values (5, 1, 1, NULL, 'lily.smith', 'Also, the kids stole the show!');
+
+insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
+values (6, 1, 1, NULL, 'em.smith', '100%! They’re the real MVPs. Also, can we talk about how comfy Dad looks? 😂');
+
+insert into "Comments" ("userId", "familyId", "imageId", "videoId", "author", "comment")
+values (1, 1, 1, NULL, 'guest', 'Seriously though, this needs to be framed.');
