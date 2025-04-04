@@ -1042,17 +1042,6 @@ app.delete(
   }
 );
 
-async function generateHash(): Promise<void> {
-  try {
-    const hashedPassword = await argon2.hash('MemorEaseFamily123@'); // Replace with desired password
-    console.log(hashedPassword);
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-generateHash();
-
 /*
  * Handles paths that aren't handled by any other route handler.
  * It responds with `index.html` to support page refreshes with React Router.
