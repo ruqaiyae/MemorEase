@@ -35,7 +35,7 @@ export function Recipe() {
   }, [familyId, recipeId]);
 
   const labelStyle =
-    'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[25px] md:ml-2 w-[85px] md:w-[200px]';
+    'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[25px] md:ml-2 w-[200px]';
 
   return (
     <MemoryContainer
@@ -85,7 +85,7 @@ export function Recipe() {
         </div>
 
         <div className="flex flex-wrap justify-center mb-5">
-          <div className="md:w-[50%] md:px-5 md:pt-2 mb-1 md:my-[10px] md:mx-auto mt-3">
+          <div className="w-[90%] md:w-[50%] md:px-5 md:pt-2 mb-1 md:my-[10px] md:mx-auto mt-3">
             <p className={labelStyle}>Ingredients from the Heart</p>
             <ul
               className="block border md:border-2 border-[#654A2F]
