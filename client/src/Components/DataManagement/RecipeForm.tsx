@@ -65,7 +65,7 @@ export function RecipeForm() {
   }
 
   const labelStyle =
-    'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[20px] ml-2 text-center';
+    'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[20px] mx-1 text-center';
 
   return (
     <>
@@ -76,7 +76,7 @@ export function RecipeForm() {
         <h2 className="font-[fondamento] text-[#654A2F] text-[15px] md:text-[30px] text-center my-3 md:my-10">
           Write it down, pass it on.
         </h2>
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form onSubmit={(e) => handleSubmit(e)} className="flex justify-center">
           <div className=" flex flex-wrap mt-6 md:mt-12 md:mb-4 w-[90%] md:w-[100%]">
             <div className="w-[50%]">
               <div>
@@ -87,7 +87,7 @@ export function RecipeForm() {
                     name="dishName"
                     defaultValue={recipe?.dishName ?? ''}
                     placeholder="A recipe worth remembering is called…"
-                    className="w-[100%] md:w-[90%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mb-1 md:my-[10px] text-[8px] md:text-[16px]"
+                    className="w-[100%] md:w-[90%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mb-1 md:my-[10px] text-[8px] md:text-[18px]"
                   />
                 </label>
                 <label className={labelStyle}>
@@ -97,7 +97,7 @@ export function RecipeForm() {
                     name="creator"
                     defaultValue={recipe?.creator ?? ''}
                     placeholder="Who shared this recipe with you?"
-                    className="w-[100%] md:w-[90%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mb-1 md:my-[10px] text-[8px] md:text-[16px]"
+                    className="w-[100%] md:w-[90%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mb-1 md:my-[10px] text-[8px] md:text-[18px]"
                   />
                 </label>
               </div>
@@ -108,7 +108,7 @@ export function RecipeForm() {
                 <select
                   name="category"
                   required
-                  className="w-[100%] md:w-[83%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 mb-1 md:my-[10px] text-[10px] md:text-[16px]">
+                  className="w-[100%] md:w-[90%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mb-1 md:my-[10px] text-[8.4px] md:text-[18px]">
                   <option value="">--Please choose one--</option>
                   <option value="Morning Delight">Morning Delight</option>
                   <option value="Midday Meal">Midday Meal</option>
@@ -127,39 +127,37 @@ export function RecipeForm() {
                   name="cookingTime"
                   defaultValue={recipe?.cookingTime ?? ''}
                   placeholder="Time taken for the magic to happen"
-                  className="w-[100%] md:w-[83%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mb-1 md:my-[10px] text-[8px] md:text-[16px] text-left"
+                  className="w-[100%] md:w-[90%] md:h-10 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mb-1 md:my-[10px] text-[8px] md:text-[18px]"
                 />
               </label>
             </div>
-            <div className="w-[50%] mt-3">
-              <label className={labelStyle}>
-                Ingredients from the Heart:
-                <textarea
-                  cols={30}
-                  name="ingredients"
-                  defaultValue={recipe?.ingredients ?? ''}
-                  placeholder="List each treasured ingredient, just like it was passed down.
+            <div className="flex">
+              <div className="w-[50%] mt-3">
+                <label className={labelStyle}>
+                  Ingredients from the Heart:
+                  <textarea
+                    cols={30}
+                    name="ingredients"
+                    defaultValue={recipe?.ingredients ?? ''}
+                    placeholder="List each treasured ingredient, just like it was passed down.
                   (With a comma in between)"
-                  className="block w-[90%] h-65 md:h-70 md:h-30 border md:border-2 border-[#654A2F]
-            rounded md:rounded-md focus:border-2 md:focus:border-3
-            focus:outline-none md:px-5 md:pt-2 mt-[5px] mb-1 md:my-[10px] md:mx-auto text-[16px] whitespace-pre-line"
-                />
-              </label>
-            </div>
-            <div className="w-[50%] mt-3">
-              <label className={labelStyle}>
-                Steps to Perfection:
-                <textarea
-                  cols={30}
-                  name="directions"
-                  defaultValue={recipe?.directions ?? ''}
-                  placeholder="Guide the next generation, one step at a time.
+                    className="w-[100%] md:w-[90%] h-50 md:h-70 md:h-30 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mt-1 md:my-[10px] text-[8px] md:text-[18px] whitespace-pre-line"
+                  />
+                </label>
+              </div>
+              <div className="w-[50%] mt-3">
+                <label className={labelStyle}>
+                  Steps to Perfection:
+                  <textarea
+                    cols={80}
+                    name="directions"
+                    defaultValue={recipe?.directions ?? ''}
+                    placeholder="Guide the next generation, one step at a time.
                   (End each step with a full stop.)"
-                  className="block w-[90%] h-65 md:h-70 md:h-30 border md:border-2 border-[#654A2F]
-            rounded md:rounded-md focus:border-2 md:focus:border-3
-            focus:outline-none md:px-5 md:pt-2 mt-[5px] mb-1 md:my-[10px] md:mx-auto text-[16px] whitespace-pre-line"
-                />
-              </label>
+                    className="w-[100%] md:w-[90%] h-50 md:h-70 md:h-30 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mt-1 md:my-[10px] text-[8px] md:text-[18px] whitespace-pre-line"
+                  />
+                </label>
+              </div>
             </div>
             <div className="w-[100%] mt-3">
               <label className={labelStyle}>
@@ -169,9 +167,7 @@ export function RecipeForm() {
                   name="backstory"
                   defaultValue={recipe?.backstory ?? ''}
                   placeholder="The memory behind this dish - a cherished moment, a family tradition, or a story worth telling."
-                  className="block w-[90%] h-65 md:h-70 md:h-30 border md:border-2 border-[#654A2F]
-            rounded md:rounded-md focus:border-2 md:focus:border-3
-            focus:outline-none md:px-5 md:pt-2 mt-[5px] mb-1 md:my-[10px] md:mx-auto text-[16px] whitespace-pre-line"
+                  className="w-[100%] md:w-[90%] h-50 md:h-70 md:h-30 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mt-1 md:my-[10px] text-[8px] md:text-[18px] whitespace-pre-line"
                 />
               </label>
             </div>
@@ -183,9 +179,7 @@ export function RecipeForm() {
                   name="notes"
                   defaultValue={recipe?.notes ?? ''}
                   placeholder="Any special tips, family secrets, or personal twists?"
-                  className="block w-[90%] h-65 md:h-70 md:h-30 border md:border-2 border-[#654A2F]
-            rounded md:rounded-md focus:border-2 md:focus:border-3
-            focus:outline-none md:px-5 md:pt-2 mt-[5px] mb-1 md:my-[10px] md:mx-auto text-[16px] whitespace-pre-line"
+                  className="w-[100%] md:w-[90%] h-50 md:h-70 md:h-30 border md:border-2 border-[#654A2F] rounded md:rounded-md focus:border-2 md:focus:border-3 focus:outline-none p-1 md:p-2 mt-1 md:my-[10px] text-[8px] md:text-[18px] whitespace-pre-line"
                 />
               </label>
             </div>

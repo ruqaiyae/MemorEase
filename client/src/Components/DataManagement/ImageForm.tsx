@@ -12,11 +12,10 @@ import {
 } from '../../Lib/data';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labelClass } from '../UserManagement/FormInput';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FormContainer } from './FormContainer';
 import { errorMsg } from '../Toast/errorToast';
 import { LoadingCircleSpinner } from '../LoadingSpinner';
+import { EditImage } from './EditImage';
 
 export function ImageForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -132,37 +131,9 @@ export function ImageForm() {
         text="Your family's history, captured in every frame."
         onSubmit={(e) => handleSubmit(e)}>
         {isEditing && imageUrl ? (
-          <>
-            <div className="inline-block relative">
-              <div className="flex justify-center">
-                <img
-                  className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
-                  src={imageUrl}
-                  alt="Image preview"
-                />
-              </div>
-              <FontAwesomeIcon
-                icon={faCircleXmark}
-                onClick={handleRemove}
-                className="text-[#654a2f] text-[15px] md:text-[25px] cursor-pointer absolute top-3 -right-2"
-              />
-            </div>
-          </>
+          <EditImage imgSrc={imageUrl} onRemove={handleRemove} />
         ) : selectedFile ? (
-          <div className="inline-block relative">
-            <div className="flex justify-center">
-              <img
-                className="mb-3 mt-3 md:mt-6 border-2 border-[#654A2F] rounded-lg"
-                src={preview}
-                alt="Image preview"
-              />
-              <FontAwesomeIcon
-                icon={faCircleXmark}
-                onClick={handleRemove}
-                className="text-[#654a2f] text-[15px] md:text-[25px] cursor-pointer absolute top-3 -right-2"
-              />
-            </div>
-          </div>
+          <EditImage imgSrc={preview} onRemove={handleRemove} />
         ) : (
           <>
             <p className={labelClass}>Add a Picture to Your Memory Vault</p>

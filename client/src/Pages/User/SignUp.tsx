@@ -131,14 +131,17 @@ export function SignUp() {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+                className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 md:mb-3 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
                 Create Account
               </button>
             </div>
+            <p className="mt-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[20px]">
+              OR
+            </p>
             <button
               type="button"
               onClick={handleGuest}
-              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 mb-1 md:my-3 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
               Sign in as Guest
             </button>
             <p className="font-[Lato] text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">

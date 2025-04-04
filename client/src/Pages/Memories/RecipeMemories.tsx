@@ -86,13 +86,13 @@ export function RecipeMemories() {
                         `/family/${familyId}/dashboard/recipes/${recipe.recipeId}`
                       )
                     }
-                    className="px-5 mt-5 cursor-pointer">
+                    className="px-5 mt-2 mb-1 md:mt-5 cursor-pointer">
                     {recipe.dishName}
                   </li>
                   <FontAwesomeIcon
                     icon={recipe.isLiked ? faHeartSolid : faHeartRegular}
                     onClick={() => handleLike(recipe)}
-                    className={`text-[25px] cursor-pointer ${
+                    className={`text-[12px] md:text-[25px] cursor-pointer ${
                       recipe.isLiked ? 'text-[#d51010]' : 'text-[#654A2F]'
                     }`}
                   />
