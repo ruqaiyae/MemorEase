@@ -106,18 +106,18 @@ export function SignUp() {
                 labelName={'Password:'}
                 onInput={(e) => setPassword(e.target.value)}
               />
+              {passwordError !== '' && (
+                <div className="w-55 md:w-full flex md:flex-wrap justify-end items-center mb-2">
+                  <FontAwesomeIcon
+                    icon={faTriangleExclamation}
+                    className="text-[#B22222] text-[7px] md:text-[12px]"
+                  />
+                  <p className="text-left text-[#B22222] text-[7px] md:text-[12px] px-1 ">
+                    {passwordError}
+                  </p>
+                </div>
+              )}
             </div>
-            {passwordError !== '' && (
-              <div className="flex items-start mb-2 md:ml-60 mx-2">
-                <FontAwesomeIcon
-                  icon={faTriangleExclamation}
-                  className="text-[#B22222] text-[7px] mt-0.5 md:mt-2 md:text-[12px]"
-                />
-                <p className="w-100 items-center md:text-left text-[#B22222] text-[7px] md:text-[12px] md:p-1 ">
-                  {passwordError}
-                </p>
-              </div>
-            )}
             <div className="mr-10 md:mr-30">
               <PasswordInput
                 labelName={'Confirm Password:'}
