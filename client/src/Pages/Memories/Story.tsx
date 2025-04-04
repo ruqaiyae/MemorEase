@@ -15,10 +15,10 @@ export function Story() {
   const { user } = useUser();
 
   useEffect(() => {
-    async function loadStory(storyId: number) {
+    async function loadStory(familyId: number, storyId: number) {
       try {
-        const res = await readStory(Number(familyId), storyId);
-        setStory(res);
+        const story = await readStory(familyId, storyId);
+        setStory(story);
       } catch (err) {
         errorMsg('Error loading story. Please try again.');
       } finally {
@@ -27,7 +27,7 @@ export function Story() {
     }
     if (storyId) {
       setIsLoading(true);
-      loadStory(+storyId);
+      loadStory(Number(familyId), +storyId);
     }
   }, [familyId, storyId]);
 
