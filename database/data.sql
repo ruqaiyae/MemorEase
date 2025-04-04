@@ -1,5 +1,5 @@
 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
-values ('Guest', 'User', 'guest', '$argon2id$v=19$m=65536,t=3,p=4$vr9eyHdrynesh+KyezNqWQ$sCyJ3RY1CzpGMmSrUyfJDFOXZK6eFuUohCPQl876jXY');
+values ('Guest', 'User', 'guest', '$argon2id$v=19$m=65536,t=3,p=4$576zKZ3bRQRYo9Nn/kCJUw$mO+6rM/JcE+pwwW8kMSxw3gqIVwtiGGcozlP5xrFm2c');
 
 insert into "Users" ("firstName", "lastName", "username", "hashedPassword")
 values ('Sarah', 'Smith', 'sarah.s', '$argon2id$v=19$m=65536,t=3,p=4$DXonwVGGWYViXOmu/Oo6pQ$Dxe+7RPmeS0rkJSJSd+38KyoAz0dGE4eYGtSkd/kNp8');
