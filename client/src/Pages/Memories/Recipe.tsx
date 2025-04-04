@@ -37,6 +37,10 @@ export function Recipe() {
   const labelStyle =
     'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[25px] text-center md:ml-2';
 
+  const paragraphs = recipe?.backstory
+    .split(/\n\s*\n/)
+    .map((para) => para.trim());
+
   return (
     <MemoryContainer
       marginLeft="20px"
@@ -123,18 +127,35 @@ export function Recipe() {
               className="font-[Lato] text-[#654A2F] text-[10px] md:text-[22px] border md:border-2 border-[#654A2F]
             rounded md:rounded-md focus:border-2 md:focus:border-3
             focus:outline-none leading-[1.6] md:leading-[2] px-3 py-1 md:p-5 md:mx-auto">
-              {recipe?.backstory}
+              {paragraphs?.map((para, index) => (
+                <p
+                  key={index}
+                  style={{ textIndent: '2em', marginBottom: '1em' }}>
+                  {para}
+                </p>
+              ))}
             </p>
           </div>
-
           <div className="w-[90%] md:w-[100%] md:px-5 md:pt-2 md:mx-auto mt-3 md:mb-9">
             <p className={labelStyle}>Secret Touches & Notes</p>
-            <p
+            <ul
+              className="block border md:border-2 border-[#654A2F]
+            rounded md:rounded-md focus:border-2 md:focus:border-3
+            focus:outline-none py-1 md:py-3 pr-4 mt-1 md:mt-3">
+              {recipe?.notes.split('.').map((note, index) => (
+                <li
+                  key={index}
+                  className="font-[Lato] text-[#654A2F] text-[10px] md:text-[22px] md:text-[18px] list-disc my-1 md:my-2 ml-4 md:ml-8 md:pl-1">
+                  {note}.
+                </li>
+              ))}
+            </ul>
+            {/* <p
               className="font-[Lato] text-[#654A2F] text-[10px] md:text-[22px] border md:border-2 border-[#654A2F]
             rounded md:rounded-md focus:border-2 md:focus:border-3
             focus:outline-none leading-[1.6] md:leading-[2] px-3 py-1 md:p-5 md:mx-auto">
               {recipe?.notes}
-            </p>
+            </p> */}
           </div>
         </div>
       </Container>
