@@ -57,7 +57,7 @@ export function SignUp() {
   async function handleGuest() {
     const { user, token } = (await requestSignIn({
       username: 'Guest',
-      password: 'Guest123@',
+      password: 'MemorEaseFamily123@',
     })) as Auth;
     handleSignIn(user, token);
     navigate('/');
