@@ -11,7 +11,7 @@ export function FormInput({ labelName, name }: Props) {
   return (
     <label className={labelClass}>
       {labelName}
-      <input required name={name} type={'text'} className={inputClass} />
+      <input required name={name} type="text" className={inputClass} />
     </label>
   );
 }

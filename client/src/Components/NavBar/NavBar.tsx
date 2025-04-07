@@ -23,9 +23,9 @@ export function NavBar() {
         </div>
         <div className="w-[50%] md:w-[30%] my-2 md:my-3">
           <div className="flex items-center justify-around">
-            <NavBtn btnName="Home" path={'/'} />
-            <NavBtn btnName="About" path={'about-us'} />
-            <NavBtn btnName="Vault" path={'family/dashboard'} />
+            <NavBtn btnName="Home" path="/" />
+            <NavBtn btnName="About" path="about-us" />
+            <NavBtn btnName="Vault" path="family/dashboard" />
             <FontAwesomeIcon
               icon={faUser}
               onClick={() => {
