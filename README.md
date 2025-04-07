@@ -13,13 +13,10 @@ Explore MemorEase and begin preserving your family's legacy in just a few steps!
 
 #### 1️⃣ Access the App
 - Click the Live Demo link above.
-- Click on the user icon to access the sign in page.
-- Use the following credentials to sign in: \
-    **username**: s.carter \
-    **password**: Sophia123@
+- Sign in as Guest
 
 #### 2️⃣ Navigate to the Family Dashboard
-- From the user icon, navigate to the **Carter** family dashboard.
+- From the user icon, navigate to the **Smith** family dashboard.
 - Select the image, video, story or recipe memory tile
 
 #### 3️⃣ Capture & Preserve Memories
