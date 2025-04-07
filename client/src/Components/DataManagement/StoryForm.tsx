@@ -28,7 +28,7 @@ export function StoryForm() {
         if (!story) throw new Error(`Story with ID ${storyId} not found`);
         setStory(story);
       } catch (err) {
-        console.log(err);
+        errorMsg(`Error loading the story. Please try again.`);
       } finally {
         setIsLoading(false);
       }
