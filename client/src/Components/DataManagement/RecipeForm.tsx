@@ -27,7 +27,7 @@ export function RecipeForm() {
           setRecipe(recipe);
         }
       } catch (err) {
-        errorMsg('Error editing recipe');
+        errorMsg(`Error loading the recipe. Please try again.`);
       } finally {
         setIsLoading(false);
       }
