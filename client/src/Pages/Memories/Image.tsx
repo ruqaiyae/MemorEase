@@ -26,7 +26,6 @@ export function Image() {
   const [image, setImage] = useState<Image>();
   const [isLoading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [value, setValue] = useState('');
   const [comments, setComments] = useState<Comment[]>([]);
   const [ownerId, setOwnerId] = useState<number>();
   const { familyId, imageId } = useParams();
@@ -62,7 +61,10 @@ export function Image() {
       (await dislikeMemory(Number(familyId), 'image', Number(imageId)));
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+    value: string
+  ) {
     event.preventDefault();
     try {
       await addComment(
@@ -77,7 +79,6 @@ export function Image() {
         Number(imageId)
       );
       setComments(updatedComments);
-      setValue('');
     } catch (err) {
       errorMsg('Error adding comment. Please try again!');
     }
@@ -132,9 +133,7 @@ export function Image() {
 
         <Comments
           width="60%"
-          onCommentSubmit={(e) => handleSubmit(e)}
-          onInputChange={(e) => setValue(e.target.value)}
-          value={value}
+          onCommentSubmit={(e, value) => handleSubmit(e, value)}
           comments={comments}
           onDelete={(commentId) => handleDelete(commentId)}
         />
