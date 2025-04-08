@@ -35,7 +35,7 @@ export function Recipe() {
   }, [familyId, recipeId]);
 
   const labelStyle =
-    'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[25px] text-center md:ml-2';
+    'mb-1 block font-lato text-[#654A2F] text-[10px] md:text-[25px] text-center md:ml-2';
 
   const paragraphs = recipe?.backstory
     .split(/\n\s*\n/)
@@ -60,28 +60,28 @@ export function Recipe() {
         </div>
         <div className="flex flex-wrap md:flex-nowrap content-start mt-3 md:mt-12 md:mb-4 md:w-[100%]">
           <div className="md:w-[300%]">
-            <h2 className="mb-1 block font-[Fondamento] text-[#654A2F] text-[15px] md:text-[35px] mx-3 md:ml-10 md:mb-5">
+            <h2 className="mb-1 block font-fondamento text-[#654A2F] text-[15px] md:text-[35px] mx-3 md:ml-10 md:mb-5">
               {recipe?.dishName}
             </h2>
           </div>
           <div className="flex justify-between items-center md:block w-full mx-2">
             <div className="flex items-center gap-x-1 md:my-3">
               <img src="/chef.png" className="w-4 md:w-10" />
-              <p className="font-[Lato] text-[#654A2F] text-[10px] md:text-[25px]">
+              <p className="font-lato text-[#654A2F] text-[10px] md:text-[25px]">
                 Grandma Rose
               </p>
             </div>
 
             <div className="flex items-center gap-x-1 md:my-3">
               <img src="/salad.png" className="w-4 md:w-10" />
-              <p className="font-[Lato] text-[#654A2F] text-[10px] md:text-[25px]">
+              <p className="font-lato text-[#654A2F] text-[10px] md:text-[25px]">
                 Sweet Treat
               </p>
             </div>
 
             <div className="flex items-center gap-x-1 md:my-3">
               <img src="/clock.png" className="w-4 md:w-10" />
-              <p className="font-[Lato] text-[#654A2F] text-[10px] md:text-[25px]">
+              <p className="font-lato text-[#654A2F] text-[10px] md:text-[25px]">
                 27 mins
               </p>
             </div>
@@ -98,7 +98,7 @@ export function Recipe() {
               {recipe?.ingredients.split(',').map((ingredient, index) => (
                 <li
                   key={index}
-                  className="font-[Lato] text-[#654A2F] text-[10px] md:text-[22px] md:text-[18px] list-disc my-1 md:my-2 ml-4 md:ml-8 md:pl-1">
+                  className="font-lato text-[#654A2F] text-[10px] md:text-[22px] md:text-[18px] list-disc my-1 md:my-2 ml-4 md:ml-8 md:pl-1">
                   {ingredient}
                 </li>
               ))}
@@ -114,7 +114,7 @@ export function Recipe() {
               {recipe?.directions.split('.').map((direction, index) => (
                 <li
                   key={index}
-                  className="font-[Lato] text-[#654A2F] text-[10px] md:text-[22px] md:text-[18px] list-decimal my-1 md:my-2 ml-4 md:ml-8 md:pl-1">
+                  className="font-lato text-[#654A2F] text-[10px] md:text-[22px] md:text-[18px] list-decimal my-1 md:my-2 ml-4 md:ml-8 md:pl-1">
                   {direction}.
                 </li>
               ))}
@@ -124,7 +124,7 @@ export function Recipe() {
           <div className="w-[90%] md:w-[100%] md:px-5 md:pt-2 mb-1 md:my-[10px] md:mx-auto mt-3">
             <p className={labelStyle}>A Story to Remember</p>
             <p
-              className="font-[Lato] text-[#654A2F] text-[10px] md:text-[22px] border md:border-2 border-[#654A2F]
+              className="font-lato text-[#654A2F] text-[10px] md:text-[22px] border md:border-2 border-[#654A2F]
             rounded md:rounded-md focus:border-2 md:focus:border-3
             focus:outline-none leading-[1.6] md:leading-[2] px-3 py-1 md:p-5 md:mx-auto">
               {paragraphs?.map((para, index) => (
@@ -145,13 +145,13 @@ export function Recipe() {
               {recipe?.notes.split('.').map((note, index) => (
                 <li
                   key={index}
-                  className="font-[Lato] text-[#654A2F] text-[10px] md:text-[22px] md:text-[18px] list-disc my-1 md:my-2 ml-4 md:ml-8 md:pl-1">
+                  className="font-lato text-[#654A2F] text-[10px] md:text-[22px] md:text-[18px] list-disc my-1 md:my-2 ml-4 md:ml-8 md:pl-1">
                   {note}.
                 </li>
               ))}
             </ul>
             {/* <p
-              className="font-[Lato] text-[#654A2F] text-[10px] md:text-[22px] border md:border-2 border-[#654A2F]
+              className="font-lato text-[#654A2F] text-[10px] md:text-[22px] border md:border-2 border-[#654A2F]
             rounded md:rounded-md focus:border-2 md:focus:border-3
             focus:outline-none leading-[1.6] md:leading-[2] px-3 py-1 md:p-5 md:mx-auto">
               {recipe?.notes}

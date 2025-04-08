@@ -8,11 +8,11 @@ export function Dashboard() {
   const navigate = useNavigate();
 
   const className =
-    'font-[fondamento] md:text-[40px] text-[#654A2F] text-center cursor-pointer';
+    'font-fondamento md:text-[40px] text-[#654A2F] text-center cursor-pointer';
 
   return (
     <>
-      <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[50px] my-4 md:my-8 mx-7 md:mx-70">
+      <h1 className="font-fondamento text-[#654A2F] text-center text-[16px] md:text-[50px] my-4 md:my-8 mx-7 md:mx-70">
         Welcome to the legacy of the {currentFamily?.familyName} family — where
         memories live on.
       </h1>

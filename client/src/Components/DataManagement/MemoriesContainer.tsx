@@ -35,7 +35,7 @@ export function MemoriesContainer({
 
   return (
     <>
-      <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[40px] my-4 md:my-15 mx-7 md:mx-30 md:whitespace-pre-line">
+      <h1 className="font-fondamento text-[#654A2F] text-center text-[16px] md:text-[40px] my-4 md:my-15 mx-7 md:mx-30 md:whitespace-pre-line">
         {header1} {currentFamily?.familyName} {header2}
       </h1>
       <Container mobileWidth="80%" width="85%">
@@ -43,7 +43,7 @@ export function MemoriesContainer({
           <LoadingCircleSpinner width="100px" height="100px" text="loading" />
         ) : !content?.length ? (
           <>
-            <p className="font-[artifika] text-[#654A2F] text-center text-[10px] md:text-[25px] mx-5 mt-10 md:mt-20">
+            <p className="font-artifika text-[#654A2F] text-center text-[10px] md:text-[25px] mx-5 mt-10 md:mt-20">
               No memories here yet... but every legacy starts with a first{' '}
               {memoryType}!
             </p>
@@ -52,7 +52,7 @@ export function MemoriesContainer({
                 onClick={() => {
                   navigate(`/family/${familyId}/dashboard/${path}`);
                 }}
-                className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 mt-5 mb-10 md:my-16 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+                className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 mt-5 mb-10 md:my-16 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
                 Upload Now
               </button>
             </div>
@@ -63,7 +63,7 @@ export function MemoriesContainer({
               onClick={() => {
                 navigate(`/family/${familyId}/dashboard/${path}`);
               }}
-              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
               Add a New Memory
             </button>
           </div>

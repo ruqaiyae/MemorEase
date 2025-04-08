@@ -31,7 +31,7 @@ export function SignIn() {
 
   return (
     <>
-      <h1 className="font-[fondamento] font-bold text-[#654A2F] text-[15px] md:text-[40px] text-center my-3 md:my-10">
+      <h1 className="font-fondamento font-bold text-[#654A2F] text-[15px] md:text-[40px] text-center my-3 md:my-10">
         Preserve Your Legacy, One Memory at a Time
       </h1>
       <Container mobileWidth="60%" width="50%">
@@ -45,10 +45,10 @@ export function SignIn() {
           <div className="text-center">
             <button
               disabled={isLoading}
-              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
               Sign In
             </button>
-            <p className="font-[Lato] text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
+            <p className="font-lato text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
               Don&apos;t have an account?{' '}
               <span
                 onClick={() => {
