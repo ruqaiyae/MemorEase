@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
@@ -61,11 +61,7 @@ export function Image() {
       (await dislikeMemory(Number(familyId), 'image', Number(imageId)));
   }
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>,
-    value: string
-  ) {
-    event.preventDefault();
+  async function handleSubmit(value: string) {
     try {
       await addComment(
         Number(familyId),
@@ -133,9 +129,9 @@ export function Image() {
 
         <Comments
           width="60%"
-          onCommentSubmit={(e, value) => handleSubmit(e, value)}
+          onCommentSubmit={handleSubmit}
           comments={comments}
-          onDelete={(commentId) => handleDelete(commentId)}
+          onDelete={handleDelete}
         />
       </div>
     </MemoryContainer>

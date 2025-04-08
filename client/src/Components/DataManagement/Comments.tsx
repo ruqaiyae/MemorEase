@@ -2,11 +2,11 @@ import { type Comment } from '../../Lib/data';
 import { useUser } from '../UserManagement/useUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 type Props = {
   width: string;
-  onCommentSubmit: (e: React.FormEvent<HTMLFormElement>, value: string) => void;
+  onCommentSubmit: (value: string) => void;
   comments: Comment[];
   onDelete: (id: number) => void;
 };
@@ -20,16 +20,18 @@ export function Comments({
   const [value, setValue] = useState('');
   const { user } = useUser();
 
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    onCommentSubmit(value);
+    setValue('');
+  }
+
   return (
     <div style={{ width }} className="md:w-[50%]">
       <p className="text-[#654A2F] text-[12px] md:text-[20px] mt-5">
         Comments:
       </p>
-      <form
-        onSubmit={(e) => {
-          onCommentSubmit(e, value);
-          setValue('');
-        }}>
+      <form onSubmit={handleSubmit}>
         <label>
           <input
             placeholder="Add your comment"
