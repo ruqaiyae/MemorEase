@@ -4,10 +4,10 @@ export function About() {
       <div className="flex bg-[#654A2F]">
         <div className="flex w-[50%] md:w-[60%]">
           <div className="content-center ml-7 md:ml-35 mr-3">
-            <h1 className="font-[fondamento] text-[#EBD199] md:text-5xl mb-2 md:mb-6">
+            <h1 className="font-fondamento text-[#EBD199] md:text-5xl mb-2 md:mb-6">
               Your Memories, Forever Cherished.
             </h1>
-            <p className="font-[lato] text-[#EBD199] text-[10px] md:text-[20px] md:mr-40">
+            <p className="font-lato text-[#EBD199] text-[10px] md:text-[20px] md:mr-40">
               MemorEase is a digital sanctuary where your family&apos;s stories,
               moments, and traditions live on for generations to come.
             </p>
@@ -21,7 +21,7 @@ export function About() {
           />
         </div>
       </div>
-      <div className="font-[Artifika] text-[#654A2F] text-[10px] md:text-[20px] w-[85%] md:w-[75%] mx-auto my-7 md:my-18">
+      <div className="font-artifika text-[#654A2F] text-[10px] md:text-[20px] w-[85%] md:w-[75%] mx-auto my-7 md:my-18">
         <p className="py-1 md:py-3">Dear Memory Keepers, </p>
         <p className="py-1 md:py-3">
           Welcome to MemorEase—where every moment becomes a cherished heirloom.

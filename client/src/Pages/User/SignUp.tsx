@@ -94,7 +94,7 @@ export function SignUp() {
 
   return (
     <>
-      <h1 className="font-[fondamento] font-bold text-[#654A2F] text-[15px] md:text-[40px] text-center my-3 md:my-10">
+      <h1 className="font-fondamento font-bold text-[#654A2F] text-[15px] md:text-[40px] text-center my-3 md:my-10">
         Preserve Your Legacy, One Memory at a Time
       </h1>
       <Container mobileWidth="60%" width="50%">
@@ -108,18 +108,8 @@ export function SignUp() {
               <PasswordInput
                 labelName={'Password:'}
                 onInput={(e) => setPassword(e.target.value)}
+                err={passwordError}
               />
-              {passwordError !== '' && (
-                <div className="w-55 md:w-full flex md:flex-wrap justify-end items-center mb-2">
-                  <FontAwesomeIcon
-                    icon={faTriangleExclamation}
-                    className="text-[#B22222] text-[7px] md:text-[12px]"
-                  />
-                  <p className="text-left text-[#B22222] text-[7px] md:text-[12px] px-1 ">
-                    {passwordError}
-                  </p>
-                </div>
-              )}
             </div>
             <div className="mr-10 md:mr-30">
               <PasswordInput
@@ -134,20 +124,20 @@ export function SignUp() {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 md:mb-3 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+                className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 md:mb-3 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
                 Create Account
               </button>
             </div>
-            <p className="mt-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[20px]">
+            <p className="mt-1 block font-lato text-[#654A2F] text-[10px] md:text-[20px]">
               OR
             </p>
             <button
               type="button"
               onClick={handleGuest}
-              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 mb-1 md:my-3 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+              className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 mb-1 md:my-3 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
               Sign in as Guest
             </button>
-            <p className="font-[Lato] text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
+            <p className="font-lato text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
               Already have an account?{' '}
               <span
                 onClick={() => {

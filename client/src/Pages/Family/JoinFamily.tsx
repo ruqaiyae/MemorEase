@@ -43,7 +43,7 @@ export function JoinFamily() {
 
   return (
     <>
-      <h1 className="font-[fondamento] text-[#654A2F] text-center text-[16px] md:text-[30px] mt-15 md:mt-18 mx-7 md:mx-70">
+      <h1 className="font-fondamento text-[#654A2F] text-center text-[16px] md:text-[30px] mt-15 md:mt-18 mx-7 md:mx-70">
         Families are built with love, memories, and togetherness. Join yours
         now.
       </h1>
@@ -59,10 +59,10 @@ export function JoinFamily() {
             <div className="text-center ">
               <button
                 disabled={isLoading}
-                className="btn bg-[#654A2F] px-4 md:px-7 py-[5px] md:py-3 my-6 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[10px] md:text-[18px] cursor-pointer">
+                className="btn bg-[#654A2F] px-4 md:px-7 py-[5px] md:py-3 my-6 md:mt-6 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[10px] md:text-[18px] cursor-pointer">
                 Join
               </button>
-              <p className="font-[Lato] text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
+              <p className="font-lato text-[#654A2F] text-[8px] md:text-[15px] mb-5 md:mb-8">
                 No family to join?{' '}
                 <span
                   onClick={() => {

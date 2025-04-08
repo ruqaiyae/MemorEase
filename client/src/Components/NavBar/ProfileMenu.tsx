@@ -34,7 +34,7 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
           top,
           right: 0,
         }}>
-        <ul className="list-none m-0 py-[3px] font-[Lato] text-[#EBD199] text-right text-[9px] md:text-[15px] cursor-pointer">
+        <ul className="list-none m-0 py-[3px] font-lato text-[#EBD199] text-right text-[9px] md:text-[15px] cursor-pointer">
           {!user && (
             <>
               <li

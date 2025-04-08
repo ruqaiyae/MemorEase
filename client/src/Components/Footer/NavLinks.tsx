@@ -7,7 +7,7 @@ type Props = {
 
 export function FooterLinks({ link, name }: Props) {
   const linkClass =
-    'font-[Lato] text-[#EBD199] text-[8px] block md:text-xl py-[1px]';
+    'font-lato text-[#EBD199] text-[8px] block md:text-xl py-[1px]';
 
   return (
     <Link to={link} className={linkClass}>

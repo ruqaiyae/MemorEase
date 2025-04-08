@@ -65,15 +65,15 @@ export function RecipeForm() {
   }
 
   const labelStyle =
-    'mb-1 block font-[Lato] text-[#654A2F] text-[10px] md:text-[20px] mx-1 text-center';
+    'mb-1 block font-lato text-[#654A2F] text-[10px] md:text-[20px] mx-1 text-center';
 
   return (
     <>
-      <h1 className="font-[fondamento] font-bold text-[#654A2F] text-[15px] md:text-[40px] text-center my-3 md:my-10">
+      <h1 className="font-fondamento font-bold text-[#654A2F] text-[15px] md:text-[40px] text-center my-3 md:my-10">
         Food is a memory you can taste.
       </h1>
       <Container mobileWidth="80%" width="90%">
-        <h2 className="font-[fondamento] text-[#654A2F] text-[15px] md:text-[30px] text-center my-3 md:my-10">
+        <h2 className="font-fondamento text-[#654A2F] text-[15px] md:text-[30px] text-center my-3 md:my-10">
           Write it down, pass it on.
         </h2>
         <form onSubmit={(e) => handleSubmit(e)} className="flex justify-center">
@@ -189,13 +189,13 @@ export function RecipeForm() {
                   type="button"
                   onClick={handleDelete}
                   disabled={isLoading}
-                  className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-10 md:mb-15 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+                  className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-10 md:mb-15 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
                   Delete
                 </button>
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-10 md:mb-15 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+                  className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-10 md:mb-15 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
                   Save
                 </button>
               </div>
@@ -204,7 +204,7 @@ export function RecipeForm() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-10 md:mb-15 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
+                  className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 md:mt-6 mb-10 md:mb-15 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[18px] cursor-pointer">
                   Add to the Family Cookbook
                 </button>
               </div>

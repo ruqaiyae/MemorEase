@@ -25,7 +25,7 @@ export function LandingPage() {
     <>
       <HeroImg />
       <div className="bg-[#654A2F] w-[70%] mx-auto rounded-[50%]">
-        <h1 className="font-[fondamento] font-bold text-[#EBD199] text-[15px] md:text-[40px] text-center my-6 md:my-20 py-2 md:py-4">
+        <h1 className="font-fondamento font-bold text-[#EBD199] text-[15px] md:text-[40px] text-center my-6 md:my-20 py-2 md:py-4">
           Preserve Memories, Share Your Legacy
         </h1>
       </div>
@@ -126,7 +126,7 @@ A digital recipe book infused with the flavors of family history.`}
       </Container>
       <div className="md:mb-30">
         <div className="bg-[#654A2F] mx-auto rounded-2xl w-[80%]">
-          <h2 className="font-[fondamento] font-bold text-[#EBD199] text-[13px] md:text-[35px] text-center mb-3 md:my-6 py-2 md:py-4">
+          <h2 className="font-fondamento font-bold text-[#EBD199] text-[13px] md:text-[35px] text-center mb-3 md:my-6 py-2 md:py-4">
             Start Building Your Family's Memory Vault Today!
           </h2>
         </div>
@@ -135,7 +135,7 @@ A digital recipe book infused with the flavors of family history.`}
             onClick={() => {
               navigate('sign-up');
             }}
-            className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-[Lato] text-[#EBD199] text-[8px] md:text-[25px] cursor-pointer">
+            className="btn bg-[#654A2F] px-2 md:px-7 py-[3px] md:py-3 my-3 md:mt-6 rounded-lg md:rounded-full font-lato text-[#EBD199] text-[8px] md:text-[25px] cursor-pointer">
             Get Started
           </button>
         </div>
