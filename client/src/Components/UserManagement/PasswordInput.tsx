@@ -13,8 +13,8 @@ export function PasswordInput({ labelName, onInput, icon }: Props) {
       {labelName}
       <input
         required
-        name={'password'}
-        type={'password'}
+        name="password"
+        type="password"
         onChange={(e) => onInput && onInput(e)}
         className={inputClass}
       />

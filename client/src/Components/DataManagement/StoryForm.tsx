@@ -28,7 +28,7 @@ export function StoryForm() {
         if (!story) throw new Error(`Story with ID ${storyId} not found`);
         setStory(story);
       } catch (err) {
-        console.log(err);
+        errorMsg(`Error loading the story. Please try again.`);
       } finally {
         setIsLoading(false);
       }
@@ -76,9 +76,9 @@ export function StoryForm() {
           Title:
           <input
             required
-            name={'title'}
+            name="title"
             defaultValue={story?.title ?? ''}
-            type={'text'}
+            type="text"
             className="border md:border-2 focus:border-2 md:focus:border-3 focus:outline-none border-[#654A2F] rounded md:rounded-md  md:p-2 md:h-10 w-[75%] md:w-[83%] mb-3 md:mb-6 md:my-[10px] ml-2"
           />
         </label>

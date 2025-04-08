@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
@@ -26,7 +26,6 @@ export function Video() {
   const [video, setVideo] = useState<Video>();
   const [isLoading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [value, setValue] = useState('');
   const [comments, setComments] = useState<Comment[]>([]);
   const [ownerId, setOwnerId] = useState<number>();
   const { familyId, videoId } = useParams();
@@ -62,8 +61,7 @@ export function Video() {
       (await dislikeMemory(Number(familyId), 'video', Number(videoId)));
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(value: string) {
     try {
       await addComment(
         Number(familyId),
@@ -77,7 +75,6 @@ export function Video() {
         Number(videoId)
       );
       setComments(updatedComments);
-      setValue('');
     } catch (err) {
       errorMsg('Error adding comment. Please try again!');
     }
@@ -132,11 +129,9 @@ export function Video() {
         </div>
         <Comments
           width="80%"
-          onCommentSubmit={(e) => handleSubmit(e)}
-          onInputChange={(e) => setValue(e.target.value)}
-          value={value}
+          onCommentSubmit={handleSubmit}
           comments={comments}
-          onDelete={(commentId) => handleDelete(commentId)}
+          onDelete={handleDelete}
         />
       </div>
     </MemoryContainer>

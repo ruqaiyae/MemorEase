@@ -21,16 +21,16 @@ export function Footer() {
             </p>
           </div>
           <div className="content-center text-center my-5 md:my-12">
-            <FooterLinks link={'/'} name="Home" />
-            <FooterLinks link={'about-us'} name="About Us" />
-            <FooterLinks link={'*'} name="Contact Us" />
-            <FooterLinks link={'*'} name="FAQ" />
+            <FooterLinks link="/" name="Home" />
+            <FooterLinks link="about-us" name="About Us" />
+            <FooterLinks link="*" name="Contact Us" />
+            <FooterLinks link="*" name="FAQ" />
           </div>
         </div>
       </div>
       <div className="w-[85%] md:w-[90%] mx-auto my-2 font-[Lato] text-[#654A2F] text-[6px] md:text-sm">
-        <Link to={'*'}>Privacy Policy</Link>
-        <Link to={'*'} className="pl-3 md:pl-15">
+        <Link to="*">Privacy Policy</Link>
+        <Link to="*" className="pl-3 md:pl-15">
           Terms &amp; Conditions
         </Link>
       </div>

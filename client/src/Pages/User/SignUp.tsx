@@ -16,6 +16,7 @@ import {
   faCircleXmark,
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
+import { useFamily } from '../../Components/FamilyManagement/useFamily';
 
 export function SignUp() {
   const [password, setPassword] = useState('');
@@ -24,6 +25,7 @@ export function SignUp() {
   const [valid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { handleSignIn } = useUser();
+  const { updateFamily } = useFamily();
   const navigate = useNavigate();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -60,7 +62,8 @@ export function SignUp() {
       password: 'MemorEaseFamily123@',
     })) as Auth;
     handleSignIn(user, token);
-    navigate('/');
+    updateFamily({ familyId: 1, familyName: 'Smith' });
+    navigate('/family/1/dashboard');
   }
 
   let message;

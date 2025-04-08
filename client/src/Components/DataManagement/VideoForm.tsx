@@ -36,7 +36,7 @@ export function VideoForm() {
         setVideo(video);
         setVideoUrl(video.videoUrl);
       } catch (err) {
-        console.log(err);
+        errorMsg(`Error loading the video. Please try again.`);
       } finally {
         setIsLoading(false);
       }

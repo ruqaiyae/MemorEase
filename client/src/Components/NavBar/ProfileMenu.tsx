@@ -40,11 +40,11 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
               <li
                 onClick={onClose}
                 className="pb-[5px] md:pb-[10px] cursor-pointer">
-                <Link to={'sign-in'}>Sign In</Link>
+                <Link to="sign-in">Sign In</Link>
               </li>
 
               <li onClick={onClose}>
-                <Link to={'sign-up'}>Sign Up</Link>
+                <Link to="sign-up">Sign Up</Link>
               </li>
             </>
           )}
@@ -72,7 +72,7 @@ export function ProfileMenu({ isOpen, positionTo, onClose }: Props) {
                   onClose();
                 }}
                 className="py-[3px] md:pb-[10px] cursor-pointer">
-                <Link to={'/'}>Sign Out</Link>
+                <Link to="/">Sign Out</Link>
               </li>
             </>
           )}
